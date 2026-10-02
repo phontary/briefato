@@ -758,3 +758,124 @@ def test_generate_letter_with_method_dictation_has_no_hard_findings(db):
     assert letter.last_check["hard_count"] == 0
     assert letter.error == ""
     assert all(check["ok"] for check in letter.last_check["checks"])
+
+
+# --------------------------------------------------------------------------- quality-gap fixes
+
+
+class _TransliterationProvider:
+    """Returns ASCII transliterations that the deterministic R6 autofix must repair."""
+
+    text = (
+        "Die Patientin wurde stationaer aufgenommen. Sonographisch zeigte sich freie Fluessigkeit im Abdomen.\n\n"
+        "Diagnosen:\nAszites"
+    )
+
+    def generate(self, system: str, user: str, *, max_tokens: int = 2000, temperature: float = 0.2):
+        return LLMResult(
+            text=self.text, model="stub", provider="stub", tokens_in=1, tokens_out=1, cost_usd=0.0, latency_ms=1
+        )
+
+
+def test_pipeline_autofixes_umlauts_and_logs_them(db, monkeypatch):
+    user, patient, _ = _seed(db)
+    monkeypatch.setattr(gen_mod, "get_provider", lambda settings: _TransliterationProvider())
+
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation="Freie Fluessigkeit im Abdomen bei Aszites.",
+        letterhead={},
+    )
+    content = security.decrypt_field(letter.content_enc)
+    assert "stationär" in content and "Flüssigkeit" in content
+    assert "stationaer" not in content and "Fluessigkeit" not in content
+
+    soft = [
+        finding
+        for check in letter.last_check["checks"]
+        for finding in check["findings"]
+        if finding["rule_id"] == "R6-AUTOFIX"
+    ]
+    assert soft, "every umlaut replacement must be logged into the rule-check detail"
+    assert all(finding["severity"] == "soft" for finding in soft)
+
+
+_INVENT_DICTATION = (
+    "Die Patientin wurde wegen seit zwei Tagen bestehender Unterbauchschmerzen stationär aufgenommen. "
+    "Die Sonographie zeigte eine entzündlich verdickte Sigma-Schlinge. Laborchemisch bestanden eine "
+    "Leukozytose und ein erhöhtes CRP. Wir nahmen die Patientin zur i.v. Antibiotikatherapie stationär auf."
+)
+
+
+class _InventProvider:
+    """Always emits an invented recommendation sentence — R-INVENT must survive the retry."""
+
+    text = (
+        "Die Patientin wurde wegen seit zwei Tagen bestehender Unterbauchschmerzen stationär aufgenommen. "
+        "Die Sonographie zeigte eine entzündlich verdickte Sigma-Schlinge. Empfohlen werden eine "
+        "Wiedervorstellung bei Rötung, Schwellung oder Fieber.\n\n"
+        "Diagnosen:\nSigmadivertikulitis\n\nNebenerkrankungen:\nkeine\n\n"
+        "Therapie-Maßnahmen auf der Station:\ni.v. Antibiotikatherapie"
+    )
+
+    def __init__(self) -> None:
+        self.calls = 0
+
+    def generate(self, system: str, user: str, *, max_tokens: int = 2000, temperature: float = 0.2):
+        self.calls += 1
+        self.last_user = user
+        return LLMResult(
+            text=self.text, model="stub", provider="stub", tokens_in=1, tokens_out=1, cost_usd=0.0, latency_ms=1
+        )
+
+
+def test_generate_letter_keeps_r_invent_visible_after_retry(db, monkeypatch):
+    user, patient, _ = _seed(db)
+    provider = _InventProvider()
+    monkeypatch.setattr(gen_mod, "get_provider", lambda settings: provider)
+
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation=_INVENT_DICTATION,
+        letterhead={},
+    )
+    assert letter.status == "done"
+    assert letter.last_check["retried"] is True
+    hard_ids = {
+        finding["rule_id"]
+        for check in letter.last_check["checks"]
+        for finding in check["findings"]
+        if finding["severity"] == "hard"
+    }
+    assert "R-INVENT" in hard_ids
+    assert letter.last_check["hard_count"] >= 1
+
+
+def test_invent_retry_prompt_names_the_unsupported_passages(db, monkeypatch):
+    user, patient, _ = _seed(db)
+    provider = _InventProvider()
+    monkeypatch.setattr(gen_mod, "get_provider", lambda settings: provider)
+
+    gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation=_INVENT_DICTATION,
+        letterhead={},
+    )
+    assert provider.calls >= 2, "a hard R-INVENT finding must trigger a targeted retry"
+    retry_prompt = provider.last_user
+    # the offending passage and the novel terms are named for the model ...
+    assert "R-INVENT" in retry_prompt
+    assert "Wiedervorstellung" in retry_prompt
+    # ... with an explicit delete-or-ground directive and the 'nichts erfinden' rule
+    assert "ERFUNDENE/UNBELEGTE PASSAGEN" in retry_prompt
+    assert "ENTWEDER STREICHEN" in retry_prompt
+    assert "nichts erfinden" in retry_prompt

@@ -55,7 +55,7 @@ APP_DIR = REPO_ROOT / "app"
 # Sibling modules (run as a script: sys.path[0] is this directory).
 from eval_checks import check_must_contain, check_must_not_contain, check_structure  # noqa: E402
 from eval_corpus import Case, load_cases  # noqa: E402
-from eval_echo import detect_echo  # noqa: E402
+from eval_echo import ECHO_THRESHOLD, ECHO_THRESHOLDS_BY_TYPE, detect_echo, echo_threshold_for  # noqa: E402
 from eval_judge import AXES, judge_output  # noqa: E402
 
 MOCK_BANNER = "MOCK — misst KEINE Schreibqualität"
@@ -175,39 +175,66 @@ def _finding_ids(checks: list[dict]) -> tuple[list[str], list[str]]:
 # --------------------------------------------------------------------------- one case
 
 
-def evaluate_case(case: Case, db, user, patient, settings, *, enrich: bool, judge_provider, judge_model: str) -> dict:
+def evaluate_case(
+    case: Case,
+    db,
+    user,
+    patient,
+    settings,
+    *,
+    enrich: bool,
+    judge_provider,
+    judge_model: str,
+    repeat: int = 1,
+) -> dict:
     from briefato import security
     from briefato.pipeline import generate as gen_mod
     from briefato.pipeline.providers import PipelineError
 
     dictation = effective_dictation(case, enrich)
+    repeat = max(1, int(repeat))
     record: dict = {
         "id": case.id,
         "title": case.title,
         "doc_type_expected": case.doc_type,
         "enrich": bool(enrich),
+        "repeat": repeat,
         "status": "ok",
         "error": "",
         "notes": case.notes,
+        "content_file": f"cases/{case.id}.txt",
     }
 
-    try:
-        letter = gen_mod.generate_letter(
-            db,
-            user=user,
-            patient=patient,
-            kind=case.doc_type,
-            dictation=dictation,
-            letterhead=dict(LETTERHEAD),
-        )
-    except PipelineError as exc:
-        record["status"] = "failed"
-        record["error"] = f"{type(exc).__name__}: {exc}"
-        return record
+    contents: list[str] = []
+    docs: list[tuple[str, dict, object]] = []
+    for _ in range(repeat):
+        try:
+            letter = gen_mod.generate_letter(
+                db,
+                user=user,
+                patient=patient,
+                kind=case.doc_type,
+                dictation=dictation,
+                letterhead=dict(LETTERHEAD),
+            )
+        except PipelineError as exc:
+            record["status"] = "failed"
+            record["error"] = f"{type(exc).__name__}: {exc}"
+            return record
+        content = security.decrypt_field(letter.content_enc) or ""
+        last = getattr(letter, "last_check", {}) or {}
+        contents.append(content)
+        docs.append((content, last, letter))
 
-    content = security.decrypt_field(letter.content_enc) or ""
-    last = getattr(letter, "last_check", {}) or {}
-    actual_type = str(last.get("doc_type") or letter.kind)
+    actual_type = str(docs[0][1].get("doc_type") or docs[0][2].kind)
+    threshold = echo_threshold_for(actual_type)
+    echoes = [detect_echo(dictation, content, threshold=threshold) for content, _, _ in docs]
+    similarities = [echo.similarity for echo in echoes]
+    # Representative run = the median-similarity one, so a single noisy run cannot
+    # decide the record (echo similarity is unstable across runs — see docs/05 §5).
+    representative = sorted(range(len(similarities)), key=lambda index: similarities[index])[len(similarities) // 2]
+    content, last, _letter = docs[representative]
+    echo = echoes[representative]
 
     hard_ids, soft_ids = _finding_ids(last.get("checks") or [])
     record.update(
@@ -221,13 +248,25 @@ def evaluate_case(case: Case, db, user, patient, settings, *, enrich: bool, judg
                 "hard_ids": hard_ids,
                 "soft_ids": soft_ids,
             },
-            "echo": detect_echo(dictation, content).as_dict(),
+            "echo": echo.as_dict(),
+            "echo_repeat": {
+                "n": len(echoes),
+                "similarities": [round(value, 4) for value in similarities],
+                "median": round(sorted(similarities)[len(similarities) // 2], 4),
+                "min": round(min(similarities), 4),
+                "max": round(max(similarities), 4),
+                "threshold": threshold,
+                "representative_index": representative,
+            },
             "must_contain": check_must_contain(content, list(case.must_contain)).as_dict(),
             "must_not_contain_violations": check_must_not_contain(content, list(case.must_not_contain)),
             "structure": check_structure(content, actual_type, list(case.expected_blocks)).as_dict(),
-            "tokens_in": int(getattr(letter, "tokens_in", 0) or 0),
-            "tokens_out": int(getattr(letter, "tokens_out", 0) or 0),
+            "tokens_in": int(getattr(docs[representative][2], "tokens_in", 0) or 0),
+            "tokens_out": int(getattr(docs[representative][2], "tokens_out", 0) or 0),
             "content_chars": len(content),
+            # Raw generated text for the run dir; popped before run.json is written.
+            "content_text": content,
+            "contents": contents,
         }
     )
 
@@ -330,6 +369,8 @@ def _scorecard(run: dict) -> str:
     lines.append(f"- **Enrich (Rohquellen einbezogen):** {'ja' if run['enrich'] else 'nein'}")
     lines.append(f"- **LLM-Judge:** {run.get('judge_model') or '— (nicht konfiguriert)'}")
     lines.append(f"- **Fälle:** {agg['completed']}/{agg['cases']} erfolgreich")
+    if int(run.get("repeat", 1) or 1) > 1:
+        lines.append(f"- **Wiederholungen pro Fall:** {int(run['repeat'])} (Echo als Median + Bereich)")
     lines.append("")
     lines.append("## Gesamt")
     lines.append("")
@@ -337,6 +378,12 @@ def _scorecard(run: dict) -> str:
     lines.append("|---|---|")
     lines.append(f"| Mean Echo-Similarity | {_fmt(agg['mean_similarity'])} |")
     lines.append(f"| Mean Token-Jaccard | {_fmt(agg['mean_jaccard'])} |")
+    _per_type_thresholds = ", ".join(f"{key} {value:.2f}" for key, value in sorted(ECHO_THRESHOLDS_BY_TYPE.items()))
+    lines.append(
+        f"| Echo-Schwelle | {ECHO_THRESHOLD:.2f} (Standard)"
+        + (f"; {_per_type_thresholds}" if _per_type_thresholds else "")
+        + " |"
+    )
     lines.append(f"| **Echo-Fälle** | **{agg['echo_baseline']}** |")
     lines.append(f"| Content-Echo-Fälle (Token-Jaccard > 0.85) | {agg.get('content_echo_baseline', '—')} |")
     lines.append(f"| Harte Regel-Findings (Summe) | {agg['hard_findings_total']} |")
@@ -395,6 +442,18 @@ def _scorecard(run: dict) -> str:
         lines.append(f"- Echo: similarity={item['echo']['similarity']:.3f}, token_ratio={item['echo']['token_ratio']:.3f}, "
                      f"jaccard={item['echo']['jaccard']:.3f} → {item['echo']['verdict']}"
                      + (" (Content-Echo: alle Inhaltswörter geteilt)" if item['echo'].get('content_echo') and not item['echo']['is_echo'] else ""))
+        repeat = item.get("echo_repeat") or {}
+        if int(repeat.get("n", 1) or 1) > 1:
+            values = ", ".join(f"{value:.3f}" for value in repeat.get("similarities", []))
+            lines.append(
+                f"- Echo über {repeat['n']} Läufe: median={_fmt(repeat.get('median'))}, "
+                f"Bereich {_fmt(repeat.get('min'))}–{_fmt(repeat.get('max'))} (Werte: {values}) — "
+                "einzelne Läufe sind verrauscht, der Median zählt"
+            )
+        lines.append(
+            f"- Echo-Schwelle (Typ `{item['doc_type_actual']}`): {_fmt(item['echo']['threshold'])} | "
+            f"Text: `{item.get('content_file', 'cases/' + item['id'] + '.txt')}`"
+        )
         structure = item["structure"]
         if structure["missing"] or not structure["order_ok"] or structure["canonical_missing"]:
             lines.append(f"- Struktur: fehlende Blöcke {structure['missing'] or '—'}, "
@@ -521,40 +580,60 @@ def run(args: argparse.Namespace) -> int:
             judge_provider = OpenAICompatProvider(judge_settings)
 
     cases = load_cases(args.cases_dir, only=args.only)
+    is_mock = bool(getattr(settings, "llm_mock", True))
+    run_id = f"{_now().strftime('%Y%m%d-%H%M%S')}-{_slug(args.provider)}-{_slug(settings.llm_model)}"
+    out_dir = Path(args.out) / run_id
+    cases_out = out_dir / "cases"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
     db = SessionLocal()
     try:
         user, patient = _seed(db)
         results: list[dict] = []
         print(f"[eval] {len(cases)} Fälle · provider={args.provider} · model={settings.llm_model}"
               + (" · enrich" if args.enrich else "")
+              + (f" · repeat={args.repeat}" if args.repeat and args.repeat > 1 else "")
               + (f" · judge={args.judge_model}" if judge_provider else ""))
         for case in cases:
             outcome = evaluate_case(
                 case, db, user, patient, settings,
                 enrich=args.enrich, judge_provider=judge_provider, judge_model=args.judge_model or "",
+                repeat=max(1, int(args.repeat)),
             )
+            # Persist the generated text so a defect can be diffed after the run.
+            representative = outcome.pop("content_text", "")
+            all_contents = outcome.pop("contents", [])
+            if representative:
+                cases_out.mkdir(parents=True, exist_ok=True)
+                (cases_out / f"{case.id}.txt").write_text(representative, encoding="utf-8")
+                if len(all_contents) > 1:
+                    for index, text in enumerate(all_contents, 1):
+                        (cases_out / f"{case.id}.run{index}.txt").write_text(text, encoding="utf-8")
             results.append(outcome)
             if outcome.get("status") == "ok":
                 sim = outcome["echo"]["similarity"]
+                repeat_note = ""
+                if outcome.get("echo_repeat", {}).get("n", 1) > 1:
+                    repeat_note = f" [{outcome['echo_repeat']['min']:.3f}–{outcome['echo_repeat']['max']:.3f}]"
                 print(
                     f"  - {case.id:<26} typ={outcome['doc_type_actual']:<18} "
                     f"hard={outcome['findings']['hard_count']} "
                     f"must={len(outcome['must_contain']['matched'])}/{outcome['must_contain']['total']} "
-                    f"echo_sim={sim:.3f} {'ECHO' if outcome['echo']['is_echo'] else ''}"
+                    f"echo_sim={sim:.3f}{repeat_note} {'ECHO' if outcome['echo']['is_echo'] else ''}"
                 )
             else:
                 print(f"  - {case.id:<26} FEHLER: {outcome['error']}", file=sys.stderr)
     finally:
         db.close()
 
-    is_mock = bool(getattr(settings, "llm_mock", True))
     run_record = {
-        "run_id": f"{_now().strftime('%Y%m%d-%H%M%S')}-{_slug(args.provider)}-{_slug(settings.llm_model)}",
+        "run_id": run_id,
         "timestamp": _now().isoformat(timespec="seconds"),
         "provider": args.provider,
         "model": settings.llm_model,
         "base_url": "" if is_mock else str(getattr(settings, "llm_base_url", "")),
         "enrich": bool(args.enrich),
+        "repeat": max(1, int(args.repeat)),
         "judge_model": args.judge_model or "",
         "is_mock": is_mock,
         "quality_claim": MOCK_BANNER if is_mock else REAL_BANNER,
@@ -563,8 +642,6 @@ def run(args: argparse.Namespace) -> int:
         "cases": results,
     }
 
-    out_dir = Path(args.out) / run_record["run_id"]
-    out_dir.mkdir(parents=True, exist_ok=True)
     run_path = out_dir / "run.json"
     scorecard_path = out_dir / "scorecard.md"
     run_path.write_text(json.dumps(run_record, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -617,6 +694,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--model", default="", help="Modellname (OpenAI-kompatibel)")
     parser.add_argument("--base-url", default="", help="Basis-URL des OpenAI-kompatiblen Endpoints")
     parser.add_argument("--enrich", action="store_true", help="Rohquellen (sources) zusätzlich als Eingabe")
+    parser.add_argument(
+        "--repeat",
+        type=int,
+        default=1,
+        help="Jeden Fall N-mal laufen lassen und Echo als Median+Bereich ausweisen (Default 1; "
+        "einzelne Läufe sind verrauscht)",
+    )
     parser.add_argument("--only", action="append", default=None, help="Nur diese Fall-ID(s) laufen lassen")
     parser.add_argument("--out", default=str(EVAL_DIR / "runs"), help="Ausgabeverzeichnis")
     parser.add_argument("--cases-dir", default=None, help="Alternatives Corpus-Verzeichnis")

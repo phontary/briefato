@@ -498,14 +498,71 @@ def build_prompt(
 
 
 def correction_block(correction_instructions: list[str]) -> str:
-    """Build the retry 'KORREKTURHINWEISE' text appended after a failed check."""
+    """Build the retry 'KORREKTURHINWEISE' text appended after a failed check.
+
+    Hard ``R-INVENT`` findings (invented/unsupported clinical content) are pulled out
+    into their own directive block: for those passages the model must either delete the
+    sentence or ground it in the dictation — and must never add generic standard advice.
+    """
     if not correction_instructions:
         return ""
-    lines = "\n".join(f"- {item}" for item in correction_instructions)
-    return (
+    invent = [item for item in correction_instructions if item.lstrip().startswith("R-INVENT")]
+    rest = [item for item in correction_instructions if not item.lstrip().startswith("R-INVENT")]
+
+    parts = [
         "KORREKTURHINWEISE — der vorige Entwurf verletzte verbindliche Regeln. "
-        "Beheben Sie genau diese Punkte, ohne neue Inhalte zu erfinden:\n" + lines
-    )
+        "Beheben Sie genau diese Punkte, ohne neue Inhalte zu erfinden:"
+    ]
+    if rest:
+        parts.append("\n".join(f"- {item}" for item in rest))
+    if invent:
+        parts.append(
+            "ERFUNDENE/UNBELEGTE PASSAGEN (Methode „nichts erfinden“ – verbindlich):\n"
+            + "\n".join(f"- {item}" for item in invent)
+        )
+        parts.append(
+            "Für jede oben genannte Passage gilt: den Satz ENTWEDER STREICHEN ODER ausschließlich "
+            "mit einer im DIKTAT ausdrücklich belegten Aussage neu formulieren. Fügen Sie NIEMALS "
+            "generische Standard-Empfehlungen, Nachsorge-, Verlaufs- oder Befundhinweise hinzu, die "
+            "nicht wörtlich im DIKTAT stehen. Erfinden Sie keine Diagnosen, Befunde, Werte, Daten, "
+            "Maßnahmen, Wirkstoffe oder Nachsorgekriterien. Im Zweifel weglassen statt ergänzen."
+        )
+    return "\n\n".join(parts)
+
+
+def reference_support_text(hits: list | None, enrichments: list | None) -> str:
+    """Text of everything the model received as reference knowledge.
+
+    The rule checker uses this to distinguish *invented* content (hard ``R-INVENT``) from content
+    that legitimately came from the retrieved Musterbrief sections or from grounded enrichment
+    (soft ``R-REFERENZ`` note). Without it, a letter that correctly uses archive-derived standard
+    technique would be reported as invention — the opposite of the method's rule that standard
+    details may be derived from the archive.
+    """
+    parts: list[str] = []
+    for item in enrichments or []:
+        value = getattr(item, "claim", "") or getattr(item, "text", "") or item
+        if value:
+            parts.append(str(value))
+    for hit in hits or []:
+        body = ""
+        for attr in ("body", "text", "sections_text", "content", "excerpt"):
+            candidate = getattr(hit, attr, "")
+            if candidate:
+                body = str(candidate)
+                break
+        if not body:
+            name = getattr(hit, "file", "")
+            if name:
+                try:
+                    from . import retrieval as _retrieval
+
+                    body = str(_retrieval.template_body(name) or "")
+                except Exception:  # noqa: BLE001 - reference text is best-effort
+                    body = ""
+        if body:
+            parts.append(body)
+    return "\n".join(part for part in parts if part)
 
 
 __all__ = [
@@ -519,4 +576,5 @@ __all__ = [
     "build_weave_prompt",
     "compression_rule",
     "correction_block",
+    "reference_support_text",
 ]

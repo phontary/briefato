@@ -27,7 +27,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Sequence
 
 from ..brain.prompt_assembly import build_weave_prompt, correction_block
-from ..brain.rule_checker import check as rule_check
+from ..brain.rule_checker import autofix_umlauts, check as rule_check
 
 DEFAULT_MAX_PARALLEL = 3
 #: Sanity ceiling so a mis-set environment variable cannot melt the provider.
@@ -255,7 +255,13 @@ def run_weave(
             guard(bundle.system, bundle.user)
         result = provider.generate(bundle.system, bundle.user)
         restored = pseudonymizer.restore(result.text)
-        return bundle, result, restored, rule_check(restored, doc_type, dictation)
+        fixed, umlaut_fixes = autofix_umlauts(restored)
+        from ..brain.prompt_assembly import reference_support_text  # local: avoid import cycle
+
+        reference = reference_support_text(templates, enrichment)
+        return bundle, result, fixed, rule_check(
+            fixed, doc_type, dictation, autofix=umlaut_fixes, reference=reference
+        )
 
     bundle, result, text, check_result = _call(extra or "")
     retried = False

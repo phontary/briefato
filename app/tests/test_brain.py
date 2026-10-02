@@ -13,7 +13,7 @@ import pytest
 
 from briefato.brain import brain_loader, muster_merge, prompt_assembly, retrieval, rule_checker, triage
 from briefato.brain.prompt_assembly import build_prompt
-from briefato.brain.rule_checker import check
+from briefato.brain.rule_checker import autofix_umlauts, check
 from briefato.brain.stopwords import is_qualifier
 from briefato.brain.triage import DOC_TYPES, TriageDecision
 
@@ -440,3 +440,167 @@ def test_merge_map_documents_every_group_and_non_merge():
     assert payload.get("non_merges"), "deliberate non-merges must be documented"
     for non_merge in payload["non_merges"]:
         assert non_merge.get("reason")
+
+
+# --------------------------------------------------------------------------- triage: 'nachweis' fix
+#
+# Real-model harness finding: a bare `nachweis` (e.g. "Malignitätsnachweis") mis-routed a
+# clinical dictation to weiterbildung-kv-nachweise. It must only do so in a real
+# KV/WBO/Weiterbildung/Logbuch/QZ/QS context.
+
+
+@pytest.mark.parametrize(
+    "dictation,expected",
+    [
+        # a clinical finding word must stay clinical
+        ("Stationärer Entlassbrief mit Malignitätsnachweis in der Histologie.", ("arztbrief",)),
+        ("Sputum: Nachweis von Streptococcus pneumoniae.", ("arztbrief",)),
+        # ... whereas a real Nachweis request keeps routing there
+        ("Bitte den KV-Nachweis für die Weiterbildung erstellen.", ("weiterbildung-kv-nachweise",)),
+        ("WBO / KV-Genehmigung als Nachweis.", ("weiterbildung-kv-nachweise",)),
+        ("Nachweis der QZ-Teilnahme bitte.", ("weiterbildung-kv-nachweise",)),
+    ],
+)
+def test_triage_nachweis_requires_a_weiterbildung_context(dictation, expected):
+    decision = triage.triage(dictation)
+    assert decision.doc_types == expected, decision.reason
+
+
+# --------------------------------------------------------------------------- R5: broadened labels
+
+
+@pytest.mark.parametrize(
+    "text,doc_type",
+    [
+        # the judge's quoted label-like list opener (no colon)
+        ("Abschließende Kontrolle auf intraabdominelle Bluttrockenheit, welche besteht.", "operationsbericht"),
+        # a colon label that was previously not in the list
+        ("Mikrobiologie: Nachweis von Streptococcus pneumoniae.", "arztbrief"),
+        ("Diagnostik: Sonographie des Abdomens.", "arztbrief"),
+    ],
+)
+def test_rule_checker_flags_broadened_category_labels(text, doc_type):
+    result = check(text, doc_type, "")
+    assert "R5" in {finding.rule_id for finding in result.findings}
+
+
+# --------------------------------------------------------------------------- R6 autofix
+
+
+def test_autofix_normalises_curated_transliterations():
+    fixed, replacements = autofix_umlauts(
+        "Die stationaer aufgenommene Patientin hat Fluessigkeit und grosse Beschwerden."
+    )
+    assert "stationär" in fixed
+    assert "Flüssigkeit" in fixed
+    assert "große" in fixed
+    assert "stationaer" not in fixed and "Fluessigkeit" not in fixed
+    assert ("stationaer", "stationär") in replacements
+    assert ("Fluessigkeit", "Flüssigkeit") in replacements
+
+
+def test_autofix_never_touches_words_where_ae_oe_ue_ss_is_correct():
+    original = (
+        "Das Aerosol, der Oesophagus und das Museum sind keine Umlautfehler; "
+        "auch Prozess und Fluss bleiben unverändert."
+    )
+    fixed, replacements = autofix_umlauts(original)
+    assert fixed == original
+    assert replacements == []
+
+
+def test_check_logs_umlaut_autofix_as_a_soft_finding():
+    cleaned, replacements = autofix_umlauts("stationaer aufgenommen")
+    result = check(cleaned, "arztbrief", "irgendein Rohtext", autofix=replacements)
+    autofix_findings = [finding for finding in result.findings if finding.rule_id == "R6-AUTOFIX"]
+    assert autofix_findings
+    assert all(finding.severity == "soft" for finding in autofix_findings)
+    assert "stationär" in autofix_findings[0].message
+
+
+# --------------------------------------------------------------------------- R-INVENT (anti-invention)
+
+_AMBULANT02_DICTATION = (
+    "Das Kind stellte sich in Begleitung seiner Mutter in der NFA vor, nachdem es sich beim Spielen "
+    "den Kopf gestossen hatte. In der KU zeigte sich an der Stirn oberhalb der linken Augenbraue eine "
+    "ca. 0,5 cm grosse Kopfplatzwunde; neurologisch war das Kind unauffaellig.\n\n"
+    "Die Wunde wurde desinfiziert, mit Fibrinkleber adaptiert und mit Pflaster verbunden. Die Mutter "
+    "wurde über das weitere Vorgehen aufgeklaert; der Hautkleber löst sich nach etwa 3 Tagen von selbst. "
+    "Eine stationaere Aufnahme war nicht erforderlich.\n\n"
+    "Diagnosen:\nPlatzwunde der Stirn\nCommotio cerebri ausgeschlossen"
+)
+
+_OPBERICHT01_DICTATION = (
+    "OP-Bericht. Bei der 54-jaehrigen Patientin besteht eine symptomatische Cholezystolithiasis ohne "
+    "Anhalt fuer eine Gallenwegsobstruktion. Bei symptomatischem Steinleiden erfolgte die geplante "
+    "laparoskopische Cholezystektomie. OP: OP am 23.09.2026: laparoskopische Cholezystektomie. "
+    "Intraoperativ zeigte sich eine chronisch entzuendete Gallenblase mit multiplen Konkrementen. "
+    "Präparat: Gallenblase, Präparat ad Histologie. Diagnosen: Symptomatische Cholezystolithiasis "
+    "Operation: Laparoskopische Cholezystektomie"
+)
+
+
+def test_rule_checker_catches_the_invented_recommendation_sentence():
+    """The judge scored this exact sentence 1/5 (ambulant-02) — it must be an R-INVENT."""
+    text = (
+        "Das Kind stellte sich in Begleitung seiner Mutter in der NFA vor.\n\n"
+        "Empfohlen werden die regelmäßige Wundkontrolle sowie die Wiedervorstellung bei Rötung, "
+        "Schwellung, zunehmenden Schmerzen oder Fieber.\n\n"
+        "Diagnosen:\nPlatzwunde der Stirn"
+    )
+    result = check(text, "ambulant", _AMBULANT02_DICTATION)
+    invented = [finding for finding in result.hard if finding.rule_id == "R-INVENT"]
+    assert invented, [finding.rule_id for finding in result.hard]
+    message = invented[0].message.lower()
+    assert "wundkontrolle" in message and "wiedervorstellung" in message
+    # the offending passage is quoted for the UI
+    assert "Wundkontrolle" in invented[0].evidence
+
+
+def test_rule_checker_catches_the_invented_op_standard_text():
+    """The judge scored this OP sentence 0/5 (opbericht-01)."""
+    text = (
+        "Bei der 54-jährigen Patientin besteht eine symptomatische Cholezystolithiasis.\n\n"
+        "Nach Team-Time-out erfolgt die Hautdesinfektion gefärbt sowie die sterile Abdeckung des Abdomens.\n\n"
+        "Diagnosen:\nSymptomatische Cholezystolithiasis\n\nOperation:\nLaparoskopische Cholezystektomie"
+    )
+    result = check(text, "operationsbericht", _OPBERICHT01_DICTATION)
+    invented = [finding for finding in result.hard if finding.rule_id == "R-INVENT"]
+    assert invented, [finding.rule_id for finding in result.hard]
+    assert "hautdesinfektion" in invented[0].message.lower()
+
+
+def test_rule_checker_tolerates_faithful_rephrasing_via_synonyms():
+    source = (
+        "Die Patientin wurde mit Unterbauchbeschwerden stationär aufgenommen. Sonographisch zeigte sich "
+        "eine entzündlich verdickte Sigma-Schlinge. Laborchemisch bestanden eine Leukozytose und ein "
+        "erhöhtes CRP. Wir nahmen die Patientin zur intravenösen Antibiotikatherapie stationär auf."
+    )
+    faithful = (
+        "Die Aufnahme der Patientin erfolgte bei Unterbauchschmerzen. Sonographisch zeigte sich eine "
+        "entzündlich verdickte Sigma-Schlinge. Eine Leukozytose und ein erhöhtes CRP bestanden."
+    )
+    assert "R-INVENT" not in {finding.rule_id for finding in check(faithful, "arztbrief", source).findings}
+    # the same source with a genuinely novel sentence DOES fire — proves the check is active here
+    invented = faithful + " Empfohlen wird eine Wiedervorstellung bei Rötung, Schwellung oder Fieber."
+    assert "R-INVENT" in {finding.rule_id for finding in check(invented, "arztbrief", source).findings}
+
+
+def test_invention_check_is_deterministic_and_fast_on_two_pages():
+    import time
+
+    paragraph = (
+        "Die Patientin klagte über seit zwei Tagen bestehende rechtsseitige Oberbauchschmerzen mit "
+        "Ausstrahlung. Sonographisch zeigte sich eine entzündlich verdickte Gallenblasenwand mit Konkrementen. "
+        "Laborchemisch bestanden eine Leukozytose und ein erhöhtes CRP."
+    )
+    text = "\n".join(paragraph for _ in range(14))  # ~2 pages
+    calls = [check(text, "arztbrief", _AMBULANT02_DICTATION) for _ in range(2)]
+    first = [finding.as_dict() for finding in calls[0].findings]
+    second = [finding.as_dict() for finding in calls[1].findings]
+    assert first == second  # deterministic
+
+    start = time.perf_counter()
+    check(text, "arztbrief", _AMBULANT02_DICTATION)
+    elapsed = time.perf_counter() - start
+    assert elapsed < 0.1, f"R-INVENT too slow: {elapsed * 1000:.1f} ms on {len(text)} chars"

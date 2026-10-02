@@ -34,6 +34,25 @@ Der bestehende `rule_checker` (R1–R67 + AP-01..AP-25) liefert harte und weiche
 Findings mit Regel-IDs. Das Harness reimplementiert ihn nicht, sondern liest das
 Ergebnis der Pipeline (`letter.last_check`).
 
+Seit dem ersten Echt-Modelllauf (02.10.2026) enthält der Checker zusätzlich:
+* **`R-INVENT` (hart) — Quellenbindung / Anti-Erfindung.** Der Text wird in Aussagen
+  zerlegt; die substantiellen klinischen Terme je Aussage (Zahlen, Daten, Befunde,
+  Diagnosen, Maßnahmen, anatomische/Medikamenten-/Nachsorgebegriffe) werden gegen das
+  Diktat geprüft. Eine Aussage wird geflaggt, wenn sie **≥ 2 ungestützte Terme** enthält
+  oder ein Empfehlungssatz ganz ohne Gegenstück in den Quellen ist. Legitime
+  Umformulierungen bleiben unbeanstandet (kleine medizinische Synonymkarte,
+  Stammformen, Komposita-Toleranz, Stopword-/Generik-Filter). Jeder Treffer zitiert die
+  beanstandete Stelle (für die UI) und nennt die neuen Terme (für den Retry).
+* **`R6-AUTOFIX` (weich) — deterministische Umlaut-Korrektur.** Bekannte ASCII-Umschreibungen
+  (stationaer→stationär, Fluessigkeit→Flüssigkeit, …) werden vor der Prüfung über eine
+  explizite, kuratierte Wortkarte normalisiert; korrekte Wörter (Aerosol, Oesophagus,
+  Museum, neue, Quelle, Fluss, Prozess …) bleiben über eine Deny-List unangetastet. Jede
+  Ersetzung wird als weiches Finding protokolliert (sichtbar in `letter.last_check`). Ein
+  verbleibender, nicht gelisteter ASCII-Umlaut fällt weiterhin als hartes `R6` auf.
+* **`R5` erweitert — Kategorie-Labels.** Neben den Colon-Labels (Labor:, KU:, Sono:, CT:,
+  Anamnese:, Befund:, Therapie:, Diagnostik:, Mikrobiologie:, …) werden auch label-artige
+  Listen-Opener ohne Colon erkannt (z. B. „Abschließende Kontrolle auf …“).
+
 ### 2.2 Echo-Erkennung (die Antwort auf den Einwand)
 `tools/eval/eval_echo.py` normalisiert Diktat und Ausgabe (Umlaut-Faltung,
 Kleinschreibung, Satzzeichen weg) und **entfernt vorher die Struktur-Labels**
@@ -50,6 +69,19 @@ Verdikt: **`ECHO (keine eigene Formulierung)`**, wenn `similarity > 0.85`.
 Zusätzlich wird ein **Content-Echo** ausgewiesen (`jaccard > 0.85`): eine reine
 Umsortierung teilt alle Inhaltswörter, kann aber die Zeichenketten-Similarity unter
 die Schwelle drücken — siehe §5.
+
+**Schwelle je Dokumenttyp.** Für `zusammenfassung` und `entlassmedikationsplan` gilt eine
+erhöhte Schwelle (0.92 statt 0.85): beide sind Kompressionsaufträge, deren korrekte Ausgabe
+per Definition ein kondensierter Teil des Diktats ist — die Zeichenketten-Überlappung ist
+dadurch von Natur aus höher. Die Standardschwelle 0.85 würde eine korrekte Kurzfassung
+fälschlich als Echo markieren. `echo_threshold_for(doc_type)` liefert die Schwelle; sie
+erscheint im `run.json` (`echo.threshold`) und in der Scorecard.
+
+**Echo-Streuung.** Ein einzelner Lauf ist kein belastbares Echo-Urteil: derselbe Fall
+lieferte im Echt-Modelllauf `similarity` **0.021** in einem Lauf und **0.957** im nächsten.
+Deshalb gibt es `--repeat N`: jeder Fall läuft N-mal, ausgewiesen werden **Median und
+Bereich** (der Median bestimmt den repräsentativen Lauf und fließt in die Aggregate ein).
+Siehe §5.
 
 ### 2.3 `must_contain` / `must_not_contain`
 Handgeschriebene Qualitätserwartungen je Fall. `must_contain` matcht als
@@ -111,6 +143,10 @@ cd /workspace/briefato
 .venv/bin/python tools/eval/run_eval.py --provider openai --model gpt-4o-mini \
     --out tools/eval/runs --judge-model mistral-large-latest
 
+# Rauschen beherrschen: jeden Fall N-mal laufen, Echo als Median + Bereich
+.venv/bin/python tools/eval/run_eval.py --provider openai --model gpt-4o-mini \
+    --out tools/eval/runs --repeat 3
+
 # A/B-Diff-Tabelle aus zwei fertigen Läufen
 .venv/bin/python tools/eval/run_eval.py --compare \
     tools/eval/runs/<RUN_A>/run.json tools/eval/runs/<RUN_B>/run.json
@@ -118,7 +154,10 @@ cd /workspace/briefato
 
 Jeder Lauf schreibt `<out>/<run-id>/run.json` (Maschinenlesbar) und
 `<out>/<run-id>/scorecard.md` (Menschenlesbar). Die Run-ID ist zeitgestempelt
-(`YYYYmmdd-HHMMSS-provider-modell`).
+(`YYYYmmdd-HHMMSS-provider-modell`). Zusätzlich wird **je Fall der erzeugte Text** unter
+`<out>/<run-id>/cases/<id>.txt` abgelegt (bei `--repeat N` für den repräsentativen Lauf
+plus `<id>.run1.txt` … `<id>.runN.txt`), damit ein Defekt nach dem Lauf diffbar ist; die
+Scorecard verweist auf den Pfad.
 
 ### A/B zwischen zwei Modellen
 1. Lauf A und Lauf B wie oben erzeugen.
@@ -164,6 +203,14 @@ das Rohmaterial enthält absichtlich keine Routine-Schritte und kein
 ergänzen (R52). Der Mock tut das nicht — genau der Pfad, den ein echtes Modell
 beweisen muss.
 
+**Zur Vorsicht bei Echt-Läufen.** Der erste Echt-Modelllauf (02.10.2026, DeepSeek
+`deepseek-flash`) zeigte, dass die Echo-Similarity desselben Falls zwischen Läufen stark
+schwankt: `zusammenfassung-01` lag bei **0.021** im 14er-Lauf und bei **0.957** im
+Judge-Lauf; `ambulant-02` bei 1.000 bzw. 0.811. Ein Einzel-Lauf-Wert ist daher
+**Rauschen** — belastbar ist nur der **Median über `--repeat N`** samt Bereich. Aus demselben
+Grund wird der erzeugte Text je Fall unter `cases/<id>.txt` gespeichert, damit ein Befund
+nachträglich diffbar ist statt nur als Zahl zu existieren.
+
 ## 6. Einen Fall hinzufügen
 
 1. Datei `tools/eval/cases/<id>.json` anlegen; Felder siehe
@@ -172,9 +219,12 @@ beweisen muss.
 2. **Keine echten Patientendaten** — erfundene Namen („Muster, Anna") oder `XXX`.
 3. Erwartungen fachlich aus `brain/regelwerk.md` und
    `brain/dokumenttypen/<typ>.md` ableiten.
-4. Vermeide Triage-Trigger-Wörter im falschen Fall (`nachweis`, `pflegebericht`,
+4. Vermeide Triage-Trigger-Wörter im falschen Fall (`pflegebericht`,
    `medikationsplan`, `OP-Bericht`, `Zusammenfassung`); eine Fehlleitung erscheint
-   als `doc_type_match: false` und wird so sichtbar statt still.
+   als `doc_type_match: false` und wird so sichtbar statt still. Der frühere
+   `\bnachweis`-Fehlpfad ist behoben: ein klinisches „Malignitätsnachweis“ bleibt beim
+   klinischen Dokument, nur ein echter KV-/WBO-/Weiterbildungs-/Logbuch-/QZ-/QS-Kontext
+   routet auf `weiterbildung-kv-nachweise`.
 5. `tools/eval/run_eval.py --provider mock --only <id>` laufen lassen und die
    Baseline-Zahlen prüfen.
 
@@ -186,10 +236,18 @@ cd /workspace/briefato
 ```
 
 Deckt ab (offline, Mock): Echo-Erkennung (wörtliches Echo wird markiert, echte
-Umformulierung passiert, Label-Überlappung allein zählt nicht), `must_contain`/
-`must_not_contain`-Logik inkl. Label-Schärfe und Flexionstoleranz,
-Struktur/Reihenfolge, Judge-Parsing, Corpus-Validierung, `--enrich`, Subprozess-Lauf
-über eine Zwei-Fall-Teilmenge mit Scorecard + Banner sowie der `--compare`-Modus.
+Umformulierung passiert, Label-Überlappung allein zählt nicht), die Schwellen je
+Dokumenttyp, `must_contain`/`must_not_contain`-Logik inkl. Label-Schärfe und
+Flexionstoleranz, Struktur/Reihenfolge, Judge-Parsing, Corpus-Validierung, `--enrich`,
+`--repeat` mit Median/Bereich und persistiertem Text, Subprozess-Lauf über eine
+Zwei-Fall-Teilmenge mit Scorecard + Banner sowie der `--compare`-Modus.
+
+Die neuen deterministischen Achsen (`R-INVENT`, `R6-AUTOFIX`, erweitertes `R5`) und die
+Triage-Härtung sind zusätzlich in `app/tests/test_brain.py` bzw.
+`app/tests/test_pipeline.py` abgedeckt: die beiden vom Judge beanstandeten Sätze werden
+als `R-INVENT` gefangen, eine Synonym-Umformulierung nicht; die Umlaut-Karte korrigiert
+`stationaer`/`Fluessigkeit`, lässt `Aerosol`/`Oesophagus`/`Museum`/`Prozess`/`Fluss`
+unangetastet und protokolliert jede Ersetzung.
 
 ## 8. Grenzen (Zusammenfassung)
 

@@ -49,8 +49,13 @@ from sqlalchemy import select
 from .. import security
 from ..brain import brain_loader, retrieval
 from ..brain import triage as brain_triage
-from ..brain.prompt_assembly import PROMPT_VERSION, build_prompt, correction_block
-from ..brain.rule_checker import check as rule_check
+from ..brain.prompt_assembly import (
+    PROMPT_VERSION,
+    build_prompt,
+    correction_block,
+    reference_support_text,
+)
+from ..brain.rule_checker import autofix_umlauts, check as rule_check
 from ..config import get_settings
 from ..models import Generation, Letter, Subscription
 from ..research import enrich_default, filter_generic, get_research_provider
@@ -370,7 +375,11 @@ def _single_pass_document(
             raise AssertionError("pseudonymisation is not idempotent: raw identifiers survive masking")
         result = provider.generate(bundle.system, bundle.user)
         restored = pseudonymizer.restore(result.text)
-        return bundle, result, restored, rule_check(restored, doc_type, dictation)
+        fixed, umlaut_fixes = autofix_umlauts(restored)
+        reference = reference_support_text(hits, enrichment)
+        return bundle, result, fixed, rule_check(
+            fixed, doc_type, dictation, autofix=umlaut_fixes, reference=reference
+        )
 
     bundle, result, text, check_result = _call(extra)
     retried = False

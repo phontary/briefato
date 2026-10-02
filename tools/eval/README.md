@@ -15,7 +15,7 @@ die Schreibqualität. Dieses Harness trennt beides.
 | Datei | Zweck |
 |---|---|
 | `run_eval.py` | CLI-Runner: fährt jeden Fall durch die echte `generate_letter`-Pipeline und schreibt `run.json` + `scorecard.md`. |
-| `eval_echo.py` | Echo-Erkennung: `difflib.SequenceMatcher`-Similarity + Token-Jaccard, Verdikt `ECHO (keine eigene Formulierung)` > 0.85. |
+| `eval_echo.py` | Echo-Erkennung: `difflib.SequenceMatcher`-Similarity + Token-Jaccard, Verdikt `ECHO (keine eigene Formulierung)` > 0.85; Schwellen je Dokumenttyp (0.92 für `zusammenfassung`/`entlassmedikationsplan`, weil Kompression naturgemäß mehr überlappt). |
 | `eval_checks.py` | Deterministische Erwartungen: `must_contain` / `must_not_contain` / Blockpräsenz + -reihenfolge. |
 | `eval_corpus.py` | Lädt und validiert die Fälle aus `cases/*.json`. |
 | `eval_judge.py` | Optionaler LLM-Judge (0–5-Rubrik, fünf Achsen, mit Begründung + Zitat). |
@@ -46,13 +46,22 @@ tools/eval/run_eval.py --provider openai --model gpt-4o-mini \
 tools/eval/run_eval.py --provider openai --model gpt-4o-mini \
     --out tools/eval/runs --judge-model mistral-large-latest
 
+# Einzel-Läufe sind verrauscht (ein Fall schwankte zwischen 0.021 und 0.957):
+# jeden Fall N-mal laufen und Echo als Median + Bereich ausweisen
+tools/eval/run_eval.py --provider openai --model gpt-4o-mini \
+    --out tools/eval/runs --repeat 3
+
 # A/B-Vergleich zweier fertiger Läufe
 tools/eval/run_eval.py --compare runs/A/run.json runs/B/run.json
 ```
 
 Optionen: `--enrich` (siehe unten), `--model`, `--base-url`, `--judge-model`,
-`--judge-base-url`, `--only` (mehrfach), `--cases-dir`, `--tmp-dir`, `--out`,
-`--compare`.
+`--judge-base-url`, `--repeat N` (Echo-Median + Bereich), `--only` (mehrfach),
+`--cases-dir`, `--tmp-dir`, `--out`, `--compare`.
+
+Ausgabe je Lauf: `<out>/<run-id>/run.json` + `scorecard.md` **plus** `cases/<id>.txt`
+(der erzeugte Text jedes Falls; bei `--repeat N` zusätzlich `<id>.run1.txt` … `<id>.runN.txt`)
+— so lässt sich ein Defekt nach dem Lauf diffen, statt ihn nur als Zahl zu sehen.
 
 Voraussetzung: Repo-Venv (`/workspace/briefato/.venv`), nur stdlib + App-Abhängigkeiten.
 Ohne Netz nur im `mock`-Modus. Der Runner ist ein Single-Shot-Prozess: Settings und
@@ -96,10 +105,11 @@ Ein Fall (`cases/<id>.json`):
 * **Keine echten Patientendaten.** Namen wie „Muster, Anna" oder Platzhalter `XXX`.
 * `must_contain`-Einträge ohne Doppelpunkt werden als Substring geprüft — wähle
   aussagekräftige Fachbegriffe.
-* Vermeide im Diktat Wörter, die die Triage fälschlich umleiten (u. a.
-  `nachweis` → Weiterbildungs-Nachweise; `pflegebericht`, `medikationsplan`,
-  `OP-Bericht`, `Zusammenfassung` nur in den passenden Fällen). Das Harness erkennt
-  eine Fehlleitung als `doc_type_match: false`.
+* Vermeide im Diktat Wörter, die die Triage fälschlich umleiten (`pflegebericht`,
+  `medikationsplan`, `OP-Bericht`, `Zusammenfassung` nur in den passenden Fällen). Das
+  Harness erkennt eine Fehlleitung als `doc_type_match: false`. Der `\bnachweis`-Fehlpfad
+  ist behoben: nur mit echtem KV/WBO/Weiterbildung/Logbuch/QZ/QS-Kontext routet er auf
+  `weiterbildung-kv-nachweise`; „Malignitätsnachweis“ bleibt klinisch.
 * Lauf `tools/eval/run_eval.py --provider mock` nach dem Anlegen, um die
   Baseline-Zahlen zu aktualisieren.
 

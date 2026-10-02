@@ -34,7 +34,7 @@ from eval_checks import (  # noqa: E402
     contains_strict,
 )
 from eval_corpus import CorpusError, load_cases  # noqa: E402
-from eval_echo import ECHO_VERDICT, detect_echo  # noqa: E402
+from eval_echo import ECHO_THRESHOLDS_BY_TYPE, ECHO_VERDICT, detect_echo, echo_threshold_for  # noqa: E402
 from eval_judge import AXES, parse_judge_response  # noqa: E402
 from run_eval import effective_dictation  # noqa: E402
 
@@ -82,6 +82,15 @@ def test_echo_empty_output_is_not_an_echo():
     result = detect_echo("irgendein Diktat", "")
     assert result.is_echo is False
     assert result.similarity == 0.0
+
+
+def test_echo_threshold_is_per_document_type():
+    # Compression types legitimately share more of the input verbatim.
+    assert echo_threshold_for("zusammenfassung") == 0.92
+    assert echo_threshold_for("entlassmedikationsplan") == 0.92
+    assert echo_threshold_for("arztbrief") == 0.85
+    assert echo_threshold_for(None) == 0.85
+    assert set(ECHO_THRESHOLDS_BY_TYPE) == {"zusammenfassung", "entlassmedikationsplan"}
 
 
 # --------------------------------------------------------------------------- must_contain
@@ -258,6 +267,52 @@ def test_runner_executes_subset_and_writes_scorecard(tmp_path):
     # The mock copies its input — the harness must say so.
     assert run["aggregate"]["echo_count"] >= 1
     assert "Echo" in scorecard
+
+    # The generated text is persisted per case so a defect can be diffed after the run.
+    case_files = sorted(path.name for path in out_dir.glob("*/cases/*.txt"))
+    assert "entlassbrief-01.txt" in case_files
+    assert "pflegebericht-01.txt" in case_files
+    assert run["cases"][0]["content_file"].startswith("cases/")
+    assert "cases/entlassbrief-01.txt" in scorecard
+    # The per-type echo threshold is reported in the scorecard.
+    assert "Echo-Schwelle" in scorecard
+
+
+def test_runner_repeat_reports_median_and_range(tmp_path):
+    out_dir = tmp_path / "runs"
+    tmp_dir = tmp_path / "work"
+    cmd = [
+        sys.executable,
+        str(EVAL_DIR / "run_eval.py"),
+        "--provider",
+        "mock",
+        "--only",
+        "ambulant-01",
+        "--repeat",
+        "3",
+        "--out",
+        str(out_dir),
+        "--tmp-dir",
+        str(tmp_dir),
+    ]
+    env = {**os.environ, "BRIEFATO_LLM_MOCK": "true", "BRIEFATO_SECRET_KEY": "eval-test-secret"}
+    env.pop("BRIEFATO_BRAIN_DIR", None)
+    completed = subprocess.run(cmd, cwd=str(REPO_ROOT), env=env, capture_output=True, text=True, timeout=300)
+    assert completed.returncode == 0, completed.stderr
+
+    run = json.loads(next(iter(out_dir.glob("*/run.json"))).read_text(encoding="utf-8"))
+    assert run["repeat"] == 3
+    case = run["cases"][0]
+    repeat = case["echo_repeat"]
+    assert repeat["n"] == 3
+    assert len(repeat["similarities"]) == 3
+    assert repeat["min"] <= repeat["median"] <= repeat["max"]
+    assert case["echo"]["threshold"] == 0.85
+
+    case_dir = next(out_dir.glob("*/cases"))
+    assert (case_dir / "ambulant-01.txt").exists()
+    assert (case_dir / "ambulant-01.run1.txt").exists()
+    assert (case_dir / "ambulant-01.run3.txt").exists()
 
 
 def test_compare_mode_produces_a_diff_table(tmp_path):

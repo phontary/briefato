@@ -93,7 +93,14 @@ _ZUSAMMENFASSUNG = (r"\bzusammenfassung\b", r"\bzusammenfassen\b", r"nur die zus
 _OP = (r"\bop[-\s]?bericht\b", r"\boperationsbericht\b")
 _MEDIKATION = (r"medikationsplan", r"\bmop\b", r"verabreichungsplan", r"entlassmedikation", r"mediks\s*plan")
 _ABLEHNUNG = (r"ablehnungsbogen", r"thieme\s*compliance", r"aufkl[äa]rungsbogen")
-_WEITERBILDUNG = (r"\bwbo\b", r"weiterbildung", r"kv[-\s]?genehmigung", r"logbuch", r"\bqs\b", r"nachweis")
+_WEITERBILDUNG = (r"\bwbo\b", r"weiterbildung", r"kv[-\s]?genehmigung", r"logbuch", r"\bqs\b")
+# A bare „Nachweis“ (e.g. „Malignitätsnachweis“, „Nachweis von Streptococcus“) is a
+# clinical finding, NOT a Weiterbildungs-/KV-Nachweis request. Only route it there when
+# the surrounding material really is a KV/Weiterbildung context.
+_NACHWEIS = (r"\bnachweis\w*",)
+_WEITERBILDUNG_CONTEXT = (
+    r"\bkv\b", r"kv[-\s]?genehmigung", r"\bwbo\b", r"weiterbildung", r"logbuch", r"\bqz\b", r"\bqs\b",
+)
 _PFLEGE = (r"pflegebericht", r"pflegedokumentation", r"pflegeberichte", r"pflegerische dokumentation")
 _AMBULANT = (
     r"\bambulant\w*\b.*(brief|fall|vorstellung|eingriff)",
@@ -117,6 +124,10 @@ def _dictation_route(text: str) -> tuple[tuple[str, ...], float, str, tuple[str,
     medik = _find(text, _MEDIKATION)
     ablehn = _find(text, _ABLEHNUNG)
     wb = _find(text, _WEITERBILDUNG)
+    if not wb and _find(text, _NACHWEIS) and _find(text, _WEITERBILDUNG_CONTEXT):
+        # „Nachweis“ alone is a clinical finding word; it only signals a
+        # Weiterbildungs-/KV-Nachweis request together with its real context.
+        wb = ["nachweis"]
     pflege = _find(text, _PFLEGE)
     amb = _find(text, _AMBULANT)
     entlass = _find(text, _ENTLASSBRIEF)

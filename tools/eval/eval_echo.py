@@ -35,6 +35,21 @@ ECHO_THRESHOLD = 0.85
 ECHO_VERDICT = "ECHO (keine eigene Formulierung)"
 REWRITE_VERDICT = "eigene Formulierung (kein Echo)"
 
+# Per-document-type thresholds. Zusammenfassung and Entlassmedikationsplan are
+# *compression* tasks: a faithful output is a condensed subset of the dictation, so its
+# character-level overlap with the input is inherently higher than for narrative letter
+# types. Holding them to the plain 0.85 bar would flag a correct short summary as a copy.
+# The raised bar keeps the verdict meaningful for exactly those types.
+ECHO_THRESHOLDS_BY_TYPE: dict[str, float] = {
+    "zusammenfassung": 0.92,
+    "entlassmedikationsplan": 0.92,
+}
+
+
+def echo_threshold_for(doc_type: str | None) -> float:
+    """Return the echo threshold for ``doc_type`` (falling back to the global default)."""
+    return ECHO_THRESHOLDS_BY_TYPE.get((doc_type or "").strip().lower(), ECHO_THRESHOLD)
+
 # Block labels that may legitimately appear verbatim in both material and output.
 STRUCTURAL_LABELS: tuple[str, ...] = (
     "ambulante therapieempfehlungen nach der entlassung",
@@ -183,10 +198,12 @@ def detect_echo(
 
 __all__ = [
     "ECHO_THRESHOLD",
+    "ECHO_THRESHOLDS_BY_TYPE",
     "ECHO_VERDICT",
     "REWRITE_VERDICT",
     "STRUCTURAL_LABELS",
     "EchoResult",
     "detect_echo",
+    "echo_threshold_for",
     "normalise",
 ]
