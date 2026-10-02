@@ -91,16 +91,133 @@ class LLMProvider(Protocol):
 
 # --------------------------------------------------------------------------- mock
 
+# --- method shaping helpers (WORKSTREAM-BRAIN-V2) ---------------------------
+#
+# The MockProvider used to echo the dictation verbatim, so the rule-check panel
+# always showed hard failures (R21 Diagnosen, R5 Kategorie-Label, R6 ASCII-Umlaute)
+# and dev/staging demos were useless. It now composes a *method-shaped* draft from
+# the dictation: prose first, then the labelled blocks in the order the document
+# type requires. It never invents clinical facts and states only diagnoses that
+# appear in the dictation (else "keine Angabe im Diktat").
+
+# Legitimate German words containing the ae/oe trigram — never "corrected".
+_MOCK_UMLAUT_ALLOW = {
+    "aerosol", "aerob", "aerobier", "aerobes", "aachen", "oesophagus", "oesophagitis",
+    "oesophag", "oesophage", "oocyte", "koeffizient", "poesie", "poet", "poetisch",
+    "michael", "rafael", "raffael", "israel",
+}
+
+# Curated 'ue' transliterations (generic 'ue' is legitimate: neue, zuerst, Quelle).
+_MOCK_UE_WORDS = {
+    "ueber", "ueberweisung", "uebernahme", "uebergeben", "ueberpruefung", "ueberpruefen",
+    "ueberwachung", "uebersicht", "ueberleben", "uebungen", "uebung", "uebel", "uebelkeit",
+    "durchfuehrung", "durchgefuehrt", "durchfuehren", "fuehrung", "fuehren", "fuehrte",
+    "gefuehl", "zufuehren", "zurueck", "zustaendig", "verfuegung", "ausfuehren", "aufuehren",
+    "unterstuetzung", "unterstuetzen", "begruendung", "verkuerzung", "zustaende", "zustaenden",
+}
+
+# Forbidden category labels the rule checker (R5) rejects in prose.
+_MOCK_FORBIDDEN_LABELS = (
+    "ku", "sono", "sonografie", "sonographie", "labor", "laborwerte", "ct", "mrt",
+    "anamnese", "befund", "therapie", "diagnostik", "klinik", "verlauf", "aufnahme",
+    "entlassung", "ekg", "röntgen", "roentgen", "endoskopie", "histologie", "medikation",
+    "procedere", "aufnahmebefund", "untersuchung", "diagnose", "vorgeschichte",
+)
+
+# Block labels the composer recognises in the dictation (umlaut-folded lowercase).
+_MOCK_BLOCK_LABELS = {
+    "ambulante therapieempfehlungen nach der entlassung": "ambulant_empfehlungen",
+    "therapieempfehlungen bei entlassung": "ambulant_empfehlungen",
+    "diagnosen": "diagnosen",
+    "diagnose": "diagnosen",
+    "nebenerkrankungen": "nebenerkrankungen",
+    "therapie-massnahmen auf der station": "therapie_station",
+    "therapie-massnahmen": "therapie_station",
+}
+_MOCK_OPS_LABELS = {
+    "indikation": "indikation",
+    "op": "op",
+    "operation": "op",
+    "praeparat": "praeparat",
+    "präparat": "praeparat",
+}
+
+_WORD_RE_MOCK = re.compile(r"[A-Za-zÄÖÜäöüß]+")
+_DIAG_PREFIX_RE = re.compile(r"^\s*(?:dg\.?|diagnose[n]?)\s*:\s*", re.IGNORECASE)
+
+
+def _mock_fold(text: str) -> str:
+    text = (text or "").lower()
+    for source, target in (("ä", "ae"), ("ö", "oe"), ("ü", "ue"), ("ß", "ss")):
+        text = text.replace(source, target)
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return " ".join(text.split())
+
+
+def _mock_fix_umlauts(text: str) -> str:
+    """Turn conservative ASCII transliterations back into ä/ö/ü (R6)."""
+
+    def fix(word: str) -> str:
+        low = word.lower()
+        if low in _MOCK_UMLAUT_ALLOW:
+            return word
+        if "ae" in low or "oe" in low:
+            fixed = re.sub(r"(?i)ae", "ä", re.sub(r"(?i)oe", "ö", word))
+        elif low in _MOCK_UE_WORDS:
+            fixed = re.sub(r"(?i)ue", "ü", word)
+        elif low.startswith("ue") and len(low) >= 5:
+            fixed = re.sub(r"(?i)ue", "ü", word, count=1)
+        else:
+            return word
+        if word[:1].isupper():
+            fixed = fixed[:1].upper() + fixed[1:]
+        return fixed
+
+    return _WORD_RE_MOCK.sub(lambda match: fix(match.group(0)), text)
+
+
+_MOCK_BLOCK_LABELS_FOLDED = {_mock_fold(key): value for key, value in _MOCK_BLOCK_LABELS.items()}
+_MOCK_OPS_LABELS_FOLDED = {_mock_fold(key): value for key, value in _MOCK_OPS_LABELS.items()}
+
+
+def _mock_strip_markdown(text: str) -> str:
+    text = re.sub(r"^\s{0,3}#{1,6}\s*", "", text, flags=re.MULTILINE)
+    text = text.replace("**", "").replace("__", "").replace("`", "")
+    text = text.replace("|", " ")
+    text = re.sub(r"(?m)^\s*[-*•·]\s+", "", text)
+    text = re.sub(r"(?m)^\s*\d+[.)]\s+", "", text)
+    return text
+
+
+def _mock_strip_forbidden_labels(text: str, *, allow_ops: bool) -> str:
+    words = list(_MOCK_FORBIDDEN_LABELS)
+    if not allow_ops:
+        words += ["indikation", "op", "operation", "präparat", "praeparat"]
+    for word in sorted(words, key=len, reverse=True):
+        pattern = r"(?<![A-Za-zÄÖÜäöüß])" + re.escape(word) + r"\s*:"
+        text = re.sub(pattern, " ", text, flags=re.IGNORECASE)
+    return text
+
+
+def _mock_clean_line(line: str) -> str:
+    line = _mock_strip_markdown(line)
+    line = re.sub(r"^\s*[-*•·]\s*", "", line)
+    line = _mock_strip_forbidden_labels(line, allow_ops=True)
+    line = _mock_fix_umlauts(line)
+    return " ".join(line.split())
+
 
 class MockProvider:
-    """Deterministic, offline provider.
+    """Deterministic, offline provider that emits a method-shaped draft.
 
-    It does not invent clinical content: it re-emits the (pseudonymised) dictation
-    verbatim (light paragraph normalisation), so token restoration, the rule checker
-    and the end-to-end flow can be exercised without a network call. It deliberately
-    adds no salutation, no "Betreff:" heading and no closing — those are exactly the
-    anti-patterns the brain forbids. Token counts are estimated from character counts;
-    cost is always 0.
+    Given a dictation it produces plain text (no markdown, no category labels),
+    prose first, then the labelled blocks in the order the document type requires
+    (for a stationary discharge letter: ``ambulante Therapieempfehlungen nach der
+    Entlassung:`` → ``Diagnosen:`` → ``Nebenerkrankungen:`` → ``Therapie-Maßnahmen
+    auf der Station:``). It states only diagnoses that appear in the dictation and
+    never invents clinical facts; when no diagnosis is recognisable it writes
+    ``Diagnosen:`` followed by ``keine Angabe im Diktat``. The result passes the
+    R1–R67 rule checker for method-shaped input (tested).
     """
 
     name = "mock"
@@ -118,7 +235,8 @@ class MockProvider:
     ) -> LLMResult:
         started = time.perf_counter()
         dictation = self._extract_dictation(user)
-        text = self._compose(dictation)
+        kind = self._extract_kind(user)
+        text = self._compose(dictation, kind)
         latency_ms = max(1, int((time.perf_counter() - started) * 1000))
         return LLMResult(
             text=text,
@@ -146,12 +264,159 @@ class MockProvider:
             return match.group(1).strip()
         return (user or "").strip()
 
+    # -- composition -------------------------------------------------------
+
+    @classmethod
+    def _parse(cls, dictation: str) -> tuple[list[str], dict[str, list[str]]]:
+        """Split into narrative chunks + recognised labelled blocks."""
+        chunks = [chunk for chunk in re.split(r"\n\s*\n", dictation or "") if chunk.strip()]
+        narrative: list[str] = []
+        blocks: dict[str, list[str]] = {}
+        for chunk in chunks:
+            lines = chunk.splitlines()
+            first = lines[0].strip()
+            kind = None
+            head = first.split(":", 1)
+            if len(head) == 2:
+                label = _mock_fold(head[0])
+                if label in _MOCK_BLOCK_LABELS_FOLDED:
+                    kind = _MOCK_BLOCK_LABELS_FOLDED[label]
+                elif label in _MOCK_OPS_LABELS_FOLDED:
+                    kind = _MOCK_OPS_LABELS_FOLDED[label]
+            if kind is None:
+                narrative.append(chunk)
+                continue
+            content = head[1].strip()
+            body = ([content] if content else []) + lines[1:]
+            blocks.setdefault(kind, []).extend(body)
+        return narrative, blocks
+
+    @classmethod
+    def _weave(cls, narrative: list[str], *, allow_ops: bool = False) -> list[str]:
+        paragraphs: list[str] = []
+        for chunk in narrative:
+            lines = [line.strip() for line in chunk.splitlines() if line.strip()]
+            text = _mock_strip_markdown(" ".join(lines))
+            text = _mock_strip_forbidden_labels(text, allow_ops=allow_ops)
+            text = _mock_fix_umlauts(text)
+            text = cls._cap_semicolons(text)
+            text = " ".join(text.split())
+            if text:
+                paragraphs.append(text)
+        return cls._dedupe_sentences(paragraphs)
+
     @staticmethod
-    def _compose(dictation: str) -> str:
-        # Split on blank lines only — single newlines inside a block (e.g. the
-        # Diagnosen list) are preserved so the checker sees intact blocks.
-        paragraphs = [p.strip() for p in re.split(r"\n\s*\n", dictation) if p.strip()]
-        return "\n\n".join(paragraphs) or "Keine Angaben übermittelt."
+    def _cap_semicolons(text: str) -> str:
+        if text.count(";") > 1:
+            return text.replace(";", ",")
+        return text
+
+    @staticmethod
+    def _dedupe_sentences(paragraphs: list[str]) -> list[str]:
+        seen: set[str] = set()
+        out: list[str] = []
+        for paragraph in paragraphs:
+            sentences = re.split(r"(?<=[.!?])\s+", paragraph)
+            kept = []
+            for sentence in sentences:
+                key = _mock_fold(sentence)
+                if len(key) >= 20 and key in seen:
+                    continue
+                seen.add(key)
+                kept.append(sentence)
+            joined = " ".join(kept).strip()
+            if joined:
+                out.append(joined)
+        return out
+
+    @classmethod
+    def _clean_block(cls, lines: list[str] | None) -> str:
+        cleaned = [cls._cap_semicolons(_mock_clean_line(line)) for line in (lines or [])]
+        cleaned = [line for line in cleaned if line]
+        return "\n".join(cleaned)
+
+    @classmethod
+    def _diagnoses(cls, lines: list[str] | None) -> tuple[str, list[str]]:
+        """Return (diagnosis list text, Z.n. lines moved out of the list)."""
+        diagnoses: list[str] = []
+        zn: list[str] = []
+        for line in lines or []:
+            cleaned = cls._cap_semicolons(_mock_clean_line(line))
+            cleaned = _DIAG_PREFIX_RE.sub("", cleaned).strip()
+            if not cleaned:
+                continue
+            if cleaned.lower().startswith("z.n."):
+                zn.append(cleaned)
+            else:
+                diagnoses.append(cleaned)
+        if not diagnoses:
+            return "keine Angabe im Diktat", zn
+        return "\n".join(diagnoses), zn
+
+    @classmethod
+    def _compose(cls, dictation: str, kind: str) -> str:
+        narrative, blocks = cls._parse(dictation)
+        prose = cls._weave(narrative, allow_ops=(kind == "operationsbericht"))
+
+        if kind == "ambulant":
+            # R58 forbids the stationary-admission sentence in an ambulant letter.
+            prose = [p for p in prose if "stationär auf" not in p.lower() and "stationaer auf" not in p.lower()]
+
+        if kind == "zusammenfassung":
+            text = " ".join(prose).strip()
+            sentences = re.split(r"(?<=[.!?])\s+", text)
+            return cls._finalize(" ".join(sentences[:4]).strip()) or "keine Angabe im Diktat."
+
+        parts: list[str] = list(prose)
+
+        if kind == "operationsbericht":
+            for key, label in (("indikation", "Indikation:"), ("op", "OP:"), ("praeparat", "Präparat:")):
+                if blocks.get(key):
+                    parts.append(label + "\n" + cls._clean_block(blocks[key]))
+            diag, zn = cls._diagnoses(blocks.get("diagnosen"))
+            parts.append("Diagnosen:\n" + diag)
+            op_text = cls._clean_block(blocks.get("op")) or "keine Angabe im Diktat"
+            parts.append("Operation:\n" + op_text)
+            if zn:
+                parts.append("OP:\n" + "\n".join(zn))
+            return cls._finalize("\n\n".join(part for part in parts if part.strip()))
+
+        if kind in {"arztbrief", "ambulant"}:
+            if kind == "arztbrief" and blocks.get("ambulant_empfehlungen"):
+                parts.append(
+                    "ambulante Therapieempfehlungen nach der Entlassung:\n"
+                    + cls._clean_block(blocks["ambulant_empfehlungen"])
+                )
+            diag, zn = cls._diagnoses(blocks.get("diagnosen"))
+            parts.append("Diagnosen:\n" + diag)
+            if kind == "arztbrief":
+                if blocks.get("nebenerkrankungen"):
+                    parts.append("Nebenerkrankungen:\n" + cls._clean_block(blocks["nebenerkrankungen"]))
+                station = cls._clean_block(blocks.get("therapie_station"))
+                station_lines = [station] if station else []
+                if zn:
+                    station_lines.append("\n".join(zn))
+                if station_lines:
+                    parts.append("Therapie-Maßnahmen auf der Station:\n" + "\n".join(station_lines))
+            elif zn:
+                parts.append("\n".join(zn))
+            return cls._finalize("\n\n".join(part for part in parts if part.strip()))
+
+        # Any other document type: prose plus a Diagnosen list only when the
+        # dictation actually carried one (never invented).
+        if blocks.get("diagnosen"):
+            diag, zn = cls._diagnoses(blocks.get("diagnosen"))
+            parts.append("Diagnosen:\n" + diag)
+            if zn:
+                parts.append("\n".join(zn))
+        return cls._finalize("\n\n".join(part for part in parts if part.strip())) or "keine Angabe im Diktat."
+
+    @staticmethod
+    def _finalize(text: str) -> str:
+        text = (text or "").strip()
+        text = MockProvider._cap_semicolons(text)
+        return text
+
 
 
 # --------------------------------------------------------------------------- openai-compatible

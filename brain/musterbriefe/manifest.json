@@ -1,7 +1,7 @@
 {
   "source": "/workspace/schreibdienst/musterbriefe",
   "generated": "2026-10-02T18:37:42Z",
-  "count": 152,
+  "count": 144,
   "reference_sections": [
     "Klinik",
     "KU",
@@ -29,14 +29,16 @@
     "Diagnosen": 15
   },
   "counts": {
-    "files": 152,
+    "files": 144,
     "has_quellen": 4,
     "licence_review": 4,
     "thin_under_400_chars": 0,
     "under_1200_chars": 21,
     "long_over_4000_chars": 4,
     "scrub_flagged": 8,
-    "duplicate_pairs": 11
+    "duplicate_pairs": 0,
+    "merged_groups": 7,
+    "files_absorbed": 11
   },
   "templates": [
     {
@@ -909,37 +911,53 @@
     },
     {
       "file": "Biliaere_Pankreatitis.md",
-      "title": "Biliäre Pankreatitis",
+      "title": "Pankreatitis (biliär / papillär)",
       "group": "Kardiologie / Angiologie",
       "indication_keywords": [
         "Biliaere",
         "Pankreatitis",
         "Biliäre",
         "Bauchspeicheldruesenentzuendung",
-        "biliaer"
+        "biliaer",
+        "Biliäre Pankreatitis",
+        "Papillaere",
+        "Papilläre",
+        "Papillitis",
+        "Papillenstenose",
+        "ERCP",
+        "Papilläre Pankreatitis"
       ],
       "sections_present": [
         "Klinik",
+        "KU",
         "Diagnostik",
         "Therapie",
-        "Nachsorge"
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Quellen"
       ],
       "sections_missing": [
-        "KU",
-        "Verlauf",
-        "Therapieempfehlungen bei Entlassung",
         "Diagnosen"
       ],
       "headings_raw": [
         "Klinik",
+        "KU",
         "Diagnostik",
         "Therapie",
-        "Nachsorge"
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Quellen"
       ],
-      "has_quellen": false,
-      "licence_risk": "low",
-      "chars": 2230,
-      "body_chars": 2027
+      "has_quellen": true,
+      "licence_risk": "review",
+      "chars": 10895,
+      "body_chars": 10895,
+      "merged_from": [
+        "Papillaere_Pankreatitis.md"
+      ],
+      "merged_group": "pankreatitis"
     },
     {
       "file": "Bissverletzung.md",
@@ -1608,8 +1626,8 @@
       "body_chars": 2385
     },
     {
-      "file": "Diabetes_mellitus_Typ1.md",
-      "title": "Diabetes mellitus Typ 1",
+      "file": "Diabetes_mellitus.md",
+      "title": "Diabetes mellitus (Typ 1 / Typ 2)",
       "group": "Kardiologie / Angiologie",
       "indication_keywords": [
         "Diabetes",
@@ -1617,43 +1635,12 @@
         "Typ1",
         "Typ",
         "Diabetes Typ 1",
-        "Zuckerkrankheit"
-      ],
-      "sections_present": [
-        "Therapie"
-      ],
-      "sections_missing": [
-        "Klinik",
-        "KU",
-        "Diagnostik",
-        "Verlauf",
-        "Nachsorge",
-        "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
-      ],
-      "headings_raw": [
-        "Basisdaten",
-        "Komplikationen / Komorbiditäten",
-        "Therapieanpassung (stationär)",
-        "Merksätze"
-      ],
-      "has_quellen": false,
-      "licence_risk": "low",
-      "chars": 1549,
-      "body_chars": 1377
-    },
-    {
-      "file": "Diabetes_mellitus_Typ2.md",
-      "title": "Diabetes mellitus Typ 2",
-      "group": "Nephrologie / Urologie",
-      "indication_keywords": [
-        "Diabetes",
-        "mellitus",
-        "Typ2",
-        "Typ",
-        "Diabetes Typ 2",
         "Zuckerkrankheit",
-        "Hyperglykaemie"
+        "Diabetes mellitus Typ 1",
+        "Typ2",
+        "Diabetes Typ 2",
+        "Hyperglykaemie",
+        "Diabetes mellitus Typ 2"
       ],
       "sections_present": [
         "Klinik",
@@ -1665,7 +1652,8 @@
         "KU",
         "Verlauf",
         "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
+        "Diagnosen",
+        "Quellen"
       ],
       "headings_raw": [
         "Klinik",
@@ -1675,8 +1663,13 @@
       ],
       "has_quellen": false,
       "licence_risk": "low",
-      "chars": 2393,
-      "body_chars": 2221
+      "chars": 3784,
+      "body_chars": 3784,
+      "merged_from": [
+        "Diabetes_mellitus_Typ1.md",
+        "Diabetes_mellitus_Typ2.md"
+      ],
+      "merged_group": "diabetes_mellitus"
     },
     {
       "file": "Diabetisches_Fusssyndrom.md",
@@ -2000,70 +1993,44 @@
     },
     {
       "file": "Erysipel.md",
-      "title": "Erysipel",
+      "title": "Erysipel (Wundrose)",
       "group": "Kardiologie / Angiologie",
       "indication_keywords": [
         "Erysipel",
         "Wundrose",
-        "Hautinfektion"
-      ],
-      "sections_present": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Nachsorge"
-      ],
-      "sections_missing": [
-        "KU",
-        "Verlauf",
-        "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
-      ],
-      "headings_raw": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Nachsorge"
-      ],
-      "has_quellen": false,
-      "licence_risk": "low",
-      "chars": 2127,
-      "body_chars": 1985
-    },
-    {
-      "file": "Erysipel_Wundrose.md",
-      "title": "Erysipel (Wundrose)",
-      "group": "Endokrinologie / Stoffwechsel",
-      "indication_keywords": [
-        "Erysipel",
-        "Wundrose",
-        "Hautinfektion"
+        "Hautinfektion",
+        "Erysipel (Wundrose)"
       ],
       "sections_present": [
         "Klinik",
         "Diagnostik",
         "Therapie",
         "Verlauf",
+        "Nachsorge",
         "Therapieempfehlungen bei Entlassung",
         "Diagnosen"
       ],
       "sections_missing": [
         "KU",
-        "Nachsorge"
+        "Quellen"
       ],
       "headings_raw": [
-        "Aufnahmesituation",
-        "Risikofaktoren / Begleiterkrankungen",
+        "Klinik",
         "Diagnostik",
         "Therapie",
-        "Verlauf (typisch)",
-        "Entlassung",
-        "ICD-Code"
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
       ],
       "has_quellen": false,
       "licence_risk": "low",
-      "chars": 1721,
-      "body_chars": 1557
+      "chars": 3669,
+      "body_chars": 3669,
+      "merged_from": [
+        "Erysipel_Wundrose.md"
+      ],
+      "merged_group": "erysipel"
     },
     {
       "file": "Fasziitis_plantaris.md",
@@ -2788,86 +2755,17 @@
       "body_chars": 2192
     },
     {
-      "file": "Kontusion_Grosszehe.md",
-      "title": "Kontusion und Distorsion der Großzehe (Contusio/Distorsio hallucis)",
-      "group": "Orthopädie / Unfallchirurgie",
-      "indication_keywords": [
-        "Kontusion",
-        "Grosszehe",
-        "und",
-        "Distorsion",
-        "der",
-        "Großzehe",
-        "Contusio",
-        "Distorsio",
-        "hallucis",
-        "Prellung"
-      ],
-      "sections_present": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Nachsorge"
-      ],
-      "sections_missing": [
-        "KU",
-        "Verlauf",
-        "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
-      ],
-      "headings_raw": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Nachsorge"
-      ],
-      "has_quellen": false,
-      "licence_risk": "low",
-      "chars": 1559,
-      "body_chars": 1303
-    },
-    {
-      "file": "Kontusion_Grundgelenk_Kleinfinger.md",
-      "title": "Kontusion Grundgelenk Kleinfinger",
+      "file": "Kontusion_Grundgelenk_Finger.md",
+      "title": "Kontusion Grundgelenk Finger",
       "group": "Orthopädie / Unfallchirurgie",
       "indication_keywords": [
         "Kontusion",
         "Grundgelenk",
         "Kleinfinger",
-        "Prellung"
-      ],
-      "sections_present": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Nachsorge"
-      ],
-      "sections_missing": [
-        "KU",
-        "Verlauf",
-        "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
-      ],
-      "headings_raw": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Nachsorge"
-      ],
-      "has_quellen": false,
-      "licence_risk": "low",
-      "chars": 1208,
-      "body_chars": 1016
-    },
-    {
-      "file": "Kontusion_Grundgelenk_Ringfinger.md",
-      "title": "Kontusion Grundgelenk Ringfinger",
-      "group": "Orthopädie / Unfallchirurgie",
-      "indication_keywords": [
-        "Kontusion",
-        "Grundgelenk",
+        "Prellung",
+        "Kontusion Grundgelenk Kleinfinger",
         "Ringfinger",
-        "Prellung"
+        "Kontusion Grundgelenk Ringfinger"
       ],
       "sections_present": [
         "Klinik",
@@ -2879,7 +2777,8 @@
         "KU",
         "Verlauf",
         "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
+        "Diagnosen",
+        "Quellen"
       ],
       "headings_raw": [
         "Klinik",
@@ -2889,8 +2788,13 @@
       ],
       "has_quellen": false,
       "licence_risk": "low",
-      "chars": 1076,
-      "body_chars": 886
+      "chars": 2055,
+      "body_chars": 2055,
+      "merged_from": [
+        "Kontusion_Grundgelenk_Kleinfinger.md",
+        "Kontusion_Grundgelenk_Ringfinger.md"
+      ],
+      "merged_group": "kontusion_grundgelenk_finger"
     },
     {
       "file": "Kontusion_Handruecken.md",
@@ -2926,8 +2830,8 @@
       "body_chars": 1414
     },
     {
-      "file": "Kontusion_Kleinzehe.md",
-      "title": "Kontusion der Kleinzehe (Contusio digiti minimi pedis)",
+      "file": "Kontusion_Zehen.md",
+      "title": "Kontusion der Zehen",
       "group": "Orthopädie / Unfallchirurgie",
       "indication_keywords": [
         "Kontusion",
@@ -2937,66 +2841,48 @@
         "digiti",
         "minimi",
         "pedis",
-        "Zehe"
-      ],
-      "sections_present": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie"
-      ],
-      "sections_missing": [
-        "KU",
-        "Verlauf",
-        "Nachsorge",
-        "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
-      ],
-      "headings_raw": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Prognose"
-      ],
-      "has_quellen": false,
-      "licence_risk": "low",
-      "chars": 1131,
-      "body_chars": 884
-    },
-    {
-      "file": "Kontusion_Mittelzehe.md",
-      "title": "Kontusion der Mittelzehe (Contusio digiti pedis)",
-      "group": "Orthopädie / Unfallchirurgie",
-      "indication_keywords": [
-        "Kontusion",
+        "Zehe",
+        "Kontusion der Kleinzehe (Contusio digiti minimi pedis)",
         "Mittelzehe",
-        "der",
-        "Contusio",
-        "digiti",
-        "pedis",
-        "Zehe"
+        "Kontusion der Mittelzehe (Contusio digiti pedis)",
+        "Grosszehe",
+        "und",
+        "Distorsion",
+        "Großzehe",
+        "Distorsio",
+        "hallucis",
+        "Prellung",
+        "Kontusion und Distorsion der Großzehe (Contusio/Distorsio hallucis)"
       ],
       "sections_present": [
         "Klinik",
         "Diagnostik",
-        "Therapie"
+        "Therapie",
+        "Nachsorge"
       ],
       "sections_missing": [
         "KU",
         "Verlauf",
-        "Nachsorge",
         "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
+        "Diagnosen",
+        "Quellen"
       ],
       "headings_raw": [
         "Klinik",
         "Diagnostik",
         "Therapie",
-        "Prognose"
+        "Nachsorge"
       ],
       "has_quellen": false,
       "licence_risk": "low",
-      "chars": 1121,
-      "body_chars": 897
+      "chars": 1938,
+      "body_chars": 1938,
+      "merged_from": [
+        "Kontusion_Kleinzehe.md",
+        "Kontusion_Mittelzehe.md",
+        "Kontusion_Grosszehe.md"
+      ],
+      "merged_group": "kontusion_zehen"
     },
     {
       "file": "Leberhämangiom.md",
@@ -3556,74 +3442,49 @@
       "body_chars": 1333
     },
     {
-      "file": "Narbenhernie_epigastrische_IPOM.md",
-      "title": "Epigastrische Narbenhernie – IPOM-Plastik",
-      "group": "Gastroenterologie / Hepatologie",
-      "indication_keywords": [
-        "Narbenhernie",
-        "epigastrische",
-        "IPOM",
-        "Epigastrische",
-        "Plastik",
-        "epigastrisch"
-      ],
-      "sections_present": [
-        "Klinik",
-        "Diagnostik",
-        "Verlauf",
-        "Therapie",
-        "Diagnosen"
-      ],
-      "sections_missing": [
-        "KU",
-        "Nachsorge",
-        "Therapieempfehlungen bei Entlassung"
-      ],
-      "headings_raw": [
-        "Anamnese",
-        "Klinik",
-        "Diagnostik",
-        "OP",
-        "Postoperativer Verlauf",
-        "Therapie",
-        "Diagnosen"
-      ],
-      "has_quellen": false,
-      "licence_risk": "low",
-      "chars": 1607,
-      "body_chars": 1399
-    },
-    {
       "file": "Narbenhernien_epigastrisch.md",
       "title": "Narbenhernien (epigastrisch)",
       "group": "Allgemein- / Viszeralchirurgie",
       "indication_keywords": [
         "Narbenhernien",
         "epigastrisch",
-        "Narbenhernie"
+        "Narbenhernie",
+        "Narbenhernien (epigastrisch)",
+        "epigastrische",
+        "IPOM",
+        "Epigastrische",
+        "Plastik",
+        "Epigastrische Narbenhernie – IPOM-Plastik"
       ],
       "sections_present": [
         "Klinik",
         "Diagnostik",
         "Therapie",
-        "Nachsorge"
+        "Verlauf",
+        "Nachsorge",
+        "Diagnosen"
       ],
       "sections_missing": [
         "KU",
-        "Verlauf",
         "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
+        "Quellen"
       ],
       "headings_raw": [
         "Klinik",
         "Diagnostik",
         "Therapie",
-        "Nachsorge"
+        "Verlauf",
+        "Nachsorge",
+        "Diagnosen"
       ],
       "has_quellen": false,
       "licence_risk": "low",
-      "chars": 2090,
-      "body_chars": 1908
+      "chars": 3462,
+      "body_chars": 3462,
+      "merged_from": [
+        "Narbenhernie_epigastrische_IPOM.md"
+      ],
+      "merged_group": "narbenhernie_epigastrisch"
     },
     {
       "file": "Nasenbeinfraktur.md",
@@ -3834,47 +3695,6 @@
       "licence_risk": "review",
       "chars": 8757,
       "body_chars": 8555
-    },
-    {
-      "file": "Papillaere_Pankreatitis.md",
-      "title": "Papilläre Pankreatitis",
-      "group": "Hämatologie / Onkologie",
-      "indication_keywords": [
-        "Papillaere",
-        "Pankreatitis",
-        "Papilläre",
-        "Papillitis",
-        "Papillenstenose",
-        "ERCP"
-      ],
-      "sections_present": [
-        "Klinik",
-        "KU",
-        "Diagnostik",
-        "Therapie",
-        "Verlauf",
-        "Nachsorge",
-        "Therapieempfehlungen bei Entlassung",
-        "Quellen"
-      ],
-      "sections_missing": [
-        "Diagnosen"
-      ],
-      "headings_raw": [
-        "Ätiologie",
-        "Klinische Präsentation",
-        "Untersuchungsbefunde",
-        "Bildgebung",
-        "Therapie",
-        "Verlauf",
-        "Nachsorge",
-        "Therapieempfehlungen bei Entlassung",
-        "Quellen"
-      ],
-      "has_quellen": true,
-      "licence_risk": "review",
-      "chars": 8887,
-      "body_chars": 8717
     },
     {
       "file": "Paralytischer_Ileus.md",
@@ -5184,65 +5004,42 @@
     },
     {
       "file": "pAVK.md",
-      "title": "pAVK",
+      "title": "pAVK / Mediasklerose",
       "group": "Kardiologie / Angiologie",
       "indication_keywords": [
         "pAVK",
         "periphere arterielle Verschlusskrankheit",
-        "Schaufensterkrankheit"
-      ],
-      "sections_present": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Nachsorge"
-      ],
-      "sections_missing": [
-        "KU",
-        "Verlauf",
-        "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
-      ],
-      "headings_raw": [
-        "Klinik",
-        "Diagnostik",
-        "Therapie",
-        "Nachsorge"
-      ],
-      "has_quellen": false,
-      "licence_risk": "low",
-      "chars": 2806,
-      "body_chars": 2672
-    },
-    {
-      "file": "pAVK_Mediasklerose.md",
-      "title": "pAVK / Mediasklerose",
-      "group": "Nephrologie / Urologie",
-      "indication_keywords": [
-        "pAVK",
+        "Schaufensterkrankheit",
         "Mediasklerose",
-        "periphere arterielle Verschlusskrankheit"
+        "pAVK / Mediasklerose"
       ],
       "sections_present": [
-        "Klinik"
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
       ],
       "sections_missing": [
         "KU",
-        "Diagnostik",
-        "Therapie",
         "Verlauf",
-        "Nachsorge",
         "Therapieempfehlungen bei Entlassung",
-        "Diagnosen"
+        "Diagnosen",
+        "Quellen"
       ],
       "headings_raw": [
-        "Charakteristika",
-        "Klinische Relevanz"
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
       ],
       "has_quellen": false,
       "licence_risk": "low",
-      "chars": 1205,
-      "body_chars": 1039
+      "chars": 3871,
+      "body_chars": 3871,
+      "merged_from": [
+        "pAVK_Mediasklerose.md"
+      ],
+      "merged_group": "pavk"
     },
     {
       "file": "Ösophagusvarizen.md",
@@ -5278,5 +5075,6 @@
       "chars": 1494,
       "body_chars": 1284
     }
-  ]
+  ],
+  "merge_map": "brain/merges/merge-map.json"
 }

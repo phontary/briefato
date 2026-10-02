@@ -9,6 +9,7 @@ Offline only: ``BRIEFATO_LLM_MOCK=true`` and a temporary SQLite DB. Run with::
 from __future__ import annotations
 
 import os
+import re
 import tempfile
 import uuid
 from datetime import date
@@ -36,6 +37,7 @@ from briefato.models import AuditEvent, Generation, Letter, Patient, Subscriptio
 from briefato.pipeline import generate as gen_mod  # noqa: E402
 from briefato.pipeline.letterhead import render_docx  # noqa: E402
 from briefato.pipeline.providers import (  # noqa: E402
+    LLMResult,
     MockProvider,
     OpenAICompatProvider,
     PipelineProviderError,
@@ -130,6 +132,32 @@ class _BoomProvider:
             "Modellanbieter antwortete mit Status 500: internal error",
             status_code=500,
             provider="boom",
+        )
+
+
+class _BadTextProvider:
+    """Returns a non-compliant draft so the hard-findings plumbing can be tested.
+
+    The mock provider now produces a method-shaped, checker-clean draft, so a
+    deliberately broken fixed response is used instead of the mock here.
+    """
+
+    text = (
+        "Hiermit berichten wir über die Patientin.\n\n"
+        "**Anamnese:** seit drei Tagen Oberbauchschmerzen. Sonographie: Cholelithiasis. "
+        "Labor: CRP 87; Leukozyten 15.\n\n"
+        "Dg.: Cholezystitis"
+    )
+
+    def generate(self, system: str, user: str, *, max_tokens: int = 2000, temperature: float = 0.2):
+        return LLMResult(
+            text=self.text,
+            model="stub",
+            provider="stub",
+            tokens_in=1,
+            tokens_out=1,
+            cost_usd=0.0,
+            latency_ms=1,
         )
 
 
@@ -580,14 +608,19 @@ def test_generate_letter_combined_order_produces_two_documents(db):
     assert len(letter.last_check["checks"]) == 2
 
 
-def test_generate_letter_attaches_findings_when_hard_rules_fail(db):
+def test_generate_letter_attaches_findings_when_hard_rules_fail(db, monkeypatch):
     user, patient, _ = _seed(db)
+    # A deliberately non-compliant provider (markdown, category label, Dg. prefix,
+    # no Diagnosen block) so the hard-findings plumbing is exercised independently
+    # of the now checker-clean mock.
+    monkeypatch.setattr(gen_mod, "get_provider", lambda settings: _BadTextProvider())
+
     letter = gen_mod.generate_letter(
         db,
         user=user,
         patient=patient,
         kind="arztbrief",
-        dictation="Patientin mit Cholezystitis und Oberbauchschmerzen. Sonographie: Cholelithiasis. Labor: CRP 87.",
+        dictation="Patientin mit Cholezystitis und Oberbauchschmerzen.",
         letterhead={},
     )
     # The letter is still delivered, but the hard findings are attached for the UI.
@@ -642,3 +675,86 @@ def test_generate_letter_prompt_is_built_from_the_brain(db, monkeypatch):
     assert "Diagnosen:" in captured
     # and no raw patient identifier from the sample patient
     assert "Müller" not in captured and "02.03.1974" not in captured
+
+
+# --------------------------------------------------------------------------- mock method shape (WORKSTREAM-BRAIN-V2)
+
+_METHOD_SHAPED_DICTATION = (
+    "Die Patientin stellte sich mit seit zwei Tagen bestehenden linksseitigen "
+    "Unterbauchschmerzen und Fieber vor. Sonographisch zeigte sich eine entzündlich "
+    "verdickte Sigma-Schlinge. Wir nahmen die Patientin zur i.v. Antibiotikatherapie "
+    "stationär auf."
+)
+
+
+def test_mock_provider_emits_method_shaped_compliant_draft():
+    from briefato.brain.prompt_assembly import build_prompt
+    from briefato.brain.rule_checker import check as rule_check
+
+    bundle = build_prompt(
+        doc_type="arztbrief", dictation=_METHOD_SHAPED_DICTATION, letterhead={}, patient_ctx={}
+    )
+    text = MockProvider().generate(bundle.system, bundle.user).text
+
+    # plain text: no markdown, no bullets, no category labels
+    assert "**" not in text and "#" not in text and "`" not in text
+    assert not re.search(r"(?m)^\s*[-*•]\s+", text)
+    # the mandatory Diagnosen block is present, and no diagnosis is invented
+    assert "Diagnosen:" in text
+    assert "keine Angabe im Diktat" in text
+    assert "ambulante Therapieempfehlungen nach der Entlassung:" not in text
+
+    result = rule_check(text, "arztbrief", _METHOD_SHAPED_DICTATION)
+    assert result.ok, [finding.rule_id for finding in result.hard]
+
+
+def test_mock_provider_orders_discharge_blocks_and_passes_checker():
+    from briefato.brain.prompt_assembly import build_prompt
+    from briefato.brain.rule_checker import check as rule_check
+
+    bundle = build_prompt(doc_type="arztbrief", dictation=_COMPLIANT_DICTATION, letterhead={}, patient_ctx={})
+    text = MockProvider().generate(bundle.system, bundle.user).text
+    order = [
+        "ambulante Therapieempfehlungen nach der Entlassung:",
+        "Diagnosen:",
+        "Nebenerkrankungen:",
+        "Therapie-Maßnahmen auf der Station:",
+    ]
+    positions = [text.index(block) for block in order]
+    assert positions == sorted(positions)
+    assert text.rstrip().endswith("Kompressionstherapie")
+    assert rule_check(text, "arztbrief", _COMPLIANT_DICTATION).ok
+
+
+def test_mock_provider_states_only_dictated_diagnoses():
+    from briefato.brain.prompt_assembly import build_prompt
+
+    dictation = (
+        "Wir nahmen den Patienten stationär auf.\n\n"
+        "Diagnosen:\n"
+        "Cholezystitis\n"
+        "Z.n. Cholezystektomie"
+    )
+    bundle = build_prompt(doc_type="arztbrief", dictation=dictation, letterhead={}, patient_ctx={})
+    text = MockProvider().generate(bundle.system, bundle.user).text
+    assert "Cholezystitis" in text
+    # the Z.n. line is moved out of the Diagnosen list (R23)
+    diag = text.split("Diagnosen:", 1)[1].split("Therapie-Maßnahmen", 1)[0]
+    assert "Z.n." not in diag
+    assert "Cholezystektomie" in text
+
+
+def test_generate_letter_with_method_dictation_has_no_hard_findings(db):
+    user, patient, _ = _seed(db)
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation=_METHOD_SHAPED_DICTATION,
+        letterhead={"practice_name": "Praxis Dr. Weber"},
+    )
+    assert letter.status == "done"
+    assert letter.last_check["hard_count"] == 0
+    assert letter.error == ""
+    assert all(check["ok"] for check in letter.last_check["checks"])

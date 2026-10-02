@@ -11,9 +11,10 @@ import re
 
 import pytest
 
-from briefato.brain import brain_loader, prompt_assembly, retrieval, rule_checker, triage
+from briefato.brain import brain_loader, muster_merge, prompt_assembly, retrieval, rule_checker, triage
 from briefato.brain.prompt_assembly import build_prompt
 from briefato.brain.rule_checker import check
+from briefato.brain.stopwords import is_qualifier
 from briefato.brain.triage import DOC_TYPES, TriageDecision
 
 
@@ -25,7 +26,7 @@ def test_loader_finds_the_brain():
     assert brain_loader.kern_text().strip()
     assert len(brain_loader.rules()) == 67
     assert len(brain_loader.anti_pattern_lines()) == 25
-    assert status["templates"] == 152
+    assert status["templates"] == 144  # 152 source templates minus 11 absorbed in 7 merge groups
     assert status["playbooks"] == len(brain_loader.DOKUMENTTYPEN) == 9
     # every playbook is loadable
     for doc_type in brain_loader.DOKUMENTTYPEN:
@@ -329,3 +330,113 @@ def test_rule_checker_summary_and_serialisation():
 def test_rule_checker_flags_specific_anti_patterns(text, doc_type, expected_rule):
     result = check(text, doc_type, "Rohtext ohne ICD")
     assert expected_rule in {finding.rule_id for finding in result.findings}
+
+
+# --------------------------------------------------------------------------- retrieval precision (WORKSTREAM-BRAIN-V2)
+
+
+def test_retrieval_selftest_queries_rank_first():
+    """All 15 self-test queries return the correct template at rank 1."""
+    for query, expected in retrieval.SELFTEST_QUERIES:
+        hits = retrieval.retrieve(query, limit=1)
+        assert hits, f"no retrieval hit for {query!r}"
+        top = hits[0]
+        if expected == "Cholezystolithiasis.md":
+            # scrub-pending and therefore intentionally excluded; the biliary family wins
+            assert re.search(r"gallen|chole", top.file, re.IGNORECASE), top.file
+        else:
+            assert expected.lower() in top.file.lower(), f"{query!r} -> {top.file}"
+        assert top.reason, f"every hit must carry a German reason ({query!r})"
+
+
+def _reason_token(hit):
+    token = hit.reason.split(":", 1)[-1].strip() if ":" in hit.reason else ""
+    return token.split()[0].lower() if token else ""
+
+
+@pytest.mark.parametrize("query,expected", retrieval.ADVERSARIAL_QUERIES)
+def test_retrieval_adversarial_generic_adjective_never_wins(query, expected):
+    """The correct template must beat any template that only shares a generic adjective."""
+    hits = retrieval.retrieve(query, limit=25)
+    assert hits, f"no retrieval hit for {query!r}"
+    top = hits[0]
+    assert expected.lower() in top.file.lower(), f"{query!r} -> {top.file}"
+    # the winning match is never a generic clinical qualifier
+    assert not is_qualifier(_reason_token(top)), top.reason
+    # and no template whose only match is a qualifier may outrank the top hit
+    for hit in hits[1:]:
+        if _reason_token(hit) and is_qualifier(_reason_token(hit)):
+            assert hit.score < top.score, f"{hit.file} outranked the correct template"
+
+
+def test_diverticulitis_dictation_beats_subdural_template():
+    """The exact staging defect: diverticulitis must beat the subdural template."""
+    query = retrieval.ADVERSARIAL_QUERIES[0][0]
+    ranked = {hit.file: hit.score for hit in retrieval.retrieve(query, limit=50)}
+    assert "Akute_Divertikulitis.md" in ranked
+    # The subdural template must not be retrieved at all, or score strictly lower.
+    subdural_score = ranked.get("Akut_auf_chronisches_Subduralhaematom.md", 0.0)
+    assert ranked["Akute_Divertikulitis.md"] > subdural_score
+
+
+def test_generic_qualifiers_are_not_strong_keyword_matches():
+    # 'akut'/'chronisch' are down-weighted: a query made of adjectives only is weak.
+    hits = retrieval.retrieve("akute chronische Verschlechterung", limit=1)
+    if hits:
+        assert hits[0].score < retrieval.W_KEYWORD
+
+
+# --------------------------------------------------------------------------- near-duplicate merges (product copy only)
+
+
+def test_manifest_has_one_entry_per_merged_group_with_merged_from():
+    merged = {entry["file"]: entry for entry in brain_loader.templates() if entry.get("merged_from")}
+    groups = {group.file: group for group in muster_merge.groups()}
+    assert set(merged) == set(groups)
+    for file_name, entry in merged.items():
+        assert entry["merged_from"] == groups[file_name].absorbed
+        assert entry["indication_keywords"], "absorbed synonyms must be folded in"
+        assert entry["licence_risk"] in {"low", "review"}
+
+
+def test_absorbed_templates_are_gone_from_the_manifest():
+    files = {entry["file"] for entry in brain_loader.templates()}
+    for absorbed in muster_merge.absorbed_files():
+        assert absorbed not in files, f"absorbed template still in manifest: {absorbed}"
+
+
+def test_merged_synonyms_still_retrieve_the_kept_template():
+    cases = [
+        ("Erysipel Wundrose", "Erysipel.md"),
+        ("pAVK Mediasklerose", "pAVK.md"),
+        ("Papilläre Pankreatitis", "Biliaere_Pankreatitis.md"),
+        ("Diabetes mellitus Typ 1", "Diabetes_mellitus.md"),
+        ("Kontusion Kleinzehe", "Kontusion_Zehen.md"),
+        ("Narbenhernie IPOM", "Narbenhernien_epigastrisch.md"),
+    ]
+    for query, expected_file in cases:
+        hits = retrieval.retrieve(query, limit=5)
+        assert any(hit.file == expected_file for hit in hits), f"{query!r} -> {[h.file for h in hits]}"
+
+
+def test_merged_packaged_files_are_deterministic():
+    """The packaged merged templates equal what the packer would generate (--check semantics)."""
+    from pathlib import Path
+
+    source = Path(str(brain_loader.manifest().get("source")))
+    dest = brain_loader.brain_root() / "musterbriefe" / "templates"
+    for group in muster_merge.groups():
+        if not source.is_dir():  # pragma: no cover - archive not mounted
+            pytest.skip("source archive not available")
+        expected = muster_merge.build_merged_content(source, group)
+        assert (dest / group.file).read_text(encoding="utf-8") == expected
+
+
+def test_merge_map_documents_every_group_and_non_merge():
+    payload = muster_merge.load_merge_map()
+    for group in payload.get("groups", []):
+        assert group.get("reason"), group.get("id")
+        assert len(group.get("sources", [])) >= 2
+    assert payload.get("non_merges"), "deliberate non-merges must be documented"
+    for non_merge in payload["non_merges"]:
+        assert non_merge.get("reason")

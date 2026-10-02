@@ -1,16 +1,23 @@
 ---
 type: Reference
-title: pAVK
-description: Musterbrief: pAVK
-tags: [Musterbrief, Schreibdienst]
-timestamp: 2026-07-10T07:45:00Z
+title: pAVK / Mediasklerose
+description: Musterbrief: pAVK / Mediasklerose
+tags: [Musterbrief, Schreibdienst, merged]
+merged_from: [pAVK.md, pAVK_Mediasklerose.md]
 ---
 
-# pAVK
+# pAVK / Mediasklerose
 
 ## Klinik
 Belastungsabhängige Schmerzen in der betroffenen Extremität (Claudicatio intermittens), in fortgeschrittenen Stadien Ruheschmerz, kühle Extremität, blasse/livide Haut, reduzierte oder fehlende Fußpulse, trophische Störungen, Ulzera, Gangrän. Klassifikation nach Fontaine: I (asymptomatisch), IIa/IIb (Claudicatio), III (Ruheschmerz), IV (Nekrose/Gangrän). Bei der pAVK vom Dreietagentyp sind Becken-, Oberschenkel- und Unterschenkeletage betroffen. Abklärung mittels ABI-Messung (Knöchel-Arm-Index, pathologisch < 0,9). Beim arteriell bedingten Ulcus cruris kann der ABI trotz höhergradiger Unterschenkelstenosen unauffällig sein; bei entsprechendem klinischem Verdacht ist die MR-Angiographie der Becken- und Beingefäße wegweisend.
 - In Kombination mit Diabetes mellitus besteht häufig ein diabetisches Fußsyndrom mit plantarem Malum perforans; die diabetische Neuropathie kann die Schmerzangabe trotz ausgeprägter Nekrose deutlich reduzieren
+- ABI 1 nicht verwertbar bei Mediasklerose (falsch hohe Werte)
+- MRT-Beinangio: Becken-Oberschenkelachse bds. offen, Unterschenkelarterien nach peripher verdämmernd (A. tibialis anterior, posterior, A. fibularis)
+- Röntgen: deutliche arterielle Verkalkungen
+- CT-Zeichen: Atherosklerose der großen abdominellen Gefäße
+- Angiographie in CO2-Technik bei KM-Kontraindikation (Niereninsuffizienz)
+- Ausgeprägte Arteriosklerose ohne hämodynamisch relevante Stenosen möglich
+- Funktionelle Zweigefäßversorgung des Unterschenkels mit erhaltener Perfusion bis zum Fußbogen möglich
 
 ## Diagnostik
 - ABI-Messung (Ruhe und nach Belastung)
@@ -37,3 +44,11 @@ Belastungsabhängige Schmerzen in der betroffenen Extremität (Claudicatio inter
 - Jährliche Fußinspektion bei DM
 - Kontrolle der Risikofaktoren (LDL-Ziel < 55 mg/dl, RR < 130/80 mmHg)
 - Kompressionsstrümpfe nur nach Revaskularisation, nie bei kritischer Ischämie
+
+## Klinische Relevanz
+- Verzögerte Wundheilung bei DFS
+- Gefäßdiagnostik vor geplanter OP immer durchführen
+- Bei pAVK und DFS ist die Revaskularisation vor Amputation zu prüfen
+- ABI bei Mediasklerose nicht verwertbar → MRA/MRT-Angio als Bildgebung der Wahl
+- Gefäßchirurgisches Konsil und ggf. gefäßchirurgische Mitbehandlung erforderlich
+- Bei dialysepflichtigen Patienten CO2-Angiographie als KM-sparende Alternative

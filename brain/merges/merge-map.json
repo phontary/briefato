@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "generated": "2026-10-02",
+  "scope": "product copy only (brain/musterbriefe/templates via tools/pack-brain.py); the read-only archive /workspace/schreibdienst/musterbriefe is never modified",
+  "rule": "Near-duplicate = (a) title token-set Jaccard >= 0.75, OR (b) title difflib ratio >= 0.75, OR (c) Klinik-section token-set Jaccard >= 0.90. The automated pass over the 152 manifest entries yields 11 pairs; each candidate is then reviewed against the manifest. Pairs describing clinically DISTINCT entities (e.g. Type 1 vs dialysis-dependent renal failure, different OP techniques) are NOT merged and are listed under non_merges. Groups below were additionally confirmed by Mohamed's 2026-10-02 decision (near-duplicates must be merged).",
+  "groups": [
+    {
+      "id": "erysipel",
+      "file": "Erysipel.md",
+      "title": "Erysipel (Wundrose)",
+      "sources": ["Erysipel.md", "Erysipel_Wundrose.md"],
+      "reason": "Identical indication keywords (Erysipel, Wundrose, Hautinfektion); one entity, two titles."
+    },
+    {
+      "id": "pavk",
+      "file": "pAVK.md",
+      "title": "pAVK / Mediasklerose",
+      "sources": ["pAVK.md", "pAVK_Mediasklerose.md"],
+      "reason": "Mediasklerose is a diagnostic special case (unusable ABI) of the same pAVK entity; both share the keyword 'periphere arterielle Verschlusskrankheit'."
+    },
+    {
+      "id": "narbenhernie_epigastrisch",
+      "file": "Narbenhernien_epigastrisch.md",
+      "title": "Narbenhernien (epigastrisch)",
+      "sources": ["Narbenhernien_epigastrisch.md", "Narbenhernie_epigastrische_IPOM.md"],
+      "reason": "Both describe an epigastric scar hernia; the IPOM file is a concrete case variant of the same entity."
+    },
+    {
+      "id": "pankreatitis",
+      "file": "Biliaere_Pankreatitis.md",
+      "title": "Pankreatitis (biliär / papillär)",
+      "sources": ["Biliaere_Pankreatitis.md", "Papillaere_Pankreatitis.md"],
+      "reason": "Biliary and papillary pancreatitis share the same entity (Pankreatitis); the papillary file adds ERCP/papillotomy detail."
+    },
+    {
+      "id": "diabetes_mellitus",
+      "file": "Diabetes_mellitus.md",
+      "title": "Diabetes mellitus (Typ 1 / Typ 2)",
+      "sources": ["Diabetes_mellitus_Typ1.md", "Diabetes_mellitus_Typ2.md"],
+      "reason": "Title token-set similarity 1.0 — the two files are structurally near-identical; merged into one template that keeps both type-specific statements."
+    },
+    {
+      "id": "kontusion_zehen",
+      "file": "Kontusion_Zehen.md",
+      "title": "Kontusion der Zehen",
+      "sources": ["Kontusion_Kleinzehe.md", "Kontusion_Mittelzehe.md", "Kontusion_Grosszehe.md"],
+      "reason": "Three near-identical toe-contusion templates (Kleinzehe/Mittelzehe body similarity 0.95; Grosszehe title ratio 0.59)."
+    },
+    {
+      "id": "kontusion_grundgelenk_finger",
+      "file": "Kontusion_Grundgelenk_Finger.md",
+      "title": "Kontusion Grundgelenk Finger",
+      "sources": ["Kontusion_Grundgelenk_Kleinfinger.md", "Kontusion_Grundgelenk_Ringfinger.md"],
+      "reason": "Title ratio 0.92 / body similarity 0.66 — the same contusion template for two adjacent fingers."
+    }
+  ],
+  "non_merges": [
+    {
+      "files": ["Chronische_Niereninsuffizienz_CKD3.md", "Chronische_Niereninsuffizienz_dialysepflichtig.md"],
+      "reason": "Clinically distinct (dialysis yes/no), deliberately kept separate per the manifest's own sectionstats note."
+    },
+    {
+      "files": ["Leistenhernie_Inguinalhernie_TAPP.md", "Leistenhernie_Inguinalhernie_Lichtenstein.md"],
+      "reason": "Two distinct operative techniques; deliberately kept as two templates."
+    },
+    {
+      "files": ["Cholezystolithiasis.md", "Choledocholithiasis.md"],
+      "reason": "Gallbladder stones vs bile-duct stones — distinct entities; Cholezystolithiasis is additionally scrub-pending/locked."
+    },
+    {
+      "files": ["Nadelstichverletzung.md", "Stichverletzung.md", "Bissverletzung.md"],
+      "reason": "Different injury aetiologies (needle-stick / stab / bite) that only share the generic word 'Verletzung'; not merged."
+    },
+    {
+      "files": ["Insektenstich.md", "Zeckenstich.md"],
+      "reason": "Different exposures (insect vs tick) with different prophylaxis; only title-part similarity."
+    },
+    {
+      "files": ["Abrissfraktur-Basis-MFK-V.md", "Metatarsalefraktur_Basis_MFK_II.md"],
+      "reason": "Different metatarsals (V vs II); distinct fracture entities."
+    },
+    {
+      "files": ["Distorsion_Daumen_Grundgelenk.md", "Distorsion_Sprunggelenk.md"],
+      "reason": "Different joints (thumb vs ankle); merging would destroy joint-specific management."
+    },
+    {
+      "files": ["Kontusion_Handruecken.md", "Prellung.md", "Schulterprellung.md", "Kniedistorsion.md", "HWS-Distorsion_Schleudertrauma.md"],
+      "reason": "Distinct anatomical regions/entities; not near-duplicates of the merged toe/finger groups."
+    }
+  ]
+}
