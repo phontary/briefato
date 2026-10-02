@@ -1,0 +1,5282 @@
+{
+  "source": "/workspace/schreibdienst/musterbriefe",
+  "generated": "2026-10-02T18:37:42Z",
+  "count": 152,
+  "reference_sections": [
+    "Klinik",
+    "KU",
+    "Diagnostik",
+    "Therapie",
+    "Verlauf",
+    "Nachsorge",
+    "Therapieempfehlungen bei Entlassung",
+    "Diagnosen"
+  ],
+  "optional_sections": [
+    "Anamnese",
+    "OP",
+    "Quellen",
+    "Sonstiges"
+  ],
+  "section_coverage": {
+    "Klinik": 144,
+    "KU": 12,
+    "Diagnostik": 140,
+    "Therapie": 146,
+    "Verlauf": 20,
+    "Nachsorge": 115,
+    "Therapieempfehlungen bei Entlassung": 16,
+    "Diagnosen": 15
+  },
+  "counts": {
+    "files": 152,
+    "has_quellen": 4,
+    "licence_review": 4,
+    "thin_under_400_chars": 0,
+    "under_1200_chars": 21,
+    "long_over_4000_chars": 4,
+    "scrub_flagged": 8,
+    "duplicate_pairs": 11
+  },
+  "templates": [
+    {
+      "file": "AC-Gelenk-Verletzung_Schulter.md",
+      "title": "AC-Gelenk-Verletzung / Schultergelenksbeschwerden",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Gelenk",
+        "Verletzung",
+        "Schulter",
+        "Schultergelenksbeschwerden",
+        "AC-Gelenk",
+        "Schultergelenk",
+        "Akromioklavikulargelenk",
+        "Schulterverletzung",
+        "Tossy"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "Nachsorge"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1467,
+      "body_chars": 1243
+    },
+    {
+      "file": "Abdominales_Lymphom.md",
+      "title": "Abdominales Lymphom",
+      "group": "Hämatologie / Onkologie",
+      "indication_keywords": [
+        "Abdominales",
+        "Lymphom",
+        "Bauchlymphom",
+        "abdominelle Lymphadenopathie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1506,
+      "body_chars": 1314
+    },
+    {
+      "file": "Abrissfraktur-Basis-MFK-V.md",
+      "title": "Abrissfraktur Basis MFK V",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Abrissfraktur",
+        "Basis",
+        "MFK",
+        "Fraktur",
+        "MFK 5",
+        "fuenfter Mittelfussknochen",
+        "Basisfraktur",
+        "Mittelfuss"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Anamnese",
+        "Klinischer Befund",
+        "Bildgebung",
+        "Therapie / Empfehlungen",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1736,
+      "body_chars": 1560
+    },
+    {
+      "file": "Abszess.md",
+      "title": "Abszess",
+      "group": "Dermatologie / Infektiologie",
+      "indication_keywords": [
+        "Abszess",
+        "Eiteransammlung",
+        "Inzision",
+        "Drainage",
+        "Hautabszess",
+        "perianaler Abszess"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3483,
+      "body_chars": 3343
+    },
+    {
+      "file": "Acne-inversa.md",
+      "title": "Acne inversa – Musterbrief",
+      "group": "Sonstiges",
+      "indication_keywords": [
+        "Acne",
+        "inversa",
+        "Musterbrief",
+        "Akne inversa",
+        "Hidradenitis suppurativa",
+        "Schweissdruesenentzuendung"
+      ],
+      "sections_present": [],
+      "sections_missing": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Stationäre Aufnahme / Exzision in toto"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1388,
+      "body_chars": 1210
+    },
+    {
+      "file": "Adipositas.md",
+      "title": "Adipositas",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Adipositas",
+        "Uebergewicht",
+        "Fettleibigkeit",
+        "BMI"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 947,
+      "body_chars": 772
+    },
+    {
+      "file": "Adipositas_permagna.md",
+      "title": "Adipositas permagna",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Adipositas",
+        "permagna",
+        "Adipositas permagna",
+        "starkes Uebergewicht",
+        "morbide Adipositas"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1924,
+      "body_chars": 1743
+    },
+    {
+      "file": "Akut_auf_chronisches_Subduralhaematom.md",
+      "title": "Akut auf chronisches Subduralhämatom",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Akut",
+        "auf",
+        "chronisches",
+        "Subduralhaematom",
+        "Subduralhämatom",
+        "SDH",
+        "subdurales Haematom",
+        "Schae-delhirntrauma",
+        "Kopfblutung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1487,
+      "body_chars": 1487
+    },
+    {
+      "file": "Akute_Colitis.md",
+      "title": "Akute Colitis",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Akute",
+        "Colitis",
+        "Dickdarmentzuendung",
+        "Kolitis"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1144,
+      "body_chars": 1144
+    },
+    {
+      "file": "Akute_Divertikulitis.md",
+      "title": "Akute Divertikulitis",
+      "group": "Psychiatrie",
+      "indication_keywords": [
+        "Akute",
+        "Divertikulitis",
+        "Divertikel",
+        "Sigma"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2236,
+      "body_chars": 2070
+    },
+    {
+      "file": "Akute_Gastritis.md",
+      "title": "Akute Gastritis",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Akute",
+        "Gastritis",
+        "Magenschleimhautentzuendung",
+        "Magenschmerzen"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1192,
+      "body_chars": 970
+    },
+    {
+      "file": "Akute_Obstipation.md",
+      "title": "Akute Obstipation",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Akute",
+        "Obstipation",
+        "Verstopfung",
+        "Stuhlverhalt"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2110,
+      "body_chars": 1906
+    },
+    {
+      "file": "Akuter_Harnverhalt.md",
+      "title": "Akuter Harnverhalt",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Akuter",
+        "Harnverhalt",
+        "Harnverhalten",
+        "Blasenentleerungsstoerung",
+        "Katheter"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1965,
+      "body_chars": 1758
+    },
+    {
+      "file": "Alkoholintoxikation.md",
+      "title": "Alkoholintoxikation",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Alkoholintoxikation",
+        "Alkoholvergiftung",
+        "Ethanol",
+        "Intoxikation"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1438,
+      "body_chars": 1274
+    },
+    {
+      "file": "Analfistel_Rektumfistel.md",
+      "title": "Analfistel / Rektumfistel (extrasphinktär)",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Analfistel",
+        "Rektumfistel",
+        "extrasphinktär",
+        "Fistel",
+        "perianale Fistel"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Standard-Formulierung stationäre Begründung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2373,
+      "body_chars": 2163
+    },
+    {
+      "file": "Analvenenthrombose.md",
+      "title": "Analvenenthrombose",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Analvenenthrombose",
+        "Haemorrhoidalthrombose",
+        "Perianalthrombose",
+        "Analthrombose"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1795,
+      "body_chars": 1601
+    },
+    {
+      "file": "Anastomositis_nach_Hemikolektomie.md",
+      "title": "Anastomositis / entzündliche Schleimhautreaktion nach Hemikolektomie",
+      "group": "Psychiatrie",
+      "indication_keywords": [
+        "Anastomositis",
+        "nach",
+        "Hemikolektomie",
+        "entzündliche",
+        "Schleimhautreaktion",
+        "Anastomose",
+        "Dickdarmoperation"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1559,
+      "body_chars": 1297
+    },
+    {
+      "file": "Angststoerung.md",
+      "title": "Angststörung",
+      "group": "Psychiatrie",
+      "indication_keywords": [
+        "Angststoerung",
+        "Angststörung",
+        "Panik",
+        "Angst"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1100,
+      "body_chars": 881
+    },
+    {
+      "file": "Apoplex_Hemiparese.md",
+      "title": "V.a. zerebrale Ischämie / brachofaziale Hemiparese",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Apoplex",
+        "Hemiparese",
+        "zerebrale",
+        "Ischämie",
+        "brachofaziale",
+        "Schlaganfall",
+        "Hirninfarkt",
+        "zerebrale Ischaemie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinische Präsentation",
+        "Untersuchungsbefunde",
+        "Bildgebung",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1277,
+      "body_chars": 1051
+    },
+    {
+      "file": "Appendizitis_epiploica.md",
+      "title": "Appendizitis epiploica",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Appendizitis",
+        "epiploica",
+        "Appendizitis epiploica",
+        "Blinddarmentzuendung",
+        "Appendix"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1164,
+      "body_chars": 994
+    },
+    {
+      "file": "Arterielle_Hypertonie.md",
+      "title": "Arterielle Hypertonie",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Arterielle",
+        "Hypertonie",
+        "Bluthochdruck",
+        "arterielle Hypertonie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1350,
+      "body_chars": 1182
+    },
+    {
+      "file": "Atherom.md",
+      "title": "Atherom (Grützbeutel)",
+      "group": "Hämatologie / Onkologie",
+      "indication_keywords": [
+        "Atherom",
+        "Grützbeutel",
+        "Gruetzbeutel",
+        "Epidermoidzyste"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Therapie",
+        "Verlauf",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "Diagnostik",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Beschreibung",
+        "Anamnese",
+        "Klinische Untersuchung",
+        "Therapie",
+        "Verlauf",
+        "Diagnosen (Beispiel)"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1474,
+      "body_chars": 1306
+    },
+    {
+      "file": "Axiale_Hiatushernie.md",
+      "title": "Axiale Hiatushernie",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Axiale",
+        "Hiatushernie",
+        "Zwerchfellhernie",
+        "Reflux"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1105,
+      "body_chars": 941
+    },
+    {
+      "file": "BWS-Schmerzsyndrom_Nervenirritation.md",
+      "title": "Musterbrief – BWS-Schmerzsyndrom / Nervenirritation",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "BWS",
+        "Schmerzsyndrom",
+        "Nervenirritation",
+        "Musterbrief",
+        "Brustwirbelsaeule",
+        "Rueckenschmerzen"
+      ],
+      "sections_present": [
+        "Therapie",
+        "Klinik",
+        "Diagnosen",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "KU",
+        "Diagnostik",
+        "Verlauf",
+        "Nachsorge"
+      ],
+      "headings_raw": [
+        "Indikation",
+        "Anamnese",
+        "Klinischer Befund",
+        "Diagnosen",
+        "Therapie",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1451,
+      "body_chars": 1223
+    },
+    {
+      "file": "Baker_Zyste.md",
+      "title": "Baker-Zyste (popliteale Zyste)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Baker",
+        "Zyste",
+        "popliteale",
+        "Bakerzyste",
+        "Poplitealzyste",
+        "Kniekehle"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2194,
+      "body_chars": 1980
+    },
+    {
+      "file": "Biliaere_Pankreatitis.md",
+      "title": "Biliäre Pankreatitis",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Biliaere",
+        "Pankreatitis",
+        "Biliäre",
+        "Bauchspeicheldruesenentzuendung",
+        "biliaer"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2230,
+      "body_chars": 2027
+    },
+    {
+      "file": "Bissverletzung.md",
+      "title": "Bissverletzung",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Bissverletzung",
+        "Bisswunde",
+        "Hundebiss",
+        "Katzenbiss"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1324,
+      "body_chars": 1324
+    },
+    {
+      "file": "Borderline-Persoenlichkeitsstoerung_Suizidalitaet.md",
+      "title": "Borderline-Persönlichkeitsstörung / Suizidalität / Eigengefährdung",
+      "group": "Psychiatrie",
+      "indication_keywords": [
+        "Borderline",
+        "Persoenlichkeitsstoerung",
+        "Suizidalitaet",
+        "Persönlichkeitsstörung",
+        "Suizidalität",
+        "Eigengefährdung",
+        "Eigengefaehrdung"
+      ],
+      "sections_present": [
+        "Therapie",
+        "Klinik"
+      ],
+      "sections_missing": [
+        "KU",
+        "Diagnostik",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Vorstellung ZNA",
+        "Wundversorgung bei Schnittverletzungen",
+        "Psychiatrische Beurteilung",
+        "Therapie/Empfehlungen",
+        "Stationäre Aufnahmebegründung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1232,
+      "body_chars": 974
+    },
+    {
+      "file": "Brustwandtumor.md",
+      "title": "Brustwandtumor",
+      "group": "Hämatologie / Onkologie",
+      "indication_keywords": [
+        "Brustwandtumor",
+        "Thoraxwand",
+        "Raumforderung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1486,
+      "body_chars": 1287
+    },
+    {
+      "file": "Bursitis_olecrani.md",
+      "title": "Bursitis olecrani",
+      "group": "Dermatologie / Infektiologie",
+      "indication_keywords": [
+        "Bursitis",
+        "olecrani",
+        "Ellenbogenschleimbeutelentzuendung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2345,
+      "body_chars": 2149
+    },
+    {
+      "file": "Bursitis_praepatellaris.md",
+      "title": "Bursitis präpatellaris",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Bursitis",
+        "praepatellaris",
+        "präpatellaris",
+        "Knieschleimbeutelentzuendung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1669,
+      "body_chars": 1499
+    },
+    {
+      "file": "C-Gastritis_bei_Gallereflux.md",
+      "title": "C-Gastritis bei Gallereflux",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Gastritis",
+        "bei",
+        "Gallereflux",
+        "C-Gastritis",
+        "chemische Gastritis"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1051,
+      "body_chars": 871
+    },
+    {
+      "file": "COPD.md",
+      "title": "COPD (Chronisch obstruktive Lungenerkrankung)",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "COPD",
+        "Chronisch",
+        "obstruktive",
+        "Lungenerkrankung",
+        "chronisch obstruktive Lungenerkrankung",
+        "Lungenemphysem"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2465,
+      "body_chars": 2249
+    },
+    {
+      "file": "CVI_Stauungsdermatitis_Unterschenkel.md",
+      "title": "CVI / Stauungsdermatitis / Ulcus cruris venosum",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "CVI",
+        "Stauungsdermatitis",
+        "Unterschenkel",
+        "Ulcus",
+        "cruris",
+        "venosum",
+        "chronisch venoese Insuffizienz",
+        "Ulcus cruris",
+        "offenes Bein"
+      ],
+      "sections_present": [
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klassischer Verlauf",
+        "Typische Befundbausteine",
+        "Therapieempfehlungen",
+        "Standard-Formulierung stationäre Begründung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1462,
+      "body_chars": 1242
+    },
+    {
+      "file": "Choledocholithiasis.md",
+      "title": "Choledocholithiasis",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Choledocholithiasis",
+        "Gallengangsteine",
+        "DHC-Stein",
+        "Gallenwegssteine"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1937,
+      "body_chars": 1773
+    },
+    {
+      "file": "Cholezystolithiasis.md",
+      "title": "Cholezystolithiasis",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Cholezystolithiasis",
+        "Gallensteine",
+        "Gallenkolik",
+        "Cholelithiasis",
+        "Cholezystitis",
+        "Gallenblase"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3322,
+      "body_chars": 3158
+    },
+    {
+      "file": "Chronisch_entzuendliche_Colonveraenderungen_sigmoidal.md",
+      "title": "Chronisch-entzündliche Veränderungen des Colon descendens und rektosigmoidal",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Chronisch",
+        "entzuendliche",
+        "Colonveraenderungen",
+        "sigmoidal",
+        "entzündliche",
+        "Veränderungen",
+        "des",
+        "Colon",
+        "descendens",
+        "und",
+        "rektosigmoidal",
+        "Colitis",
+        "Dickdarmentzuendung",
+        "CED"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1072,
+      "body_chars": 794
+    },
+    {
+      "file": "Chronische_Herzinsuffizienz_kardiale_Dekompensation.md",
+      "title": "Chronische Herzinsuffizienz / Kardiale Dekompensation",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Chronische",
+        "Herzinsuffizienz",
+        "kardiale",
+        "Dekompensation",
+        "Kardiale",
+        "Herzschwaeche",
+        "kardiale Dekompensation",
+        "NYHA"
+      ],
+      "sections_present": [
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klassischer Verlauf",
+        "Typische Befundbausteine",
+        "Therapieempfehlungen",
+        "Standard-Formulierung stationäre Begründung",
+        "Besonderheiten"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1998,
+      "body_chars": 1766
+    },
+    {
+      "file": "Chronische_Niereninsuffizienz_CKD3.md",
+      "title": "Chronische Niereninsuffizienz (CKD, nicht dialysepflichtig)",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Chronische",
+        "Niereninsuffizienz",
+        "CKD3",
+        "CKD",
+        "nicht",
+        "dialysepflichtig",
+        "chronische Nierenkrankheit"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2089,
+      "body_chars": 1845
+    },
+    {
+      "file": "Chronische_Niereninsuffizienz_dialysepflichtig.md",
+      "title": "Chronische Niereninsuffizienz (dialysepflichtig)",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Chronische",
+        "Niereninsuffizienz",
+        "dialysepflichtig",
+        "Dialyse",
+        "Nierenversagen"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1521,
+      "body_chars": 1299
+    },
+    {
+      "file": "Commotio_cerebri.md",
+      "title": "Commotio cerebri (Gehirnerschütterung)",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Commotio",
+        "cerebri",
+        "Gehirnerschütterung",
+        "Commotio cerebri",
+        "Gehirnerschuetterung",
+        "SHT"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2461,
+      "body_chars": 2461
+    },
+    {
+      "file": "Coxarthrose_Exsikkose_Sturz.md",
+      "title": "Coxarthrose, Exsikkose, Sturzereignis",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Coxarthrose",
+        "Exsikkose",
+        "Sturz",
+        "Sturzereignis",
+        "Hueftarthrose",
+        "Hueftgelenk",
+        "Hueftendoprothese"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Quellen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Quellen"
+      ],
+      "has_quellen": true,
+      "licence_risk": "review",
+      "chars": 4767,
+      "body_chars": 4567
+    },
+    {
+      "file": "Daumenfraktur.md",
+      "title": "Daumenfraktur",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Daumenfraktur",
+        "Daumen"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 778,
+      "body_chars": 626
+    },
+    {
+      "file": "Dekubitus.md",
+      "title": "Dekubitus",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Dekubitus",
+        "Druckgeschwuer",
+        "Wundliegen"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2044,
+      "body_chars": 1884
+    },
+    {
+      "file": "Demerskatheter_Dysfunktion_Wechsel.md",
+      "title": "Demers-Katheter (Dysfunktion, Wechsel)",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Demerskatheter",
+        "Dysfunktion",
+        "Wechsel",
+        "Demers",
+        "Katheter",
+        "Zystostomie",
+        "Blasenkatheter",
+        "Katheterwechsel"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2613,
+      "body_chars": 2385
+    },
+    {
+      "file": "Diabetes_mellitus_Typ1.md",
+      "title": "Diabetes mellitus Typ 1",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Diabetes",
+        "mellitus",
+        "Typ1",
+        "Typ",
+        "Diabetes Typ 1",
+        "Zuckerkrankheit"
+      ],
+      "sections_present": [
+        "Therapie"
+      ],
+      "sections_missing": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Basisdaten",
+        "Komplikationen / Komorbiditäten",
+        "Therapieanpassung (stationär)",
+        "Merksätze"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1549,
+      "body_chars": 1377
+    },
+    {
+      "file": "Diabetes_mellitus_Typ2.md",
+      "title": "Diabetes mellitus Typ 2",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Diabetes",
+        "mellitus",
+        "Typ2",
+        "Typ",
+        "Diabetes Typ 2",
+        "Zuckerkrankheit",
+        "Hyperglykaemie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2393,
+      "body_chars": 2221
+    },
+    {
+      "file": "Diabetisches_Fusssyndrom.md",
+      "title": "Diabetisches Fußsyndrom (DFS)",
+      "group": "Sonstiges",
+      "indication_keywords": [
+        "Diabetisches",
+        "Fusssyndrom",
+        "Fußsyndrom",
+        "DFS",
+        "Diabetisches Fusssyndrom",
+        "diabetischer Fuss",
+        "Ulkus"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Verlauf",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Diagnostik",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik und Diagnostik",
+        "Erregerspektrum",
+        "OP-Chronologie (typischer Verlauf)",
+        "Therapie",
+        "Komorbiditäten bei DFS (Checkliste)",
+        "Verlaufskriterien"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3463,
+      "body_chars": 3279
+    },
+    {
+      "file": "Dialyseshunt_Nachblutung_Revision.md",
+      "title": "Dialyseshunt (postoperative Nachblutung, Revisions-OP)",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Dialyseshunt",
+        "Nachblutung",
+        "Revision",
+        "postoperative",
+        "Revisions",
+        "Shunt",
+        "Haemodialyse"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2737,
+      "body_chars": 2473
+    },
+    {
+      "file": "Distorsion_Daumen_Grundgelenk.md",
+      "title": "Distorsion Daumen Grundgelenk",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Distorsion",
+        "Daumen",
+        "Grundgelenk",
+        "Verstauchung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1755,
+      "body_chars": 1567
+    },
+    {
+      "file": "Distorsion_Sprunggelenk.md",
+      "title": "Distorsion des oberen Sprunggelenks",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Distorsion",
+        "Sprunggelenk",
+        "des",
+        "oberen",
+        "Sprunggelenks",
+        "Verstauchung",
+        "OSG"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2075,
+      "body_chars": 1879
+    },
+    {
+      "file": "Dorsale_Spondylodese_LWS.md",
+      "title": "Dorsale Spondylodese LWS (Cage-Dislokation, Revision)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Dorsale",
+        "Spondylodese",
+        "LWS",
+        "Cage",
+        "Dislokation",
+        "Revision",
+        "Wirbelsaeule",
+        "Versteifung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1805,
+      "body_chars": 1805
+    },
+    {
+      "file": "Drei-Gefaess_KHK.md",
+      "title": "Drei-Gefäß-KHK (Koronare Herzkrankheit)",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Drei",
+        "Gefaess",
+        "KHK",
+        "Gefäß",
+        "Koronare",
+        "Herzkrankheit",
+        "koronare Herzkrankheit",
+        "Dreigefaesserkrankung",
+        "Herzkatheter"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1775,
+      "body_chars": 1571
+    },
+    {
+      "file": "Duenndarminvagination.md",
+      "title": "Dünndarminvagination",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Duenndarminvagination",
+        "Dünndarminvagination",
+        "Invagination",
+        "Duennndarm",
+        "Ileus"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1755,
+      "body_chars": 1516
+    },
+    {
+      "file": "Duennndarmileus_Bridenileus.md",
+      "title": "Musterbrief: Dünndarmileus / Bridenileus",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Duennndarmileus",
+        "Bridenileus",
+        "Musterbrief",
+        "Dünndarmileus",
+        "Ileus",
+        "Briden",
+        "Darmverschluss"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinisches Bild / Aufnahmegrund",
+        "Bildgebende Befunde",
+        "Therapie und Verlauf (Schema)",
+        "Pathologie",
+        "Besonderheiten / Merksätze"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2385,
+      "body_chars": 2179
+    },
+    {
+      "file": "Duodenaltumor.md",
+      "title": "Duodenaltumor",
+      "group": "Hämatologie / Onkologie",
+      "indication_keywords": [
+        "Duodenaltumor",
+        "Zwoelffingerdarm"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1543,
+      "body_chars": 1315
+    },
+    {
+      "file": "Erysipel.md",
+      "title": "Erysipel",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Erysipel",
+        "Wundrose",
+        "Hautinfektion"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2127,
+      "body_chars": 1985
+    },
+    {
+      "file": "Erysipel_Wundrose.md",
+      "title": "Erysipel (Wundrose)",
+      "group": "Endokrinologie / Stoffwechsel",
+      "indication_keywords": [
+        "Erysipel",
+        "Wundrose",
+        "Hautinfektion"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Nachsorge"
+      ],
+      "headings_raw": [
+        "Aufnahmesituation",
+        "Risikofaktoren / Begleiterkrankungen",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf (typisch)",
+        "Entlassung",
+        "ICD-Code"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1721,
+      "body_chars": 1557
+    },
+    {
+      "file": "Fasziitis_plantaris.md",
+      "title": "Fasziitis plantaris",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Fasziitis",
+        "plantaris",
+        "Fersenschmerz",
+        "Plantarfaszie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1197,
+      "body_chars": 997
+    },
+    {
+      "file": "Fingerendgliedamputation.md",
+      "title": "Fingerendgliedamputation (Fingerspitzenamputation)",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Fingerendgliedamputation",
+        "Fingerspitzenamputation",
+        "Fingeramputation",
+        "Endglied",
+        "Amputation"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1716,
+      "body_chars": 1490
+    },
+    {
+      "file": "Fremdkoerperverdacht_Nadelspitze_nach_iv_Drogenkonsum.md",
+      "title": "Fremdkörperverdacht Nadelspitze nach i.v. Drogenkonsum",
+      "group": "Psychiatrie",
+      "indication_keywords": [
+        "Fremdkoerperverdacht",
+        "Nadelspitze",
+        "nach",
+        "Drogenkonsum",
+        "Fremdkörperverdacht",
+        "Fremdkoerper",
+        "intravasal"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2598,
+      "body_chars": 2236
+    },
+    {
+      "file": "Frontobasisfraktur_Spannungspneumozephalus.md",
+      "title": "Frontobasisfraktur mit Spannungspneumozephalus",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Frontobasisfraktur",
+        "Spannungspneumozephalus",
+        "mit",
+        "Schaedelbasis",
+        "Pneumozephalus"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2373,
+      "body_chars": 2122
+    },
+    {
+      "file": "Gallenblasenpolypen_Konkremente_Verdacht.md",
+      "title": "V.a. Gallenblasenpolypen/-konkremente",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Gallenblasenpolypen",
+        "Konkremente",
+        "Verdacht",
+        "konkremente",
+        "Gallenblase"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1560,
+      "body_chars": 1360
+    },
+    {
+      "file": "Gangraenose_Cholezystitis_CHE.md",
+      "title": "Gangränöse Cholezystitis / Z.n. offener CHE",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Gangraenose",
+        "Cholezystitis",
+        "CHE",
+        "Gangränöse",
+        "offener",
+        "gangraenoes",
+        "Cholezystektomie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinische Präsentation",
+        "Untersuchungsbefunde",
+        "Bildgebung",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1703,
+      "body_chars": 1491
+    },
+    {
+      "file": "Gastroparese.md",
+      "title": "Gastroparese",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Gastroparese",
+        "Magenentleerungsstoerung",
+        "Magenlaehmung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2036,
+      "body_chars": 1828
+    },
+    {
+      "file": "Gichtarthritis.md",
+      "title": "Gichtarthritis (Arthritis urica)",
+      "group": "Endokrinologie / Stoffwechsel",
+      "indication_keywords": [
+        "Gichtarthritis",
+        "Arthritis",
+        "urica",
+        "Gicht",
+        "Arthritis urica",
+        "Hyperurikaemie",
+        "Gichtanfall"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "KU",
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinisches Bild",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Empfehlungen bei Entlassung / Abschluss"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2363,
+      "body_chars": 2173
+    },
+    {
+      "file": "Glutealfistel_Glutealabszess.md",
+      "title": "Glutealfistel / Glutealabszess (superinfiziert)",
+      "group": "Endokrinologie / Stoffwechsel",
+      "indication_keywords": [
+        "Glutealfistel",
+        "Glutealabszess",
+        "superinfiziert",
+        "Gesaessabszess",
+        "Fistel"
+      ],
+      "sections_present": [
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klassischer Verlauf (konservativ)",
+        "Operativer Verlauf (bei tief reichender Fistel / Abszess / V.a. Osteomyelitis)",
+        "Typische Befundbausteine",
+        "Therapieempfehlungen",
+        "Standard-Formulierung stationäre Begründung",
+        "Besonderheiten"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3823,
+      "body_chars": 3603
+    },
+    {
+      "file": "HWS-Distorsion_Schleudertrauma.md",
+      "title": "HWS-Distorsion / Schleudertrauma nach Auffahrunfall",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "HWS",
+        "Distorsion",
+        "Schleudertrauma",
+        "nach",
+        "Auffahrunfall",
+        "Halswirbelsaeule"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Anamnese / Unfallhergang",
+        "Klinik / KU",
+        "Radiologie",
+        "Therapie / Empfehlung",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1487,
+      "body_chars": 1259
+    },
+    {
+      "file": "Harnwegsinfekt.md",
+      "title": "Harnwegsinfekt (V.a.)",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Harnwegsinfekt",
+        "Blasenentzuendung",
+        "Zystitis",
+        "HWI",
+        "UTI"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1224,
+      "body_chars": 1018
+    },
+    {
+      "file": "Hepatomegalie_mit_zystoiden_Leberaesionen.md",
+      "title": "Hepatomegalie mit zystoiden Leberläsionen",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Hepatomegalie",
+        "mit",
+        "zystoiden",
+        "Leberaesionen",
+        "Leberläsionen",
+        "Leberlaesionen",
+        "Leberzysten"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1197,
+      "body_chars": 989
+    },
+    {
+      "file": "Herzinsuffizienz.md",
+      "title": "Herzinsuffizienz",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Herzinsuffizienz",
+        "Herzschwaeche",
+        "Herzmuskelschwaeche",
+        "Dekompensation"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1625,
+      "body_chars": 1444
+    },
+    {
+      "file": "Humerusfraktur.md",
+      "title": "Humerusfraktur",
+      "group": "Endokrinologie / Stoffwechsel",
+      "indication_keywords": [
+        "Humerusfraktur",
+        "Oberarmbruch",
+        "Humerus",
+        "Oberarm"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1531,
+      "body_chars": 1377
+    },
+    {
+      "file": "Hämorrhoiden.md",
+      "title": "Hämorrhoiden",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Hämorrhoiden",
+        "Analleiden",
+        "Analbeschwerden"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1163,
+      "body_chars": 974
+    },
+    {
+      "file": "Iatrogene_Zoekumperforation.md",
+      "title": "Iatrogene Zökumperforation nach Koloskopie",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Iatrogene",
+        "Zoekumperforation",
+        "Zökumperforation",
+        "nach",
+        "Koloskopie",
+        "Perforation",
+        "Blinddarm"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1984,
+      "body_chars": 1736
+    },
+    {
+      "file": "Insektenstich.md",
+      "title": "Insektenstich",
+      "group": "Dermatologie / Infektiologie",
+      "indication_keywords": [
+        "Insektenstich",
+        "Insektenbiss",
+        "Stich"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1115,
+      "body_chars": 1115
+    },
+    {
+      "file": "Klavikulafraktur_lateral_disloziert.md",
+      "title": "Klavikulafraktur (lateral, disloziert)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Klavikulafraktur",
+        "lateral",
+        "disloziert",
+        "Schluesselbeinbruch"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1166,
+      "body_chars": 939
+    },
+    {
+      "file": "Kniedistorsion.md",
+      "title": "Kniedistorsion",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Kniedistorsion",
+        "Knie",
+        "Verstauchung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Anamnese",
+        "Klinischer Befund",
+        "Bildgebung",
+        "Therapie / Empfehlungen",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1604,
+      "body_chars": 1450
+    },
+    {
+      "file": "Knieendoprothese_Implantation_Pangonarthrose.md",
+      "title": "Knieendoprothese Implantation Pangonarthrose",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Knieendoprothese",
+        "Implantation",
+        "Pangonarthrose",
+        "Knie-TEP",
+        "Gonarthrose",
+        "Kniegelenk"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3380,
+      "body_chars": 3129
+    },
+    {
+      "file": "Knieendoprothese_Periprothetischer_Infekt.md",
+      "title": "Knieendoprothese Periprothetischer Infekt",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Knieendoprothese",
+        "Periprothetischer",
+        "Infekt",
+        "periprothetischer Infekt",
+        "Protheseninfekt"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2455,
+      "body_chars": 2192
+    },
+    {
+      "file": "Kontusion_Grosszehe.md",
+      "title": "Kontusion und Distorsion der Großzehe (Contusio/Distorsio hallucis)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Kontusion",
+        "Grosszehe",
+        "und",
+        "Distorsion",
+        "der",
+        "Großzehe",
+        "Contusio",
+        "Distorsio",
+        "hallucis",
+        "Prellung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1559,
+      "body_chars": 1303
+    },
+    {
+      "file": "Kontusion_Grundgelenk_Kleinfinger.md",
+      "title": "Kontusion Grundgelenk Kleinfinger",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Kontusion",
+        "Grundgelenk",
+        "Kleinfinger",
+        "Prellung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1208,
+      "body_chars": 1016
+    },
+    {
+      "file": "Kontusion_Grundgelenk_Ringfinger.md",
+      "title": "Kontusion Grundgelenk Ringfinger",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Kontusion",
+        "Grundgelenk",
+        "Ringfinger",
+        "Prellung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1076,
+      "body_chars": 886
+    },
+    {
+      "file": "Kontusion_Handruecken.md",
+      "title": "Kontusion Handrücken",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Kontusion",
+        "Handruecken",
+        "Handrücken",
+        "Prellung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1614,
+      "body_chars": 1414
+    },
+    {
+      "file": "Kontusion_Kleinzehe.md",
+      "title": "Kontusion der Kleinzehe (Contusio digiti minimi pedis)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Kontusion",
+        "Kleinzehe",
+        "der",
+        "Contusio",
+        "digiti",
+        "minimi",
+        "pedis",
+        "Zehe"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Prognose"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1131,
+      "body_chars": 884
+    },
+    {
+      "file": "Kontusion_Mittelzehe.md",
+      "title": "Kontusion der Mittelzehe (Contusio digiti pedis)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Kontusion",
+        "Mittelzehe",
+        "der",
+        "Contusio",
+        "digiti",
+        "pedis",
+        "Zehe"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Prognose"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1121,
+      "body_chars": 897
+    },
+    {
+      "file": "Leberhämangiom.md",
+      "title": "Leberhämangiom",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Leberhämangiom",
+        "Haemangiom",
+        "Leber",
+        "Lebertumor",
+        "benigne Leberlaesion"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1027,
+      "body_chars": 831
+    },
+    {
+      "file": "Leberzirrhose_Aszites_infektioese_Aszitis.md",
+      "title": "Leberzirrhose mit Aszites – V.a. infektiöse Aszitis",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Leberzirrhose",
+        "Aszites",
+        "infektioese",
+        "Aszitis",
+        "mit",
+        "infektiöse",
+        "Bauchwassersucht"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3131,
+      "body_chars": 2831
+    },
+    {
+      "file": "Leistenhernie_Inguinalhernie_Lichtenstein.md",
+      "title": "Leistenhernie / Inguinalhernie – Lichtenstein (offene, anterior/epifaszial) Technik",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Leistenhernie",
+        "Inguinalhernie",
+        "Lichtenstein",
+        "offene",
+        "anterior",
+        "epifaszial",
+        "Technik"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Verlauf",
+        "Therapie",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Anamnese",
+        "Klinik",
+        "Diagnostik",
+        "OP (offene Versorgung nach Lichtenstein)",
+        "Postoperativer Verlauf",
+        "Therapie / Empfehlungen",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3337,
+      "body_chars": 3058
+    },
+    {
+      "file": "Leistenhernie_Inguinalhernie_TAPP.md",
+      "title": "Leistenhernie / Inguinalhernie – TAPP (Transabdominelle Präperitoneale Plastik)",
+      "group": "Pneumologie",
+      "indication_keywords": [
+        "Leistenhernie",
+        "Inguinalhernie",
+        "TAPP",
+        "Transabdominelle",
+        "Präperitoneale",
+        "Plastik"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Verlauf",
+        "Therapie",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Anamnese",
+        "Klinik",
+        "Diagnostik",
+        "OP",
+        "Postoperativer Verlauf",
+        "Therapie",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2176,
+      "body_chars": 1929
+    },
+    {
+      "file": "Lipom.md",
+      "title": "Lipom",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Lipom",
+        "Fettgeschwulst"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1679,
+      "body_chars": 1679
+    },
+    {
+      "file": "Lumboischialgie_Bandscheibenvorfall.md",
+      "title": "Lumboischialgie / Bandscheibenvorfall / Bandscheibenvorwölbung / lumbale Spinalkanalstenose LWS",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Lumboischialgie",
+        "Bandscheibenvorfall",
+        "Bandscheibenvorwölbung",
+        "lumbale",
+        "Spinalkanalstenose",
+        "LWS",
+        "Hexenschuss",
+        "Ischias"
+      ],
+      "sections_present": [
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Diagnosen",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Klinik",
+        "Verlauf",
+        "Nachsorge"
+      ],
+      "headings_raw": [
+        "Stammdaten",
+        "Anamnese / Beschwerden",
+        "Körperliche Untersuchung",
+        "Diagnostik",
+        "Therapie / Verlauf",
+        "Diagnosen",
+        "Ambulante Therapieempfehlungen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3852,
+      "body_chars": 3536
+    },
+    {
+      "file": "Lungenembolie.md",
+      "title": "Lungenembolie",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Lungenembolie",
+        "Pulmonalembolie",
+        "Embolie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1562,
+      "body_chars": 1410
+    },
+    {
+      "file": "Makrozytäre_hypochrome_Anaemie.md",
+      "title": "Makrozytäre hypochrome Anämie",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Makrozytäre",
+        "hypochrome",
+        "Anaemie",
+        "Anämie",
+        "Blutarmut",
+        "makrozytär"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1790,
+      "body_chars": 1606
+    },
+    {
+      "file": "Mesenteritis.md",
+      "title": "Mesenteritis",
+      "group": "Hämatologie / Onkologie",
+      "indication_keywords": [
+        "Mesenteritis",
+        "Mesenterium"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1271,
+      "body_chars": 1065
+    },
+    {
+      "file": "Metallentfernung_Aussenknoechel.md",
+      "title": "Metallentfernung am Außenknöchel (Z.n. Fraktur des Außenknöchels)",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Metallentfernung",
+        "Aussenknoechel",
+        "Außenknöchel",
+        "Fraktur",
+        "des",
+        "Außenknöchels",
+        "Plattenentfernung",
+        "Osteosynthesematerial"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2395,
+      "body_chars": 2109
+    },
+    {
+      "file": "Metatarsalefraktur_Basis_MFK_II.md",
+      "title": "Metatarsalefraktur Basis MFK II",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Metatarsalefraktur",
+        "Basis",
+        "MFK",
+        "Mittelfuss",
+        "MFK 2"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1725,
+      "body_chars": 1514
+    },
+    {
+      "file": "Morbus_Crohn.md",
+      "title": "Morbus Crohn",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Morbus",
+        "Crohn",
+        "CED",
+        "Darmentzuendung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2354,
+      "body_chars": 2204
+    },
+    {
+      "file": "Muskelverspannung_Muskelzerrung_paravertebral.md",
+      "title": "Muskelverspannung / Muskelzerrung paravertebral",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Muskelverspannung",
+        "Muskelzerrung",
+        "paravertebral",
+        "Rueckenschmerzen"
+      ],
+      "sections_present": [
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "Klinik",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Stammdaten",
+        "Anamnese / Beschwerden",
+        "Körperliche Untersuchung",
+        "Diagnostik",
+        "Therapie / Verlauf",
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1676,
+      "body_chars": 1456
+    },
+    {
+      "file": "Nabelhernie.md",
+      "title": "Nabelhernie",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Nabelhernie",
+        "Nabelbruch",
+        "Hernie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2184,
+      "body_chars": 2184
+    },
+    {
+      "file": "Nadelstichverletzung.md",
+      "title": "Nadelstichverletzung",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Nadelstichverletzung",
+        "Nadelstich",
+        "Stichverletzung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2162,
+      "body_chars": 1899
+    },
+    {
+      "file": "Nagelverletzung_Subunguales_Haematom.md",
+      "title": "Nagelverletzung mit subungualem Hämatom (Fingerquetschung)",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Nagelverletzung",
+        "Subunguales",
+        "Haematom",
+        "mit",
+        "subungualem",
+        "Hämatom",
+        "Fingerquetschung",
+        "subunguales Haematom"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1618,
+      "body_chars": 1333
+    },
+    {
+      "file": "Narbenhernie_epigastrische_IPOM.md",
+      "title": "Epigastrische Narbenhernie – IPOM-Plastik",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Narbenhernie",
+        "epigastrische",
+        "IPOM",
+        "Epigastrische",
+        "Plastik",
+        "epigastrisch"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Verlauf",
+        "Therapie",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Anamnese",
+        "Klinik",
+        "Diagnostik",
+        "OP",
+        "Postoperativer Verlauf",
+        "Therapie",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1607,
+      "body_chars": 1399
+    },
+    {
+      "file": "Narbenhernien_epigastrisch.md",
+      "title": "Narbenhernien (epigastrisch)",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Narbenhernien",
+        "epigastrisch",
+        "Narbenhernie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2090,
+      "body_chars": 1908
+    },
+    {
+      "file": "Nasenbeinfraktur.md",
+      "title": "Nasenbeinfraktur",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Nasenbeinfraktur",
+        "Nasenbeinbruch"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1524,
+      "body_chars": 1329
+    },
+    {
+      "file": "Nierenkolik_bei_Harnstauungsniere_mit_Harnleiterschiene.md",
+      "title": "Nierenkolik bei Harnstauungsniere mit einliegender Harnleiterschiene",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Nierenkolik",
+        "bei",
+        "Harnstauungsniere",
+        "mit",
+        "Harnleiterschiene",
+        "einliegender",
+        "Harnstau",
+        "Niere",
+        "Kolik"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1870,
+      "body_chars": 1870
+    },
+    {
+      "file": "Osteomyelitis_Zehenstrahlamputation.md",
+      "title": "Osteomyelitis mit Zehenstrahl-Amputation (Fuß)",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Osteomyelitis",
+        "Zehenstrahlamputation",
+        "mit",
+        "Zehenstrahl",
+        "Amputation",
+        "Fuß",
+        "Knochenmarkentzuendung",
+        "Zehenamputation"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3299,
+      "body_chars": 3071
+    },
+    {
+      "file": "Osteoporotische_Wirbelkoerperfraktur.md",
+      "title": "Musterbrief: Osteoporotische Wirbelkörperfraktur",
+      "group": "Endokrinologie / Stoffwechsel",
+      "indication_keywords": [
+        "Osteoporotische",
+        "Wirbelkoerperfraktur",
+        "Musterbrief",
+        "Wirbelkörperfraktur",
+        "Osteoporose",
+        "Sinterungsfraktur"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1608,
+      "body_chars": 1372
+    },
+    {
+      "file": "Panaritium.md",
+      "title": "Panaritium",
+      "group": "Dermatologie / Infektiologie",
+      "indication_keywords": [
+        "Panaritium",
+        "Fingerentzuendung",
+        "Umlauf"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1250,
+      "body_chars": 1250
+    },
+    {
+      "file": "Pangastritis.md",
+      "title": "Pangastritis / Antrumbetonte Gastritis",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Pangastritis",
+        "Antrumbetonte",
+        "Gastritis",
+        "Helicobacter",
+        "Magenschleimhautentzuendung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Quellen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinische Präsentation",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Hinweis",
+        "Quellen"
+      ],
+      "has_quellen": true,
+      "licence_risk": "review",
+      "chars": 8757,
+      "body_chars": 8555
+    },
+    {
+      "file": "Papillaere_Pankreatitis.md",
+      "title": "Papilläre Pankreatitis",
+      "group": "Hämatologie / Onkologie",
+      "indication_keywords": [
+        "Papillaere",
+        "Pankreatitis",
+        "Papilläre",
+        "Papillitis",
+        "Papillenstenose",
+        "ERCP"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Quellen"
+      ],
+      "sections_missing": [
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Ätiologie",
+        "Klinische Präsentation",
+        "Untersuchungsbefunde",
+        "Bildgebung",
+        "Therapie",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Quellen"
+      ],
+      "has_quellen": true,
+      "licence_risk": "review",
+      "chars": 8887,
+      "body_chars": 8717
+    },
+    {
+      "file": "Paralytischer_Ileus.md",
+      "title": "Musterbrief: Paralytischer Ileus",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Paralytischer",
+        "Ileus",
+        "Musterbrief",
+        "paralytischer Ileus",
+        "Darmverschluss"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2005,
+      "body_chars": 1811
+    },
+    {
+      "file": "Patellafraktur.md",
+      "title": "Patellafraktur",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Patellafraktur",
+        "Kniescheibenbruch"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1571,
+      "body_chars": 1391
+    },
+    {
+      "file": "Phlegmone.md",
+      "title": "Phlegmone (infizierte Weichteilphlegmone)",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Phlegmone",
+        "infizierte",
+        "Weichteilphlegmone",
+        "Weichteilinfektion",
+        "Zellulitis"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1914,
+      "body_chars": 1694
+    },
+    {
+      "file": "Pneumonie.md",
+      "title": "Pneumonie",
+      "group": "Pneumologie",
+      "indication_keywords": [
+        "Pneumonie",
+        "Lungenentzuendung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1402,
+      "body_chars": 1213
+    },
+    {
+      "file": "Portexplantation.md",
+      "title": "Portexplantation (Portentfernung)",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Portexplantation",
+        "Portentfernung",
+        "Port"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Therapie",
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Diagnostik",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "headings_raw": [
+        "Beschreibung",
+        "Indikationen",
+        "Operationstechnik (Standard, Lokalanästhesie)",
+        "Nachsorge",
+        "Diagnosen (Beispiel)"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1876,
+      "body_chars": 1669
+    },
+    {
+      "file": "Posttraumatische_Gonarthrose.md",
+      "title": "Posttraumatische Gonarthrose",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Posttraumatische",
+        "Gonarthrose",
+        "Kniearthrose",
+        "posttraumatisch"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1260,
+      "body_chars": 1078
+    },
+    {
+      "file": "Prellung.md",
+      "title": "Prellung (Contusio)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Prellung",
+        "Contusio",
+        "Kontusion"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1479,
+      "body_chars": 1315
+    },
+    {
+      "file": "Proktalgie.md",
+      "title": "Proktalgie / Analschmerz",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Proktalgie",
+        "Analschmerz",
+        "Analgie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Nachsorge",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1291,
+      "body_chars": 1117
+    },
+    {
+      "file": "Proktitis.md",
+      "title": "Proktitis",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Proktitis",
+        "Mastdarmentzuendung",
+        "Rektum"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Quellen"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Ätiologie",
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge",
+        "Quellen"
+      ],
+      "has_quellen": true,
+      "licence_risk": "review",
+      "chars": 6105,
+      "body_chars": 6105
+    },
+    {
+      "file": "Radiuskoepfchenfraktur_Mason_I.md",
+      "title": "Radiusköpfchenfraktur (Mason I)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Radiuskoepfchenfraktur",
+        "Mason",
+        "Radiusköpfchenfraktur",
+        "Ellenbogen"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1428,
+      "body_chars": 1240
+    },
+    {
+      "file": "Rektumkarzinom.md",
+      "title": "Rektumkarzinom",
+      "group": "Hämatologie / Onkologie",
+      "indication_keywords": [
+        "Rektumkarzinom",
+        "Mastdarmkrebs",
+        "Enddarmkrebs"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1515,
+      "body_chars": 1361
+    },
+    {
+      "file": "Rektusdiastase.md",
+      "title": "Rektusdiastase",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Rektusdiastase",
+        "Bauchmuskel"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1763,
+      "body_chars": 1763
+    },
+    {
+      "file": "Rippenserienfraktur.md",
+      "title": "Rippenserienfraktur (Z.n., konsolidiert)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Rippenserienfraktur",
+        "konsolidiert",
+        "Rippenbruch",
+        "Rippenfraktur"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1047,
+      "body_chars": 825
+    },
+    {
+      "file": "Rupturierte_Ovarialzyste.md",
+      "title": "Rupturierte Ovarialzyste",
+      "group": "Gynäkologie",
+      "indication_keywords": [
+        "Rupturierte",
+        "Ovarialzyste",
+        "Eierstockzyste",
+        "rupturiert"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1575,
+      "body_chars": 1357
+    },
+    {
+      "file": "Schaedelhirntrauma.md",
+      "title": "Schädelhirntrauma (SHT)",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Schaedelhirntrauma",
+        "Schädelhirntrauma",
+        "SHT",
+        "Kopfverletzung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1357,
+      "body_chars": 1185
+    },
+    {
+      "file": "Schenkelhalsfraktur.md",
+      "title": "Schenkelhalsfraktur",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Schenkelhalsfraktur",
+        "Oberschenkelhalsbruch",
+        "Hueftfraktur"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Bildgebung",
+        "Therapie"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 960,
+      "body_chars": 796
+    },
+    {
+      "file": "Schenkelhernie_Femoralhernie.md",
+      "title": "Schenkelhernie / Femoralhernie",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Schenkelhernie",
+        "Femoralhernie",
+        "Hernie"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1321,
+      "body_chars": 1135
+    },
+    {
+      "file": "Schlafapnoe_Syndrom.md",
+      "title": "Schlafapnoe-Syndrom / Adipositas-Hyperventilation",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Schlafapnoe",
+        "Syndrom",
+        "Adipositas",
+        "Hyperventilation",
+        "Schnarchen",
+        "Apnoe"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1754,
+      "body_chars": 1528
+    },
+    {
+      "file": "Schnittwunde.md",
+      "title": "Schnittwunde",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Schnittwunde",
+        "Wunde",
+        "Verletzung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1945,
+      "body_chars": 1733
+    },
+    {
+      "file": "Schuerfwunden_Abschuerfungen.md",
+      "title": "Schürfwunden (Abschürfungen) nach Sturz",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Schuerfwunden",
+        "Abschuerfungen",
+        "Schürfwunden",
+        "Abschürfungen",
+        "nach",
+        "Sturz",
+        "Schuerfwunde",
+        "Abschuerfung",
+        "Hautabschuerfung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1869,
+      "body_chars": 1869
+    },
+    {
+      "file": "Schulterluxation.md",
+      "title": "Schulterluxation / V.a. Schulterluxation",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Schulterluxation",
+        "Schulterverrenkung",
+        "Luxation"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1555,
+      "body_chars": 1349
+    },
+    {
+      "file": "Schulterprellung.md",
+      "title": "Schulterprellung / Contusio humeri",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Schulterprellung",
+        "Contusio",
+        "humeri",
+        "Contusio humeri",
+        "Prellung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "sections_missing": [
+        "Verlauf",
+        "Nachsorge"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1398,
+      "body_chars": 1204
+    },
+    {
+      "file": "Schwellung_Handruecken_nach_Braunuele.md",
+      "title": "Schwellung Handrücken nach Braunüle",
+      "group": "Sonstiges",
+      "indication_keywords": [
+        "Schwellung",
+        "Handruecken",
+        "nach",
+        "Braunuele",
+        "Handrücken",
+        "Braunüle",
+        "Paravasat"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2372,
+      "body_chars": 2079
+    },
+    {
+      "file": "Stichverletzung.md",
+      "title": "Stichverletzung",
+      "group": "Psychiatrie",
+      "indication_keywords": [
+        "Stichverletzung",
+        "Stichwunde",
+        "Verletzung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1569,
+      "body_chars": 1325
+    },
+    {
+      "file": "Struma_nodosa_Hyperthyreose.md",
+      "title": "Musterbrief: Struma nodosa / Hyperthyreose",
+      "group": "Endokrinologie / Stoffwechsel",
+      "indication_keywords": [
+        "Struma",
+        "nodosa",
+        "Hyperthyreose",
+        "Musterbrief",
+        "Schilddruese",
+        "Schilddruesenknoten",
+        "Kropf"
+      ],
+      "sections_present": [],
+      "sections_missing": [
+        "Klinik",
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1781,
+      "body_chars": 1571
+    },
+    {
+      "file": "Suizidalitaet.md",
+      "title": "Akute Suizidalität / Suizidversuch",
+      "group": "Psychiatrie",
+      "indication_keywords": [
+        "Suizidalitaet",
+        "Akute",
+        "Suizidalität",
+        "Suizidversuch",
+        "Eigengefaehrdung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1511,
+      "body_chars": 1216
+    },
+    {
+      "file": "Tibiakopffraktur.md",
+      "title": "Tibiakopffraktur",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Tibiakopffraktur",
+        "Schienbein"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1537,
+      "body_chars": 1316
+    },
+    {
+      "file": "Tiefe_Beinvenenthrombose_TVT.md",
+      "title": "Tiefe Beinvenenthrombose (TVT)",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Tiefe",
+        "Beinvenenthrombose",
+        "TVT",
+        "tiefe Beinvenenthrombose",
+        "Thrombose"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2411,
+      "body_chars": 2411
+    },
+    {
+      "file": "Urolithiasis.md",
+      "title": "Urolithiasis – Musterbrief / Template",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "Urolithiasis",
+        "Musterbrief",
+        "Template",
+        "Nierensteine",
+        "Harnsteine",
+        "Nephrolithiasis",
+        "Kolik"
+      ],
+      "sections_present": [
+        "Diagnosen",
+        "Klinik",
+        "Diagnostik",
+        "KU",
+        "Therapie",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung"
+      ],
+      "sections_missing": [
+        "Nachsorge"
+      ],
+      "headings_raw": [
+        "Diagnosen",
+        "Leitsymptome",
+        "Bildgebung",
+        "KU-Befunde",
+        "Therapie (stationär)",
+        "Verlauf typisch",
+        "Therapie bei Entlassung",
+        "Aufnahmebegründung"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1853,
+      "body_chars": 1653
+    },
+    {
+      "file": "Uterusmyom.md",
+      "title": "Uterusmyom",
+      "group": "Gynäkologie",
+      "indication_keywords": [
+        "Uterusmyom",
+        "Myom",
+        "Gebaermutter"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1920,
+      "body_chars": 1714
+    },
+    {
+      "file": "Varikose.md",
+      "title": "Varikose",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "Varikose",
+        "Krampfadern",
+        "Varizen"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1261,
+      "body_chars": 1261
+    },
+    {
+      "file": "Verbrennung_2_Grades.md",
+      "title": "Verbrennung 2. Grades",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Verbrennung",
+        "Grades",
+        "Brandwunde",
+        "Verbruehung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1471,
+      "body_chars": 1303
+    },
+    {
+      "file": "Vorhofflimmern_permanent.md",
+      "title": "Permanentes Vorhofflimmern",
+      "group": "Neurologie / Neurochirurgie",
+      "indication_keywords": [
+        "Vorhofflimmern",
+        "permanent",
+        "Permanentes",
+        "Arrhythmie",
+        "Herzrhythmusstoerung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1757,
+      "body_chars": 1579
+    },
+    {
+      "file": "Weber_C_Fraktur.md",
+      "title": "Weber-C-Fraktur des oberen Sprunggelenks (ältere, nicht dislozierte Fraktur – konservativ)",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Weber",
+        "Fraktur",
+        "des",
+        "oberen",
+        "Sprunggelenks",
+        "ältere",
+        "nicht",
+        "dislozierte",
+        "konservativ",
+        "Weber-C-Fraktur",
+        "Aussenknoechel",
+        "Sprunggelenk"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2070,
+      "body_chars": 1759
+    },
+    {
+      "file": "Weichteilabloesung_Oberarm_Decollement.md",
+      "title": "Weichteilablösung Oberarm (Decollement)",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Weichteilabloesung",
+        "Oberarm",
+        "Decollement",
+        "Weichteilablösung"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1332,
+      "body_chars": 1128
+    },
+    {
+      "file": "Wirbelkörperhämangiom.md",
+      "title": "Wirbelkörperhämangiom",
+      "group": "Orthopädie / Unfallchirurgie",
+      "indication_keywords": [
+        "Wirbelkörperhämangiom",
+        "Wirbelkoerperhaemangiom",
+        "Haemangiom",
+        "Wirbel"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1029,
+      "body_chars": 830
+    },
+    {
+      "file": "Zeckenstich.md",
+      "title": "Zeckenstich",
+      "group": "Dermatologie / Infektiologie",
+      "indication_keywords": [
+        "Zeckenstich",
+        "Zeckenbiss",
+        "Borreliose",
+        "FSME"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1693,
+      "body_chars": 1545
+    },
+    {
+      "file": "Zehenfraktur.md",
+      "title": "Zehenfraktur (Fraktur einer Phalanx digitorum pedis)",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "Zehenfraktur",
+        "Fraktur",
+        "einer",
+        "Phalanx",
+        "digitorum",
+        "pedis",
+        "Zehenbruch"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Prognose"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2106,
+      "body_chars": 1876
+    },
+    {
+      "file": "laparoskopische-appendektomie.md",
+      "title": "laparoskopische-appendektomie",
+      "group": "Allgemein- / Viszeralchirurgie",
+      "indication_keywords": [
+        "laparoskopische",
+        "appendektomie",
+        "Appendizitis",
+        "Appendektomie",
+        "Blinddarm",
+        "Appendix",
+        "laparoskopisch"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf"
+      ],
+      "sections_missing": [
+        "KU",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 3011,
+      "body_chars": 2866
+    },
+    {
+      "file": "pAVK.md",
+      "title": "pAVK",
+      "group": "Kardiologie / Angiologie",
+      "indication_keywords": [
+        "pAVK",
+        "periphere arterielle Verschlusskrankheit",
+        "Schaufensterkrankheit"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 2806,
+      "body_chars": 2672
+    },
+    {
+      "file": "pAVK_Mediasklerose.md",
+      "title": "pAVK / Mediasklerose",
+      "group": "Nephrologie / Urologie",
+      "indication_keywords": [
+        "pAVK",
+        "Mediasklerose",
+        "periphere arterielle Verschlusskrankheit"
+      ],
+      "sections_present": [
+        "Klinik"
+      ],
+      "sections_missing": [
+        "KU",
+        "Diagnostik",
+        "Therapie",
+        "Verlauf",
+        "Nachsorge",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Charakteristika",
+        "Klinische Relevanz"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1205,
+      "body_chars": 1039
+    },
+    {
+      "file": "Ösophagusvarizen.md",
+      "title": "Ösophagusvarizen",
+      "group": "Gastroenterologie / Hepatologie",
+      "indication_keywords": [
+        "Ösophagusvarizen",
+        "Oesophagusvarizen",
+        "Speiseroehrenvarizen",
+        "Varizen",
+        "Leberzirrhose"
+      ],
+      "sections_present": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "sections_missing": [
+        "KU",
+        "Verlauf",
+        "Therapieempfehlungen bei Entlassung",
+        "Diagnosen"
+      ],
+      "headings_raw": [
+        "Klinik",
+        "Diagnostik",
+        "Therapie",
+        "Nachsorge"
+      ],
+      "has_quellen": false,
+      "licence_risk": "low",
+      "chars": 1494,
+      "body_chars": 1284
+    }
+  ]
+}
