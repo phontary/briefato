@@ -1,0 +1,98 @@
+{% extends "app_base.html" %}
+{% block title %}Neuer Brief — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="chat {{ 'chat--idle' if not messages else 'chat--thread' }}" data-chat>
+  <div class="chat-page-head">
+    <div>
+      <h1>Neuer Brief</h1>
+      <p class="muted">Schreiben, diktieren oder einfügen Sie frei. Briefato erkennt die Dokumentart
+        und pflegt denselben Fall in diesem Chat weiter.</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="/app/neu">Schritt für Schritt statt Chat</a>
+  </div>
+
+  {% if error %}
+  <div class="alert alert-error" role="alert">
+    <div><span class="alert-title">Hinweis.</span> {{ error }}</div>
+  </div>
+  {% endif %}
+  {% if notice %}
+  <div class="alert alert-ok" role="status">
+    <div>{{ notice }}</div>
+  </div>
+  {% endif %}
+
+  <div class="chat-stage">
+    {% if messages %}
+    <div class="chat-thread" id="chat-stream" aria-label="Verlauf dieses Falls">
+      {% include "app/chat/_stream.html" %}
+    </div>
+    {% endif %}
+
+    <div class="chat-composer" data-chat-composer>
+      <p class="chat-cap" data-chat-cap aria-hidden="true">
+        {% for line in capability_lines %}
+        <span class="chat-cap-sentence{% if loop.first %} is-active{% endif %}" data-chat-sentence>{{ line }}</span>
+        {% endfor %}
+      </p>
+      <form class="chat-form" method="post" action="/app/chat" data-chat-form novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% if thread %}<input type="hidden" name="thread_id" value="{{ thread.id }}">{% endif %}
+        <label class="visually-hidden" for="chat-message">Ihr Diktat oder Auftrag</label>
+        <textarea class="chat-input" id="chat-message" name="message" rows="3" required
+                  data-chat-input
+                  placeholder="Diktat, Stichpunkte oder Auftrag einfügen …"></textarea>
+        <div class="chat-composer-bar">
+          <div class="field chat-patient">
+            <label for="chat-patient">Für</label>
+            <select class="select" id="chat-patient" name="patient_id">
+              <option value="">ohne Patient/in</option>
+              {% for patient in patients %}
+              <option value="{{ patient.id }}" {% if patient.id == selected_patient_id %}selected{% endif %}>{{ patient.display_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <span class="spacer"></span>
+          <span class="chat-hint">Enter sendet · Shift + Enter neue Zeile</span>
+          <button class="btn btn-primary" type="submit">Senden</button>
+        </div>
+        <details class="chat-options">
+          <summary>Weitere Optionen</summary>
+          <div class="field mt-2">
+            <label for="chat-doc-type">Dokumentart</label>
+            <select class="select" id="chat-doc-type" name="doc_type">
+              <option value="">Automatisch erkennen</option>
+              {% for option in doc_type_choices %}
+              <option value="{{ option.key }}">{{ option.label }}</option>
+              {% endfor %}
+            </select>
+            <p class="hint">Leer lassen — Briefato erkennt die Dokumentart aus Ihrem Text. Eine feste
+              Auswahl überschreibt die Erkennung.</p>
+          </div>
+        </details>
+      </form>
+      {% if not patients %}
+      <p class="hint">Noch kein Patient angelegt — <a href="/app/patienten/neu">Patient anlegen</a>,
+        damit Briefkopf und Pseudonymisierung greifen.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <aside class="chat-aside" aria-labelledby="chat-aside-title">
+    <h2 id="chat-aside-title" class="chat-aside-title">Ihre Fälle</h2>
+    {% if recent_threads %}
+    <ul class="chat-case-list">
+      {% for item in recent_threads %}
+      <li class="chat-case{% if thread and item.id == thread.id %} is-current{% endif %}">
+        <a href="/app/chat?thread={{ item.id }}">{{ item.title or 'Fall' }}</a>
+        <span class="muted">{{ item.updated_at | fmt_datetime }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="muted">Noch kein Fall. Schreiben Sie unten los.</p>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

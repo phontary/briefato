@@ -21,6 +21,7 @@ from .routes import (
     admin_vorlagen,
     auth,
     billing,
+    chat,
     letters,
     methode,
     patients,
@@ -126,6 +127,8 @@ def create_app() -> FastAPI:
     app.include_router(portal.router)
     app.include_router(patients.router)
     app.include_router(letters.router)
+    # Chat portal at /app/chat — the primary entry (one model call per turn, no agent).
+    app.include_router(chat.router)
     # Sequential wizard at /app/neu (its own router; the split editor stays at /app/briefe/{id}).
     app.include_router(wizard.router)
     app.include_router(account.router)

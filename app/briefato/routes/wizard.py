@@ -681,7 +681,7 @@ def _wizard_response(
         request,
         "app/neu.html",
         status_code=status_code,
-        active="briefe",
+        active="neu",
         crumbs=[("Übersicht", "/app"), ("Briefe", "/app/briefe"), ("Neu", None)],
         card=card,
         wizard_cards=list(WIZARD_CARDS),

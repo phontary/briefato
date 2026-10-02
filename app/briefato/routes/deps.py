@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 
 from ..config import PLAN_CATALOG, get_settings
 from ..db import get_db
-from ..models import Letter, Patient, Subscription, User, utcnow
+from ..models import ChatThread, Letter, Patient, Subscription, User, utcnow
 from ..security import NotAuthenticated, check_csrf, current_user
 
 TEMPLATES_DIR = Path(__file__).resolve().parents[1] / "templates"
@@ -224,6 +224,18 @@ def get_letter_or_404(db: Session, user: User, letter_id: str | None) -> Letter:
     return letter
 
 
+def get_thread_or_404(db: Session, user: User, thread_id: str | None) -> ChatThread:
+    """A chat thread owned by the session user, or 404 — never a foreign thread."""
+    if not thread_id:
+        raise HTTPException(status_code=404, detail="Fall nicht gefunden.")
+    thread = db.scalar(
+        select(ChatThread).where(ChatThread.id == thread_id, ChatThread.user_id == user.id)
+    )
+    if thread is None:
+        raise HTTPException(status_code=404, detail="Fall nicht gefunden.")
+    return thread
+
+
 # --------------------------------------------------------------------------- account helpers
 
 
@@ -253,6 +265,7 @@ __all__ = [
     "get_letter_or_404",
     "get_patient_or_404",
     "get_subscription",
+    "get_thread_or_404",
     "optional_user",
     "render",
     "require_auth",

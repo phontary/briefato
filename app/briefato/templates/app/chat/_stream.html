@@ -1,0 +1,92 @@
+<ol class="chat-messages">
+  {% for m in messages %}
+  <li class="chat-msg chat-msg--{{ m.role }} chat-msg--{{ m.kind }}">
+    {% if m.kind == 'letter' %}
+    <div class="chat-bubble chat-letter">
+      <p class="chat-letter-meta">
+        <span class="badge badge-accent">{{ m.meta.doc_type_label or m.meta.doc_type }}</span>
+        {% if m.meta.model %}<span class="muted">Modell: {{ m.meta.model }}</span>{% endif %}
+        {% if m.meta.tokens_out %}<span class="muted">Tokens: {{ m.meta.tokens_in }} / {{ m.meta.tokens_out }}</span>{% endif %}
+      </p>
+      <div class="copy-row">
+        <button type="button" class="btn btn-primary btn-sm" data-copy-target="#chat-letter-{{ m.meta.letter_id }}">Text kopieren</button>
+        <span class="copy-feedback muted" data-copy-feedback role="status" aria-live="polite"></span>
+        <a class="btn btn-ghost btn-sm" href="/app/briefe/{{ m.meta.letter_id }}">Im Editor öffnen</a>
+        <details class="menu">
+          <summary class="btn btn-ghost btn-sm">Weitere Optionen</summary>
+          <div class="menu-panel">
+            <a href="/app/briefe/{{ m.meta.letter_id }}/export.docx">DOCX mit Briefkopf herunterladen (optional)</a>
+            <p class="hint">Hauptausgabe ist der reine Text. Das DOCX ist eine optionale Sekundärausgabe.</p>
+          </div>
+        </details>
+      </div>
+      <pre class="result-pane chat-letter-text" id="chat-letter-{{ m.meta.letter_id }}" tabindex="0"
+           aria-label="Erzeugter Text, reiner Text zum Kopieren">{{ m.content }}</pre>
+      <p class="chat-rule-line {{ 'is-warn' if m.meta.hard_count else 'is-clean' }}">
+        {% if m.meta.hard_count %}
+          Regel-Check: {{ m.meta.hard_count }} harte, {{ m.meta.soft_count }} weiche Hinweise
+        {% elif m.meta.soft_count %}
+          Regel-Check: 0 harte, {{ m.meta.soft_count }} weiche Hinweise
+        {% else %}
+          Regel-Check: Regeln geprüft (R1–R67), keine Hinweise
+        {% endif %}
+        {% if m.meta.retried %}· nachgebessert{% endif %}
+      </p>
+      {% if m.meta.referenz_notes %}
+      <section class="enrichments" aria-labelledby="ref-{{ m.id }}">
+        <h3 id="ref-{{ m.id }}" class="chat-note-title">Aus Referenz ergänzt – bitte prüfen</h3>
+        <ul class="enrichment-list">
+          {% for note in m.meta.referenz_notes %}
+          <li class="enrichment-item"><span class="enrichment-text">{{ note.message }}</span></li>
+          {% endfor %}
+        </ul>
+        <p class="hint">Diese Angaben stammen aus Referenzvorlagen und nicht aus Ihrem Rohmaterial.</p>
+      </section>
+      {% endif %}
+      {% if m.meta.findings and m.meta.hard_count %}
+      <details class="chat-findings">
+        <summary>Alle Hinweise ({{ m.meta.findings | length }})</summary>
+        <ul class="rule-findings">
+          {% for finding in m.meta.findings %}
+          <li><span class="rule-id">{{ finding.rule_id }}</span> {{ finding.message }}</li>
+          {% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+      <section class="templates-used">
+        <h3 class="chat-note-title">Verwendete Vorlagen</h3>
+        {% if m.meta.templates %}
+        <ul class="used-list">
+          {% for template in m.meta.templates %}
+          <li><a href="/app/vorlagen/{{ template.file }}">{{ template.title }}</a>
+            <span class="muted">Treffer {{ template.score }}</span></li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="muted">Keine Vorlage gefunden.</p>
+        {% endif %}
+      </section>
+    </div>
+
+    {% elif m.kind == 'question' %}
+    <div class="chat-bubble chat-question">
+      <p class="chat-question-text">{{ m.content }}</p>
+      <form method="post" action="/app/chat/wahl" class="chat-candidates">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="thread_id" value="{{ thread.id }}">
+        <input type="hidden" name="patient_id" value="{{ selected_patient_id }}">
+        {% for candidate in m.meta.candidates %}
+        <button class="btn btn-secondary" type="submit" name="doc_type" value="{{ candidate.value }}">{{ candidate.label }}</button>
+        {% endfor %}
+      </form>
+    </div>
+
+    {% elif m.kind == 'error' %}
+    <div class="chat-bubble chat-error" role="alert">{{ m.content }}</div>
+
+    {% else %}
+    <div class="chat-bubble chat-bubble-text">{{ m.content }}</div>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ol>

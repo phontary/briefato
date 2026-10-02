@@ -179,6 +179,93 @@
     });
   }
 
+  /* Chat portal: rotating capability line above the composer, surroundings fade while the
+     cursor is in the box, Enter sends / Shift+Enter adds a newline. */
+  function initChat() {
+    var chat = document.querySelector("[data-chat]");
+    if (!chat) return;
+
+    var composer = chat.querySelector("[data-chat-composer]");
+    var input = chat.querySelector("[data-chat-input]");
+    var form = chat.querySelector("[data-chat-form]");
+
+    /* Enter sends, Shift+Enter makes a new line (a plain form POST still works without JS). */
+    if (input && form) {
+      input.addEventListener("keydown", function (event) {
+        if (event.key !== "Enter" || event.shiftKey || event.ctrlKey || event.metaKey || event.altKey) return;
+        if (event.isComposing) return;
+        event.preventDefault();
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.submit();
+        }
+      });
+    }
+
+    /* Focus mode: the cursor inside the composer fades the surroundings; blur or Escape
+       brings them back. */
+    function focusOn() {
+      document.body.classList.add("is-chat-focus");
+    }
+    function focusOff() {
+      document.body.classList.remove("is-chat-focus");
+    }
+    if (composer) {
+      composer.addEventListener("focusin", focusOn);
+      composer.addEventListener("focusout", function (event) {
+        if (composer.contains(event.relatedTarget)) return;
+        focusOff();
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key !== "Escape") return;
+        focusOff();
+        if (input) input.blur();
+      });
+    }
+
+    /* The rotating capability line: ~2.5 s, pauses as soon as the member types, and stays
+       static under prefers-reduced-motion. */
+    var cap = chat.querySelector("[data-chat-cap]");
+    var sentences = cap ? Array.prototype.slice.call(cap.querySelectorAll("[data-chat-sentence]")) : [];
+    if (sentences.length > 1 && !prefReducedMotion()) {
+      var index = 0;
+      var timer = null;
+      var paused = false;
+      var show = function (next) {
+        sentences[index].classList.remove("is-active");
+        index = ((next % sentences.length) + sentences.length) % sentences.length;
+        sentences[index].classList.add("is-active");
+      };
+      var start = function () {
+        if (timer === null && !paused) {
+          timer = window.setInterval(function () {
+            show(index + 1);
+          }, 2500);
+        }
+      };
+      var stop = function () {
+        if (timer !== null) {
+          window.clearInterval(timer);
+          timer = null;
+        }
+      };
+      start();
+      if (input) {
+        input.addEventListener("input", function () {
+          paused = true;
+          stop();
+        });
+      }
+      chat.addEventListener("focusin", stop);
+      chat.addEventListener("focusout", function (event) {
+        if (chat.contains(event.relatedTarget)) return;
+        paused = false;
+        start();
+      });
+    }
+  }
+
   onReady(function () {
     initCtrlEnter();
     initConfirms();
@@ -186,5 +273,6 @@
     initCopy();
     initHtmxErrors();
     initWizard();
+    initChat();
   });
 })();

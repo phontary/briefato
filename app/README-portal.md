@@ -24,6 +24,9 @@ BRIEFATO_LLM_MOCK=true .venv/bin/python -m pytest app/tests -q
 # the wizard suite on its own
 BRIEFATO_LLM_MOCK=true .venv/bin/python -m pytest app/tests/test_wizard.py -q
 
+# the chat-portal suite on its own
+BRIEFATO_LLM_MOCK=true .venv/bin/python -m pytest app/tests/test_chat_portal.py -q
+
 # boot the real app and walk the new routes (session-based curl matrix)
 BRIEFATO_DATA_DIR=/tmp/bd BRIEFATO_LLM_MOCK=true BRIEFATO_SECRET_KEY=dev \
   .venv/bin/python -m uvicorn briefato.main:app --app-dir app --port 8097 &
@@ -51,14 +54,15 @@ curl -s -b $J -c $J -X POST $B/app/neu --data-urlencode "csrf_token=$T" \
 | `routes/portal.py` | `/app` dashboard, `/app/suche` full-text search |
 | `routes/patients.py` | patient CRUD + archive |
 | `routes/letters.py` | letter draft → generate (doc-type + method metadata) → edit → approve → DOCX export → delete |
+| `routes/chat.py` | **chat portal `/app/chat`** — composer, one rotating capability line, triage-driven turn, one clarifying question, persisted per-case thread whose follow-ups refine the SAME letter |
 | `routes/wizard.py` | sequential type-dependent wizard at `/app/neu` (+ `/app/neu/erzeugen`, `/app/neu/ergebnis/{id}`) |
 | `routes/methode.py` | `/app/methode`, `/app/methode/regeln`, `/app/vorlagen[/…]`, proposal flow |
 | `routes/admin_vorlagen.py` | `/admin/vorlagen-vorschlaege` review (admin-only), registered before the sqladmin mount |
 | `routes/brain_bridge.py` | adapter to `briefato.brain` (triage/retrieval/rule_checker/loader) with a German-safe portal fallback |
 | `routes/library_models.py` | the **only** portal-owned table: `template_proposals` |
-| `templates/` | `base.html` (blocks `title`, `head`, `content`, `scripts`), `app_base.html`, `app/methode.html`, `app/vorlagen/*`, `app/admin/*`, editor `app/briefe/_editor.html` |
-| `static/css/{tokens,app}.css` | design system + method/library components |
-| `static/js/{htmx.min.js,app.js}` | HTMX 2.0.11 vendored; `app.js` adds the clipboard copy handler |
+| `templates/` | `base.html` (blocks `title`, `head`, `content`, `scripts`), `app_base.html`, `app/chat.html` + `app/chat/_stream.html`, `app/methode.html`, `app/vorlagen/*`, `app/admin/*`, editor `app/briefe/_editor.html` |
+| `static/css/{tokens,app}.css` | design system + method/library components + the chat portal (`.chat`, `.chat-composer`, `.is-chat-focus`) |
+| `static/js/{htmx.min.js,app.js}` | HTMX 2.0.11 vendored; `app.js` adds clipboard copy, the wizard fade and `initChat()` (focus fade, rotating line, Enter-to-send) |
 
 ## Method integration
 
@@ -72,7 +76,38 @@ curl -s -b $J -c $J -X POST $B/app/neu --data-urlencode "csrf_token=$T" \
 - `briefato.pipeline` is imported before `briefato.brain` inside the bridge to keep the
   brain↔pipeline dependency graph acyclic.
 
-## Wizard (`/app/neu`) — the primary flow
+## Chat portal (`/app/chat`) — the primary flow
+
+The step-by-step wizard entry was replaced by a conventional chat portal, per the owner's
+direction. One centred composer with a single changing capability line above it; the
+surroundings fade while the cursor is in the box. Full design + route/DB contract:
+`docs/07-chat-portal.md`.
+
+- **Entry decision**: the sidebar CTA *"Neuer Brief"*, the dashboard CTAs and the empty state
+  point at `/app/chat`. The wizard stays reachable at `/app/neu` (sidebar *"Assistent"*, and a
+  *"Schritt für Schritt statt Chat"* link on the chat page). Nothing was deleted.
+- **Self-triage**: the free text goes to `briefato.brain.triage.triage`. A confident result (or
+  a long, substantive dictation) generates immediately; a genuinely ambiguous, short order
+  (confidence < 0.55 and < 200 chars) yields **exactly one** short question plus 2–3 candidate
+  document types as buttons. No letter is created before the answer.
+- **One case = one document**: `chat_threads.letter_id` anchors the case. A follow-up message
+  regenerates the **same** `letters` row (via `letters._fold_pipeline_letters`); the accumulated
+  follow-up instructions are passed as the pipeline's `extra` prompt block. No duplicate letter
+  per message.
+- **No agent runtime**: one member turn is at most one `POST /chat/completions` from the frozen
+  pipeline (plus its rule check and at most one repair retry). No tools, no model memory; the
+  thread lives in `chat_threads` / `chat_messages` (Fernet-encrypted content, non-patient
+  metadata only) and the portal assembles the prompt.
+- **Result bubble**: plain text + `Text kopieren`, the rule-check line (hard/soft), any soft
+  `R-REFERENZ` note under *"Aus Referenz ergänzt – bitte prüfen"*, the used templates and a link
+  to the letter in the editor. DOCX stays optional under *"Weitere Optionen"*.
+- **Accessible**: a real `<form>` with a labelled `<textarea>`; Enter sends, Shift+Enter makes a
+  newline; it works as a plain form POST with JS disabled. Focus/rotation respect
+  `prefers-reduced-motion`.
+- **Focus mode**: `is-chat-focus` on `<body>` fades nav/topbar/breadcrumbs/header/aside and
+  hides the capability line; blur or Escape restores them.
+
+## Wizard (`/app/neu`) — the alternative entry
 
 One question per step, document-type-dependent, with a fade between steps and an explicit
 summary confirm before anything is generated.
@@ -187,10 +222,14 @@ proposals and a non-admin gets 403 on the review page).
   no `app/requirements.portal.txt` was created.
 - **Extensions to the frozen contracts (no contract item changed):** three new routes are added —
   `GET/POST /app/neu`, `POST /app/neu/erzeugen`, `GET /app/neu/ergebnis/{letter_id}` — with three
-  new templates (`app/neu.html`, `app/_wizard_field.html`, `app/neu/ergebnis.html`). The legacy
-  create form `/app/briefe/neu` and the split editor `/app/briefe/{id}` are unchanged and still
-  reachable; the dashboard/list CTAs now point at `/app/neu`. `routes/deps.py` gains one Jinja
-  global (`doc_type_label`) so lists can show the real document type stored in `template_id`.
+  new templates (`app/neu.html`, `app/_wizard_field.html`, `app/neu/ergebnis.html`). The chat
+  portal adds `GET/POST /app/chat` and `POST /app/chat/wahl` (`routes/chat.py`,
+  `templates/app/chat.html`, `templates/app/chat/_stream.html`) plus two new **tables**
+  (`chat_threads`, `chat_messages` in `models.py` — additive, `init_db()` creates them).
+  `routes/deps.py` gains `get_thread_or_404`. The legacy create form `/app/briefe/neu` and the
+  split editor `/app/briefe/{id}` are unchanged and still reachable; the dashboard/list CTAs now
+  point at `/app/chat`. `routes/deps.py` gains one Jinja global (`doc_type_label`) so lists can
+  show the real document type stored in `template_id`.
 - **Pipeline call**: `routes/wizard.py` calls the frozen `pipeline.generate.generate_letter` with
   `kind=<brain document type>`. Enrichment/fan-out keyword arguments are passed **only** when
   `inspect.signature` shows them (today: `enrich`; `sources`/`structured`/`doc_type`/`wizard` are

@@ -190,9 +190,79 @@ class AuditEvent(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, nullable=False)
 
 
+CHAT_THREAD_STATUS = ("open", "active", "done")
+CHAT_MESSAGE_ROLES = ("user", "assistant")
+CHAT_MESSAGE_KINDS = ("dictation", "followup", "choice", "question", "letter", "note", "error")
+
+
+class ChatThread(Base, TimestampMixin):
+    """One case discussion in the chat portal.
+
+    Bound to ``user_id`` and — once a document exists — to exactly one ``letter_id``:
+    follow-up turns in the thread regenerate and update the *same* Letter row, so a case
+    stays one document that evolves instead of a new letter per message. ``doc_type`` holds
+    the brain document type triage decided (``template_id`` on the letter). ``status`` is
+    ``open`` while a clarifying question waits, ``active`` once a letter exists.
+    """
+
+    __tablename__ = "chat_threads"
+    __table_args__ = (Index("ix_chat_threads_user_updated", "user_id", "updated_at"),)
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    patient_id: Mapped[str | None] = mapped_column(
+        ForeignKey("patients.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    letter_id: Mapped[str | None] = mapped_column(
+        ForeignKey("letters.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    title: Mapped[str] = mapped_column(String(200), default="", nullable=False)
+    doc_type: Mapped[str] = mapped_column(String(40), default="", nullable=False)
+    status: Mapped[str] = mapped_column(String(16), default="active", nullable=False)
+
+    patient: Mapped["Patient | None"] = relationship()
+    letter: Mapped["Letter | None"] = relationship()
+    messages: Mapped[list["ChatMessage"]] = relationship(
+        back_populates="thread",
+        cascade="all, delete-orphan",
+        order_by="ChatMessage.created_at, ChatMessage.id",
+    )
+
+
+class ChatMessage(Base):
+    """One turn in a case thread.
+
+    ``content_enc`` is a Fernet token (patient-derived text: the dictation, the follow-up
+    instruction, the generated letter). ``meta_json`` carries only non-patient metadata —
+    document type/label, rule-check counts and rule ids, matched template titles and the
+    letter id — so the thread can be re-rendered without decrypting anything extra.
+    """
+
+    __tablename__ = "chat_messages"
+    __table_args__ = (Index("ix_chat_messages_thread_created", "thread_id", "created_at"),)
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    thread_id: Mapped[str] = mapped_column(
+        ForeignKey("chat_threads.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    role: Mapped[str] = mapped_column(String(12), default="user", nullable=False)  # user | assistant
+    kind: Mapped[str] = mapped_column(String(20), default="dictation", nullable=False)
+    content_enc: Mapped[str | None] = mapped_column(Text, nullable=True)
+    meta_json: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, nullable=False)
+
+    thread: Mapped["ChatThread"] = relationship(back_populates="messages")
+
+
 __all__ = [
     "AuditEvent",
     "AuthSession",
+    "CHAT_MESSAGE_KINDS",
+    "CHAT_MESSAGE_ROLES",
+    "CHAT_THREAD_STATUS",
+    "ChatMessage",
+    "ChatThread",
     "Generation",
     "Letter",
     "LETTER_KINDS",
