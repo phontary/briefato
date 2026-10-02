@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180" role="img" aria-label="Pseudonymisierung: Kennungen werden vor dem Modellaufruf lokal ersetzt">
+  <title>Pseudonymisierung</title>
+  <!-- shield -->
+  <path d="M120 18l62 22v46c0 38-26 60-62 76-36-16-62-38-62-76V40z" fill="#d9efe9" stroke="#2f8d80" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- keyhole -->
+  <circle cx="120" cy="82" r="14" fill="none" stroke="#2f8d80" stroke-width="3"/>
+  <line x1="120" y1="96" x2="120" y2="118" stroke="#2f8d80" stroke-width="3" stroke-linecap="round"/>
+  <!-- tokens -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" font-weight="700" fill="#2f8d80" text-anchor="middle">
+    <text x="64" y="146">{</text>
+    <text x="176" y="146">}</text>
+  </g>
+  <rect x="82" y="132" width="76" height="18" rx="9" fill="none" stroke="#2f8d80" stroke-width="2.5" stroke-dasharray="5 5"/>
+</svg>

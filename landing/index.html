@@ -1,14 +1,426 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="no-js">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Briefato</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Briefato — Aus dem Diktat wird ein fertiger Arztbrief</title>
+<meta name="description" content="Briefato schreibt Ihre Diktate in fertige, briefkopfgerechte Arztbriefe, Atteste und Befunde um. Patientenakten, Verlauf und Suche inklusive. Test-Tarif mit 10 Briefen kostenlos.">
+<meta name="theme-color" content="#0d6e63">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/briefato.css">
 </head>
 <body>
-  <main>
-    <h1>Briefato</h1>
-    <p>Platzhalter — die Landingpage wird von WORKSTREAM-LANDING erstellt.</p>
-  </main>
+<a class="skip-link" href="#main">Zum Hauptinhalt springen</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/" aria-label="Briefato – Startseite">
+      <svg class="brand-mark" viewBox="0 0 64 64" width="34" height="34" aria-hidden="true" focusable="false">
+        <rect width="64" height="64" rx="15" fill="#0d6e63"/>
+        <path d="M20 15h16l11 11v24a2 2 0 0 1-2 2H20a2 2 0 0 1-2-2V17a2 2 0 0 1 2-2z" fill="#ffffff"/>
+        <path d="M36 15l11 11H38a2 2 0 0 1-2-2z" fill="#bfe6e0"/>
+        <g stroke="#0d6e63" stroke-width="2.6" stroke-linecap="round">
+          <line x1="24" y1="31" x2="42" y2="31"/>
+          <line x1="24" y1="37" x2="42" y2="37"/>
+          <line x1="24" y1="43" x2="35" y2="43"/>
+        </g>
+      </svg>
+      <span class="brand-name">Briefato</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
+      <span aria-hidden="true">&#9776;</span> Menü
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#ablauf">So funktioniert es</a></li>
+        <li><a href="#zielgruppen">Für wen</a></li>
+        <li><a href="/preise">Preise</a></li>
+        <li><a href="#datenschutz">Datenschutz</a></li>
+        <li><a href="#faq">Häufige Fragen</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a class="btn btn-ghost" href="/anmelden">Anmelden</a>
+        <a class="btn btn-primary" href="/registrieren">Kostenlos testen</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">Schreibhilfe für medizinische Praxen</span>
+        <h1>Aus Ihrem Diktat wird ein fertiger Arztbrief.</h1>
+        <p class="lead">Sie sprechen wie gewohnt. Briefato setzt den Text in Anrede, Grußformel und Ihren Briefkopf, legt ihn zur Patientin oder zum Patienten ab und hält ihn in der Akte durchsuchbar. Jeden Brief geben Sie selbst frei, bevor er die Praxis verlässt.</p>
+        <div class="btn-row hero-cta">
+          <a class="btn btn-primary btn-lg" href="/registrieren">Kostenlos testen</a>
+          <a class="btn btn-ghost btn-lg" href="/preise">Preise ansehen</a>
+        </div>
+        <p class="hero-meta">Test-Tarif mit 10 Briefen, ohne Kosten. Registrierung per E-Mail. Keine Installation, läuft im Browser.</p>
+      </div>
+
+      <div>
+        <div class="example">
+          <article class="example-card" aria-labelledby="ex-in">
+            <div class="example-head"><span class="example-dot" aria-hidden="true"></span><span id="ex-in">Ihre Diktatnotiz</span></div>
+            <div class="example-body">
+              <pre>herrr meier 12.3.58 kontrolle
+seit 3 wo belastungsdyspnoe, keine ruhedyspnoe
+belastungs-ekg unauffällig, bis 100 watt abgebrochen
+RR 145/90, HF 78, gewicht 92 kg
+labor LDL 3,9 ges.-chol 6,1 hba1c 5,8, crp neg
+medikation unverändert
+bitte kardio-vorstellung, befunde mitschicken</pre>
+            </div>
+            <p class="example-caption">Beispiel mit fiktiven Patientendaten.</p>
+          </article>
+
+          <article class="example-card is-out" aria-labelledby="ex-out">
+            <div class="example-head"><span class="example-dot" aria-hidden="true"></span><span id="ex-out">Fertiger Brief</span></div>
+            <div class="example-body">
+              <div class="letterhead">
+                <strong>Praxis Dr. med. A. Beispiel</strong>
+                <span>Musterstraße 1 · 12345 Musterstadt</span>
+              </div>
+              <p>Sehr geehrte Kollegin, sehr geehrter Kollege,</p>
+              <p>ich berichte über Herrn Meier, geboren am 12.03.1958, der sich zur Kontrolle vorstellte. Seit drei Wochen besteht eine Belastungsdyspnoe ohne Ruhedyspnoe.</p>
+              <p><strong>Befunde:</strong> Belastungs-EKG unauffällig, Abbruch bei 100 Watt. Blutdruck 145/90 mmHg, Herzfrequenz 78/min, Gewicht 92 kg. Labor: LDL 3,9 mmol/l, Gesamtcholesterin 6,1 mmol/l, HbA1c 5,8 %, CRP negativ.</p>
+              <p>Die Medikation bleibt unverändert. Ich bitte um kardiologische Vorstellung und um Übersendung der Befunde.</p>
+              <p>Mit freundlichen kollegialen Grüßen</p>
+            </div>
+            <p class="example-caption">Gleicher Inhalt, gesetzt auf Ihren Briefkopf – als DOCX exportierbar.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TRUST BAR ================= -->
+  <section class="section" aria-label="Kurzüberblick">
+    <div class="wrap grid grid-4">
+      <div class="card">
+        <h3>Diktat bleibt Diktat</h3>
+        <p>Sie sprechen in Ihrer gewohnten Reihenfolge. Briefato formuliert, kürzt nicht und erfindet keine Befunde.</p>
+      </div>
+      <div class="card">
+        <h3>Ihr Briefkopf</h3>
+        <p>Praxisangaben hinterlegen Sie einmal. Jeder Export als DOCX trägt denselben Kopf und dieselbe Fußzeile.</p>
+      </div>
+      <div class="card">
+        <h3>Akte je Patient</h3>
+        <p>Jeder Brief hängt an einem Patienteneintrag. Verlauf und Volltextsuche sind damit Teil des Produkts, kein Zusatz.</p>
+      </div>
+      <div class="card">
+        <h3>Freigabe durch Sie</h3>
+        <p>Ein Brief verlässt die Praxis erst nach Ihrer Freigabe. Vorher ist er ein Entwurf, den Sie ändern können.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABLAUF ================= -->
+  <section class="section section-alt" id="ablauf">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>So funktioniert es</h2>
+        <p>Drei Schritte, kein Schulungsaufwand. Der Ablauf bleibt bei jedem Dokument gleich.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card">
+          <img class="step-illo" src="/assets/img/illu-dictation.svg" alt="" width="240" height="180" loading="lazy" decoding="async">
+          <div class="step-head"><span class="step-num" aria-hidden="true">1</span><h3>Diktat einfügen</h3></div>
+          <p>Sie diktieren in Ihre gewohnte Diktierfunktion oder schreiben Stichpunkte und fügen den Text im Portal ein. Eine bestimmte Reihenfolge oder Schablone ist nicht nötig.</p>
+        </div>
+        <div class="card">
+          <img class="step-illo" src="/assets/img/illu-letter.svg" alt="" width="240" height="180" loading="lazy" decoding="async">
+          <div class="step-head"><span class="step-num" aria-hidden="true">2</span><h3>Brief erzeugen</h3></div>
+          <p>Briefato prüft den Text, setzt ihn in Ihre Anrede und Grußformel und legt ihn auf Ihren Briefkopf. Sie wählen die Dokumentart: Arztbrief, Attest, Befund, Überweisung oder Sonstiges.</p>
+        </div>
+        <div class="card">
+          <img class="step-illo" src="/assets/img/illu-privacy.svg" alt="" width="240" height="180" loading="lazy" decoding="async">
+          <div class="step-head"><span class="step-num" aria-hidden="true">3</span><h3>Prüfen und freigeben</h3></div>
+          <p>Sie lesen den Entwurf, ändern ihn bei Bedarf und geben ihn frei. Erst danach exportieren Sie ihn als DOCX – mit Briefkopf, passend zum Weiterleiten oder Ablegen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ZIELGRUPPEN ================= -->
+  <section class="section" id="zielgruppen">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Für wen Briefato gedacht ist</h2>
+        <p>Briefato ist ein Schreibwerkzeug für Praxen und Dienste, die wiederkehrende Schreiben erstellen. Es ersetzt keine Praxissoftware und stellt keine Diagnosen.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card">
+          <h3>Hausarztpraxen</h3>
+          <ul class="icon-list">
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Arztbriefe an Kolleginnen und Kollegen</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Überweisungen und Atteste</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Verlauf je Patient in einer Akte</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Physiotherapie und Logopädie</h3>
+          <ul class="icon-list">
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Befundberichte für Kostenträger</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Stellungnahmen zu Verordnungen</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Wiederkehrende Berichte in gleicher Form</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Pflegedienste</h3>
+          <ul class="icon-list">
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Pflegeberichte und Verlaufsdokumentation</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Stellungnahmen an Kassen und Ärzte</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Textbausteine für wiederkehrende Fälle</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Gutachter</h3>
+          <ul class="icon-list">
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Stellungnahmen und Gutachtenentwürfe</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Bezug auf Befunde aus der Akte</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Einheitliche Form über viele Fälle</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FUNKTIONEN ================= -->
+  <section class="section section-alt" id="funktionen">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Was im Portal enthalten ist</h2>
+        <p>Alle Funktionen sind in jedem Tarif enthalten. Die Tarife unterscheiden sich in der Zahl der Briefe pro Monat.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>Patientenverwaltung</h3>
+          <p>Patientinnen und Patienten anlegen, bearbeiten, suchen und archivieren. Jede Akte führt Stammdaten, Kontakt und die zugehörigen Schreiben.</p>
+        </div>
+        <div class="card">
+          <h3>Verlauf und Volltextsuche</h3>
+          <p>Jeder erzeugte Brief wird am Patienten gespeichert. Sie finden ältere Formulierungen und Befunde über die Suche wieder.</p>
+        </div>
+        <div class="card">
+          <h3>Fünf Dokumentarten</h3>
+          <p>Arztbrief, Attest, Befund, Überweisung und Sonstiges – jeweils mit passender Anrede und Struktur.</p>
+        </div>
+        <div class="card">
+          <h3>Briefkopf inklusive</h3>
+          <p>Praxisanschrift, Fußzeile und Layout hinterlegen Sie einmal im Konto. Jeder Export nutzt denselben Kopf.</p>
+        </div>
+        <div class="card">
+          <h3>DOCX-Export</h3>
+          <p>Freigegebene Briefe laden Sie als Word-Datei herunter – zum Ausdrucken, Versenden oder Ablegen in Ihrer Praxissoftware.</p>
+        </div>
+        <div class="card">
+          <h3>Freigabe mit Sperre</h3>
+          <p>Nach der Freigabe ist ein Brief als abgeschlossen markiert. So bleibt nachvollziehbar, welche Fassung verwendet wurde.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DATENSCHUTZ ================= -->
+  <section class="section" id="datenschutz">
+    <div class="wrap trust-grid">
+      <div>
+        <div class="section-head">
+          <h2>Umgang mit Patientendaten</h2>
+          <p>Medizinische Texte sind besonders schützenswert. Wir beschreiben hier, was technisch umgesetzt ist – und was noch nicht feststeht.</p>
+        </div>
+        <p>Briefato ist so gebaut, dass das Sprachmodell so wenig Patientendaten wie möglich sieht. Wie das im Einzelnen funktioniert, steht in der Datenschutzerklärung.</p>
+        <p><a href="/datenschutz">Zur Datenschutzerklärung</a></p>
+      </div>
+      <ul class="trust-list">
+        <li>
+          <svg class="tick" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.5l5 5 9-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><strong>Pseudonymisierung vor dem Modellaufruf</strong>Patientenkennungen wie Name, Geburtsdatum, Anschrift und Versicherungsnummer werden lokal durch Tokens ersetzt. Das Modell erhält nur den Token, nicht den Klartext. Nach der Antwort werden die echten Werte lokal wieder eingesetzt.</span>
+        </li>
+        <li>
+          <svg class="tick" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.5l5 5 9-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><strong>Verschlüsselte Speicherung</strong>Diktate und erzeugte Brieftexte werden verschlüsselt gespeichert. Der Schlüssel liegt nicht in der Datenbank.</span>
+        </li>
+        <li>
+          <svg class="tick" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.5l5 5 9-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><strong>Löschen und Export auf Anfrage</strong>Sie können Ihre Daten exportieren und Ihr Konto samt Inhalt löschen lassen.</span>
+        </li>
+        <li>
+          <svg class="tick" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.5l5 5 9-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><strong>Auftragsverarbeitungsvertrag</strong>Ein AVV nach Art. 28 DSGVO steht für Praxen und Dienste bereit.</span>
+        </li>
+        <li>
+          <svg class="tick" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.5l5 5 9-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><strong>Kein Training mit Ihren Daten</strong>Ihre Diktate und Briefe werden nicht zum Trainieren von Modellen verwendet.</span>
+        </li>
+      </ul>
+    </div>
+    <div class="wrap" style="margin-top:1.5rem">
+      <div class="notice" role="note">
+        <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2l8 15H2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><line x1="10" y1="8" x2="10" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="14.4" r="1" fill="currentColor"/></svg>
+        <div><strong>Hinweis zum Hosting:</strong> Wo die Anwendung und das Sprachmodell gehostet werden, ist noch nicht endgültig entschieden. Sobald das feststeht, ergänzen wir die Angaben hier und in der Datenschutzerklärung. Aussagen zu Serverstandorten treffen wir bis dahin bewusst nicht.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PREISE TEASER ================= -->
+  <section class="section section-alt" id="preise">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Preise</h2>
+        <p>Vier Tarife, monatliche Abrechnung, jederzeit kündbar. Alle Preise inkl. 19&nbsp;% MwSt.</p>
+      </div>
+      <!-- PREISE VORLÄUFIG: Werte aus PLAN_CATALOG (app/briefato/config.py); vor Veröffentlichung bestätigen. -->
+      <div class="plans">
+        <div class="plan">
+          <h3 class="plan-name">Test</h3>
+          <p class="plan-note">Zum Kennenlernen</p>
+          <p class="plan-price">0&nbsp;€<span class="unit"> / Monat</span></p>
+          <p class="plan-vat">inkl. 19&nbsp;% MwSt.</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 Briefe pro Monat</span></li>
+          </ul>
+          <a class="btn btn-ghost btn-block" href="/registrieren">Kostenlos testen</a>
+        </div>
+        <div class="plan">
+          <h3 class="plan-name">Starter</h3>
+          <p class="plan-note">Für einzelne Behandler</p>
+          <p class="plan-price">19&nbsp;€<span class="unit"> / Monat</span></p>
+          <p class="plan-vat">inkl. 19&nbsp;% MwSt., monatlich kündbar</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>40 Briefe pro Monat</span></li>
+          </ul>
+          <a class="btn btn-ghost btn-block" href="/registrieren">Registrieren</a>
+        </div>
+        <div class="plan is-featured">
+          <span class="badge">Häufig gewählt</span>
+          <h3 class="plan-name">Praxis</h3>
+          <p class="plan-note">Für Praxen mit mehreren Behandlern</p>
+          <p class="plan-price">39&nbsp;€<span class="unit"> / Monat</span></p>
+          <p class="plan-vat">inkl. 19&nbsp;% MwSt., monatlich kündbar</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>120 Briefe pro Monat</span></li>
+          </ul>
+          <a class="btn btn-primary btn-block" href="/registrieren">Registrieren</a>
+        </div>
+        <div class="plan">
+          <h3 class="plan-name">Klinik</h3>
+          <p class="plan-note">Für hohes Aufkommen</p>
+          <p class="plan-price">89&nbsp;€<span class="unit"> / Monat</span></p>
+          <p class="plan-vat">inkl. 19&nbsp;% MwSt., monatlich kündbar</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>400 Briefe pro Monat</span></li>
+          </ul>
+          <a class="btn btn-ghost btn-block" href="/registrieren">Registrieren</a>
+        </div>
+      </div>
+      <p style="margin-top:1.25rem"><a href="/preise">Alle Tarife und Bedingungen im Detail</a></p>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Häufige Fragen</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Ist Briefato ein Medizinprodukt?</summary>
+          <div class="faq-body"><p>Nein. Briefato ist ein Schreibwerkzeug. Es stellt keine Diagnosen, gibt keine Therapieempfehlungen und trifft keine medizinischen Aussagen. Sie prüfen und verantworten jeden Brief selbst, bevor Sie ihn verwenden.</p></div>
+        </details>
+        <details>
+          <summary>Erfindet das Programm Befunde?</summary>
+          <div class="faq-body"><p>Nein. Briefato formuliert Ihren diktierten Inhalt aus und gliedert ihn. Es soll keine Angaben ergänzen, die Sie nicht gemacht haben. Prüfen Sie dennoch jeden Entwurf, wie Sie es bei jeder Schreibkraft tun würden.</p></div>
+        </details>
+        <details>
+          <summary>Welche Dokumentarten unterstützt Briefato?</summary>
+          <div class="faq-body"><p>Arztbrief, Attest, Befund, Überweisung und Sonstiges. Anrede, Struktur und Grußformel richten sich nach der gewählten Art.</p></div>
+        </details>
+        <details>
+          <summary>Muss ich etwas installieren?</summary>
+          <div class="faq-body"><p>Nein. Briefato läuft im Browser. Sie benötigen einen aktuellen Browser und Internetzugang; ein Programm auf dem Praxisrechner ist nicht nötig.</p></div>
+        </details>
+        <details>
+          <summary>Wo werden die Daten verarbeitet?</summary>
+          <div class="faq-body"><p>Die Anwendung speichert Diktate und Briefe verschlüsselt. Für die Textformulierung wird ein Sprachmodell eines externen Anbieters genutzt. Vor jedem Aufruf werden Patientenkennungen lokal pseudonymisiert, sodass das Modell nur Tokens sieht. Der konkrete Anbieter und der Standort der Verarbeitung stehen noch nicht endgültig fest; wir nennen sie hier, sobald sie festgelegt sind. Ein Auftragsverarbeitungsvertrag steht bereit.</p></div>
+        </details>
+        <details>
+          <summary>Wie kann ich kündigen?</summary>
+          <div class="faq-body"><p>Die Tarife sind monatlich kündbar. Die Kündigung ist über das Kundenportal möglich; Details regeln die AGB (derzeit Entwurf, siehe unten).</p></div>
+        </details>
+        <details>
+          <summary>Was passiert mit meinen Daten nach der Kündigung?</summary>
+          <div class="faq-body"><p>Sie können Ihre Daten jederzeit exportieren und löschen lassen. Die Einzelheiten zur Löschung nach Vertragsende stehen in der Datenschutzerklärung.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FINAL CTA ================= -->
+  <section class="section">
+    <div class="wrap">
+      <div class="callout">
+        <div>
+          <h2>Testen Sie es mit einem echten Brief</h2>
+          <p>Legen Sie ein Diktat an und sehen Sie das Ergebnis. Der Test-Tarif enthält 10 Briefe im Monat, ohne Kosten.</p>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-primary btn-lg" href="/registrieren">Kostenlos testen</a>
+          <a class="btn btn-ghost btn-lg" href="/preise">Preise ansehen</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <img src="/assets/img/logo.svg" alt="Briefato" width="150" height="40">
+      <p>Software zur Erstellung medizinischer Schreiben für Praxen und Dienste. Kein Medizinprodukt. Keine Diagnose- oder Therapiefunktion.</p>
+    </div>
+    <nav aria-label="Produkt">
+      <h2>Produkt</h2>
+      <ul>
+        <li><a href="#ablauf">So funktioniert es</a></li>
+        <li><a href="#zielgruppen">Für wen</a></li>
+        <li><a href="#funktionen">Funktionen</a></li>
+        <li><a href="/preise">Preise</a></li>
+        <li><a href="#faq">Häufige Fragen</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Rechtliches">
+      <h2>Rechtliches</h2>
+      <ul>
+        <li><a href="/impressum">Impressum</a></li>
+        <li><a href="/datenschutz">Datenschutz</a></li>
+        <li><a href="/agb">AGB</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Konto">
+      <h2>Konto</h2>
+      <ul>
+        <li><a href="/registrieren">Registrieren</a></li>
+        <li><a href="/anmelden">Anmelden</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap footer-bottom">
+    <p>© <span id="year">2026</span> Briefato. Alle Preise inkl. 19&nbsp;% MwSt.</p>
+    <p>Die Rechtsangaben auf dieser Website sind Entwürfe und noch nicht juristisch geprüft.</p>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
 </body>
 </html>
