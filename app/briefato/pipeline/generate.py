@@ -58,7 +58,13 @@ from ..brain.prompt_assembly import (
 from ..brain.rule_checker import autofix_umlauts, check as rule_check
 from ..config import get_settings
 from ..models import Generation, Letter, Subscription
-from ..research import enrich_default, filter_generic, get_research_provider
+from ..research import (
+    ENRICH_DEFAULT_DOC_TYPES,
+    enrich_default_for,
+    enrich_default_source,
+    filter_generic,
+    get_research_provider,
+)
 from . import fanout, routing, segmenter
 from .letterhead import render_docx  # re-exported for the frozen generate.py API
 from .providers import PipelineError, get_provider
@@ -277,15 +283,23 @@ def _collect_enrichment(
     research_provider: Any,
     enrich_flag: bool,
     raw_patient_context: dict | None = None,
+    enrich_source: str = "request",
+    doc_type_default: bool = False,
 ) -> tuple[list[Any], dict[str, Any]]:
     """Run grounded enrichment and return ``(items, detail)``.
 
     Research is opt-in; if it is off, unavailable, or fails, the list is empty and the
     letter is still produced. Every kept statement passes the generic guardrail and is
     additionally checked against the patient's strong identifiers (defence in depth).
+
+    ``enrich_source`` records where the flag came from (``request`` / ``per_type_env`` /
+    ``global_env`` / ``doc_type_default``) so the member can see that enrichment was used
+    and why; ``doc_type_default`` marks a type that is enriched by default (OP-Bericht).
     """
     detail: dict[str, Any] = {
         "enabled": bool(enrich_flag),
+        "source": str(enrich_source or "request"),
+        "doc_type_default": bool(doc_type_default),
         "web_available": bool(os.environ.get("BRIEFATO_RESEARCH_BASE_URL", "").strip()),
         "items": [],
         "sources": [],
@@ -376,7 +390,9 @@ def _single_pass_document(
         result = provider.generate(bundle.system, bundle.user)
         restored = pseudonymizer.restore(result.text)
         fixed, umlaut_fixes = autofix_umlauts(restored)
-        reference = reference_support_text(hits, enrichment)
+        reference = reference_support_text(
+            hits, enrichment, doc_type=doc_type, dictation=masked_dictation
+        )
         return bundle, result, fixed, rule_check(
             fixed, doc_type, dictation, autofix=umlaut_fixes, reference=reference
         )
@@ -605,8 +621,15 @@ def generate_letter(
         ]
 
         # Grounded enrichment ('Improvisation') — per-request opt-in, default from the
-        # BRIEFATO_ENRICH_DEFAULT setting. Off/unavailable/failed → empty list.
-        enrich_flag = enrich_default() if enrich is None else bool(enrich)
+        # per-document-type setting (OP-Bericht ON, everything else off unless
+        # BRIEFATO_ENRICH_DEFAULT / BRIEFATO_ENRICH_DEFAULT_<TYPE> say otherwise).
+        # Off/unavailable/failed → empty list.
+        if enrich is None:
+            enrich_flag = enrich_default_for(doc_type)
+            enrich_source = enrich_default_source(doc_type)
+        else:
+            enrich_flag = bool(enrich)
+            enrich_source = "request"
         enrichments, enrichment_detail = _collect_enrichment(
             doc_type=doc_type,
             masked_dictation=masked_dictation,
@@ -615,7 +638,10 @@ def generate_letter(
             research_provider=research_provider,
             enrich_flag=enrich_flag,
             raw_patient_context=raw_patient_context,
+            enrich_source=enrich_source,
+            doc_type_default=doc_type in ENRICH_DEFAULT_DOC_TYPES,
         )
+        diagnostics["enrichment_source"] = enrich_source
         diagnostics["enrichment_sources"] = enrichment_detail.get("sources", [])
         diagnostics["enrichment_blocked"] = enrichment_detail.get("blocked", 0)
 

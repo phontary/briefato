@@ -15,8 +15,10 @@ profile) instead of the previous invented generic prompt. The markdown under
 | `stopwords.py` | German stopwords + generic clinical qualifiers (akut/chronisch/…) used by the scorer |
 | `muster_merge.py` | near-duplicate merge builder (reads `brain/merges/merge-map.json`) used by the packer and tests |
 | `prompt_assembly.py` | builds the system + user prompt from kern/regelwerk/anti-patterns/playbook/structure; mandates plain text |
+| `standards.py` | selects the department OP standard from `brain/standards/` and builds the injected `ABTEILUNGSSTANDARD` block + checker reference |
 | `rule_checker.py` | deterministic checks enforcing R1–R67 + the ANTI-PATTERNS with a rule id per finding |
 | `demo_brain.py` | runnable self-check demo (see below) |
+| `demo_standards.py` | runnable demo of the OP department standards (selection, block, `R-REFERENZ`) |
 
 ## Brain directory resolution
 
@@ -94,6 +96,20 @@ discharge letter). It states only diagnoses present in the dictation (else
 `keine Angabe im Diktat`) and never invents clinical facts; for method-shaped
 input it passes the R1–R67 checker with no hard findings.
 
+## Abteilungsstandards für den OP-Bericht
+
+`brain/standards/*.md` (product-owned, provenance-tagged) carry Mohamed's department
+standards for operations: the generic step catalogue (`op-standardschritte.md`), the
+laparoscopic cholecystectomy word-for-word template (`che-laparoskopisch.md`) and the
+open Narbenhernie Sublay repair (`narbenhernie-sublay.md`), selected via the trigger
+table in `brain/standards/index.md`. `standards.py` injects exactly one standard as the
+labelled `ABTEILUNGSSTANDARD (aus der Methode – verbindliches Gerüst):` block into
+**every** Operationsbericht prompt — independent of the optional enrichment toggle,
+because it is method knowledge, not a web lookup — and passes the same text to the rule
+checker (`reference_support_text(..., doc_type=..., dictation=...)`) so its routine steps
+are the soft `R-REFERENZ` note instead of a hard `R-INVENT`. No other document type gets
+the block.
+
 ## Self-check
 
 ```bash
@@ -103,6 +119,7 @@ cd /workspace/briefato
 .venv/bin/python brain/musterbriefe/retrieval_selftest.py          # 15/15
 .venv/bin/python brain/selfcheck_kern.py && .venv/bin/python brain/selfcheck_praxis.py
 .venv/bin/python app/briefato/brain/demo_brain.py
+.venv/bin/python app/briefato/brain/demo_standards.py
 ```
 
 The demo prints, for a realistic German ward dictation: the triage decision, the

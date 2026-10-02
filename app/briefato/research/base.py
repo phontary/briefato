@@ -38,10 +38,66 @@ def research_base_url() -> str:
     return os.environ.get("BRIEFATO_RESEARCH_BASE_URL", "").strip()
 
 
+# Document types for which grounded enrichment is ON by default. For an
+# ``operationsbericht`` a dictation that omits the routine procedural steps is
+# incomplete; the method (R52) expects the model to complete them from the reference,
+# and Mohamed's requirement is explicit that this "Improvisation" is indispensable.
+# The global switch ``BRIEFATO_ENRICH_DEFAULT`` stays the default for every other type;
+# a per-type override ``BRIEFATO_ENRICH_DEFAULT_<DOC_TYPE>`` (e.g.
+# ``BRIEFATO_ENRICH_DEFAULT_OPERATIONSBERICHT=false``) wins over both.
+ENRICH_DEFAULT_DOC_TYPES: frozenset[str] = frozenset({"operationsbericht"})
+
+
+def _env_truthy(raw: str) -> bool:
+    return (raw or "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _enrich_per_type_key(doc_type: str) -> str:
+    safe = re.sub(r"[^A-Za-z0-9]+", "_", doc_type or "").strip("_").upper()
+    return f"BRIEFATO_ENRICH_DEFAULT_{safe}"
+
+
 def enrich_default() -> bool:
-    """Whether enrichment is opt-in-by-default (``BRIEFATO_ENRICH_DEFAULT``, default off)."""
-    raw = os.environ.get("BRIEFATO_ENRICH_DEFAULT", "").strip().lower()
-    return raw in {"1", "true", "yes", "on"}
+    """Global default from ``BRIEFATO_ENRICH_DEFAULT`` (unset = off).
+
+    This stays the *global* default; :func:`enrich_default_for` layers the built-in
+    per-document-type default on top of it.
+    """
+    return _env_truthy(os.environ.get("BRIEFATO_ENRICH_DEFAULT", ""))
+
+
+def enrich_default_source(doc_type: str) -> str:
+    """Where the per-type enrichment decision comes from (for reporting/audit).
+
+    One of ``per_type_env``, ``global_env``, ``doc_type_default`` or ``off``.
+    """
+    per_type = os.environ.get(_enrich_per_type_key(doc_type))
+    if per_type is not None and per_type.strip():
+        return "per_type_env"
+    if os.environ.get("BRIEFATO_ENRICH_DEFAULT", "").strip():
+        return "global_env"
+    if (doc_type or "").strip().lower() in ENRICH_DEFAULT_DOC_TYPES:
+        return "doc_type_default"
+    return "off"
+
+
+def enrich_default_for(doc_type: str) -> bool:
+    """Default enrichment flag for one document type.
+
+    Precedence:
+
+    1. explicit per-type override ``BRIEFATO_ENRICH_DEFAULT_<DOC_TYPE>``;
+    2. explicit global ``BRIEFATO_ENRICH_DEFAULT``;
+    3. built-in per-type default (:data:`ENRICH_DEFAULT_DOC_TYPES`, OP-Bericht ON).
+
+    A per-request ``enrich=`` argument to ``generate_letter`` always wins over this.
+    """
+    source = enrich_default_source(doc_type)
+    if source == "per_type_env":
+        return _env_truthy(os.environ[_enrich_per_type_key(doc_type)])
+    if source == "global_env":
+        return _env_truthy(os.environ["BRIEFATO_ENRICH_DEFAULT"])
+    return source == "doc_type_default"
 
 
 # --------------------------------------------------------------------------- record
@@ -191,10 +247,13 @@ def filter_generic(
 
 
 __all__ = [
+    "ENRICH_DEFAULT_DOC_TYPES",
     "Enrichment",
     "NullEnricher",
     "ResearchProvider",
     "enrich_default",
+    "enrich_default_for",
+    "enrich_default_source",
     "filter_generic",
     "is_generic_statement",
     "research_base_url",

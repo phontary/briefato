@@ -11,6 +11,7 @@ A case is one JSON file under ``tools/eval/cases/`` with the shape::
       "must_contain": ["…"],                   # human quality expectations
       "must_not_contain": ["…"],
       "expected_blocks": ["Diagnosen:", …],    # ordered block expectations
+      "allowed_reference": "…",                # generic standard knowledge the model may use
       "notes": "…"
     }
 
@@ -53,6 +54,11 @@ class Case:
     must_not_contain: tuple[str, ...] = field(default_factory=tuple)
     expected_blocks: tuple[str, ...] = field(default_factory=tuple)
     notes: str = ""
+    # Generic standard knowledge (routine OP steps, standard technique/materials) that the
+    # model may legitimately complete from the reference for this case. Handed to the LLM
+    # judge so reference-grounded routine content is not scored as invention. Never dosed
+    # with patient-specific facts.
+    allowed_reference: str = ""
     path: str = ""
 
     def sources_block(self) -> str:
@@ -93,6 +99,7 @@ def _coerce_case(data: dict, path: Path) -> Case:
         must_not_contain=_list("must_not_contain"),
         expected_blocks=_list("expected_blocks"),
         notes=str(data.get("notes") or ""),
+        allowed_reference=str(data.get("allowed_reference") or ""),
         path=str(path),
     )
 

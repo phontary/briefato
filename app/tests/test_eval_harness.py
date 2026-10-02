@@ -186,6 +186,38 @@ def test_judge_prompt_cites_the_dictation_as_the_only_source():
     assert "JSON" in user
 
 
+def test_judge_prompt_is_reference_aware():
+    """(c) The no_invention axis must be told that reference-grounded standard procedure
+    is not an invention — and the reference text must be in the prompt."""
+    from eval_judge import build_judge_prompt
+
+    reference = (
+        "Standardtechnik einer laparoskopischen Cholezystektomie: Team-Time-out, "
+        "Hautdesinfektion, Capnoperitoneum, Präparation, Wundverschluss."
+    )
+    _system, user = build_judge_prompt("Diktat-Text", "Ausgabe-Text", "operationsbericht", reference=reference)
+    assert "REFERENZWISSEN" in user
+    assert reference in user
+    assert "aus Referenz" in user
+    assert "als BELEGT" in user
+    assert "no_invention" in user
+
+    # without a reference the dictation stays the only admissible source
+    _system_plain, plain = build_judge_prompt("Diktat-Text", "Ausgabe-Text", "operationsbericht")
+    assert "REFERENZWISSEN" not in plain
+    assert "aus Referenz" not in plain
+
+
+def test_corpus_carries_allowed_reference_for_op_cases():
+    cases = {case.id: case for case in load_cases(CASES_DIR, only=["opbericht-01", "opbericht-02"])}
+    assert set(cases) == {"opbericht-01", "opbericht-02"}
+    for case in cases.values():
+        lowered = case.allowed_reference.lower()
+        assert case.allowed_reference.strip()
+        assert "team-time-out" in lowered
+        assert "wundverschluss" in lowered
+
+
 # --------------------------------------------------------------------------- corpus
 
 

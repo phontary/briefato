@@ -193,6 +193,32 @@ def dokumenttyp_text(doc_type: str) -> str:
     return _read(f"dokumenttypen/{filename}")
 
 
+# --------------------------------------------------------------------------- standards
+#
+# Product-owned department standards for the Operationsbericht
+# (``brain/standards/*.md``). They are harvested from Mohamed's Schreibdienst method, not
+# from the Musterbrief archive, and are injected into every OP-Bericht prompt as a
+# labelled skeleton — independently of the optional enrichment toggle.
+
+STANDARDS_DIRNAME = "standards"
+STANDARDS_INDEX = "index.md"
+
+
+@lru_cache(maxsize=1)
+def standards_index_text() -> str:
+    """Return ``brain/standards/index.md`` (trigger keyword table)."""
+    return _read(f"{STANDARDS_DIRNAME}/{STANDARDS_INDEX}")
+
+
+@lru_cache(maxsize=None)
+def standard_text(file_name: str) -> str:
+    """Return one department standard ``brain/standards/<file_name>``."""
+    name = (file_name or "").strip()
+    if not name:
+        raise BrainError("empty standard file name")
+    return _read(f"{STANDARDS_DIRNAME}/{name}")
+
+
 @lru_cache(maxsize=1)
 def manifest() -> dict[str, Any]:
     """Return the parsed ``musterbriefe/manifest.json``."""
@@ -301,6 +327,8 @@ def clear_caches() -> None:
         manifest,
         musterbriefe_dir,
         rules,
+        standards_index_text,
+        standard_text,
     ):
         func.cache_clear()
 
@@ -324,6 +352,8 @@ __all__ = [
     "rule_lines",
     "rules",
     "status",
+    "standard_text",
+    "standards_index_text",
     "template_path",
     "templates",
 ]

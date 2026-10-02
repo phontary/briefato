@@ -60,5 +60,6 @@
     "Diagnosen:",
     "Operation:"
   ],
+  "allowed_reference": "Musterbrief-Standardwissen (generisch, nicht patientenbezogen): Eine laparoskopische Cholezystektomie umfasst routinemäßig das Team-Time-out, die Hautdesinfektion und sterile Abdeckung, die Anlage eines Capnoperitoneums, die laparoskopische Darstellung und Präparation der Gallenblase, das Verschließen von Ductus cysticus und A. cystica (z. B. mit Clips), die Bergung der Gallenblase, das Entfernen der Trokare und den Wundverschluss.",
   "notes": "Enrichment-Pfad: das Rohmaterial enthält KEINE Routine-Schritte (Lagerung, Team-Time-out, Desinfektion, Capnoperitoneum, Verschluss). Ein echtes Modell ergänzt sie standardgemäß aus dem Musterbrief (R52); der Mock tut das NICHT → Abdeckung sinkt. Veress-Nadel bleibt verboten (Pitfall)."
 }

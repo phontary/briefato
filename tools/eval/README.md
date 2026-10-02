@@ -18,7 +18,7 @@ die Schreibqualität. Dieses Harness trennt beides.
 | `eval_echo.py` | Echo-Erkennung: `difflib.SequenceMatcher`-Similarity + Token-Jaccard, Verdikt `ECHO (keine eigene Formulierung)` > 0.85; Schwellen je Dokumenttyp (0.92 für `zusammenfassung`/`entlassmedikationsplan`, weil Kompression naturgemäß mehr überlappt). |
 | `eval_checks.py` | Deterministische Erwartungen: `must_contain` / `must_not_contain` / Blockpräsenz + -reihenfolge. |
 | `eval_corpus.py` | Lädt und validiert die Fälle aus `cases/*.json`. |
-| `eval_judge.py` | Optionaler LLM-Judge (0–5-Rubrik, fünf Achsen, mit Begründung + Zitat). |
+| `eval_judge.py` | Optionaler LLM-Judge (0–5-Rubrik, fünf Achsen, mit Begründung + Zitat). **Referenz-bewusst**: die `no_invention`-Achse bekommt `allowed_reference` des Falls mitgeliefert; durch die Referenz gedecktes Standardwissen (Routine-OP-Schritte, Standardtechnik) zählt als belegt („aus Referenz"), nur patientenbezogene unbelegte Angaben als Erfindung. |
 | `cases/*.json` | 14 synthetische, realistische deutsche Fälle (keine echten Patientendaten). |
 
 Die R1–R67-Regelprüfung wird **nicht** neu implementiert — sie kommt read-only aus
@@ -82,6 +82,7 @@ Ein Fall (`cases/<id>.json`):
   "must_contain": ["stationär auf", "Diagnosen:"],
   "must_not_contain": ["Dg.:", "**"],
   "expected_blocks": ["Diagnosen:", "Therapie-Maßnahmen auf der Station:"],
+  "allowed_reference": "Generisches Standardwissen (Routine-OP-Schritte, Standardtechnik), das der Judge als gedeckt ansehen muss",
   "notes": "…"
 }
 ```
@@ -96,9 +97,16 @@ Ein Fall (`cases/<id>.json`):
 * `must_not_contain` — was nie erscheinen darf (strikter Ganzwort-Match; mit
   Doppelpunkt wird ein echtes Label verlangt: `"CT:"` matcht nicht das Wort „CT").
 * `expected_blocks` — erwartete Blockbeschriftungen in Reihenfolge.
+* `allowed_reference` — optionales, **generisches** Standardwissen (z. B. die
+  Routine-Schritte eines OP-Berichts), das der Judge als legitime Referenz ansieht.
+  Kein Patientenfakt; nur für die Judge-Achse `no_invention`, nicht als Pipeline-Eingabe.
 * `--enrich` hängt den vollständigen `sources`-Block an die `dictation` an (der
   un-verdichtete KIS-Export) — der Fall wird dann auf dem Rohmaterial statt auf dem
-  kuratierten Diktat gefahren.
+  kuratierten Diktat gefahren. Unabhängig davon ist die **Referenz-Anreicherung**
+  (`REFERENZWISSEN`) pro Dokumenttyp geschaltet: `operationsbericht` ist
+  standardmäßig **AN** (`BRIEFATO_ENRICH_DEFAULT_OPERATIONSBERICHT=false` schaltet sie
+  ab, `BRIEFATO_ENRICH_DEFAULT` bleibt der globale Default) — sonst fehlten die
+  Routine-Schritte.
 
 ### Regeln beim Schreiben von Fällen
 

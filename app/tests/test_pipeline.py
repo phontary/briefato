@@ -879,3 +879,84 @@ def test_invent_retry_prompt_names_the_unsupported_passages(db, monkeypatch):
     assert "ERFUNDENE/UNBELEGTE PASSAGEN" in retry_prompt
     assert "ENTWEDER STREICHEN" in retry_prompt
     assert "nichts erfinden" in retry_prompt
+
+
+# ----------------------------------------------------------------- reference-grounded routine step
+
+_REFERENCE_DICTATION = (
+    "Die Patientin wurde wegen seit zwei Tagen bestehender Unterbauchschmerzen stationär aufgenommen. "
+    "Die Sonographie zeigte eine entzündlich verdickte Sigma-Schlinge. Laborchemisch bestanden eine "
+    "Leukozytose und ein erhöhtes CRP. Wir nahmen die Patientin zur i.v. Antibiotikatherapie "
+    "stationär auf."
+)
+
+_REFERENCE_OUTPUT = (
+    "Die Patientin wurde wegen seit zwei Tagen bestehender Unterbauchschmerzen stationär aufgenommen. "
+    "Die Sonographie zeigte eine entzündlich verdickte Sigma-Schlinge. Nach Team-Time-out erfolgte die "
+    "Hautdesinfektion sowie die sterile Abdeckung.\n\n"
+    "Diagnosen:\nSigmadivertikulitis\n\nNebenerkrankungen:\nkeine\n\n"
+    "Therapie-Maßnahmen auf der Station:\ni.v. Antibiotikatherapie"
+)
+
+
+class _ReferenceGroundedProvider:
+    """Emits a faithful letter plus one standard sentence taken from the reference."""
+
+    def __init__(self) -> None:
+        self.calls = 0
+        self.last_user = ""
+
+    def generate(self, system: str, user: str, *, max_tokens: int = 2000, temperature: float = 0.2):
+        self.calls += 1
+        self.last_user = user
+        return LLMResult(
+            text=_REFERENCE_OUTPUT,
+            model="stub",
+            provider="stub",
+            tokens_in=1,
+            tokens_out=1,
+            cost_usd=0.0,
+            latency_ms=1,
+        )
+
+
+def test_reference_grounded_standard_step_is_not_retried(db, monkeypatch):
+    """A routine step covered by the reference is the soft R-REFERENZ note: the letter is
+    done, no retry is triggered, and R-INVENT does not fire."""
+    user, patient, _ = _seed(db)
+    provider = _ReferenceGroundedProvider()
+    monkeypatch.setattr(gen_mod, "get_provider", lambda settings: provider)
+    monkeypatch.setattr(
+        gen_mod,
+        "reference_support_text",
+        lambda hits, enrichment, **kwargs: (
+            "Musterbrief: Nach Team-Time-out erfolgt die Hautdesinfektion sowie die sterile "
+            "Abdeckung des Abdomens."
+        ),
+    )
+
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation=_REFERENCE_DICTATION,
+        letterhead={},
+    )
+    assert letter.status == "done"
+    assert letter.last_check["retried"] is False
+    assert provider.calls == 1
+    hard_ids = {
+        finding["rule_id"]
+        for check in letter.last_check["checks"]
+        for finding in check["findings"]
+        if finding["severity"] == "hard"
+    }
+    soft_ids = {
+        finding["rule_id"]
+        for check in letter.last_check["checks"]
+        for finding in check["findings"]
+        if finding["severity"] == "soft"
+    }
+    assert "R-INVENT" not in hard_ids
+    assert "R-REFERENZ" in soft_ids

@@ -271,8 +271,26 @@ def evaluate_case(
     )
 
     if judge_provider is not None:
+        # The judge must see the same standard knowledge the model was given, otherwise it
+        # penalises department-standard routine steps (Team-Time-out, Capnoperitoneum, …) as
+        # invention. Parent fix 2026-10-02 after the OP completeness verification.
+        judge_reference = case.allowed_reference
+        if actual_type == "operationsbericht":
+            try:
+                from briefato.brain import standards as _standards
+
+                extra = _standards.standard_reference(actual_type, dictation)
+            except Exception:  # pragma: no cover - judge must never crash the run
+                extra = ""
+            if extra:
+                judge_reference = f"{judge_reference}\n\n{extra}".strip()
         judged = judge_output(
-            judge_provider, dictation=dictation, output=content, doc_type=actual_type, model=judge_model
+            judge_provider,
+            dictation=dictation,
+            output=content,
+            doc_type=actual_type,
+            model=judge_model,
+            reference=judge_reference,
         )
         record["judge"] = judged.as_dict()
     else:
@@ -693,7 +711,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--provider", choices=("mock", "openai"), default="mock")
     parser.add_argument("--model", default="", help="Modellname (OpenAI-kompatibel)")
     parser.add_argument("--base-url", default="", help="Basis-URL des OpenAI-kompatiblen Endpoints")
-    parser.add_argument("--enrich", action="store_true", help="Rohquellen (sources) zusätzlich als Eingabe")
+    parser.add_argument(
+        "--enrich",
+        action="store_true",
+        help="Rohquellen (sources) zusätzlich als Eingabe. Unabhängig davon ist die "
+        "Referenz-Anreicherung (Musterbrief-Standardwissen) für operationsbericht "
+        "standardmäßig AN (BRIEFATO_ENRICH_DEFAULT / BRIEFATO_ENRICH_DEFAULT_<TYP>).",
+    )
     parser.add_argument(
         "--repeat",
         type=int,

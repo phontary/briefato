@@ -97,10 +97,42 @@ keine Blöcke.
 
 ### 2.5 Optionaler LLM-Judge (`--judge-model`)
 Ein unabhängiges, OpenAI-kompatibles Modell bewertet fünf Achsen 0–5 — Struktur &
-Reihenfolge, Vollständigkeit, **keine Erfindung** (Diktat als einzige Faktenquelle),
-Register & Abkürzungen, Plain-Text-Konformität — je mit einzeiliger Begründung und
-wörtlichem Zitat der beanstandeten Stelle. Der Judge ist optional und
-fehlertolerant: ein Judge-Fehler bricht keinen Lauf ab.
+Reihenfolge, Vollständigkeit, **keine Erfindung**, Register & Abkürzungen,
+Plain-Text-Konformität — je mit einzeiliger Begründung und wörtlichem Zitat der
+beanstandeten Stelle. Der Judge ist optional und fehlertolerant: ein Judge-Fehler bricht
+keinen Lauf ab.
+
+**Der Judge ist referenz-bewusst.** Trägt ein Fall die optionale `allowed_reference`
+(generisches, nicht patientenbezogenes Standardwissen — z. B. die Routine-Schritte eines
+OP-Berichts), wird dieser Text der `no_invention`-Achse mitgegeben: gedecktes
+Standardwissen gilt als **belegt** und ist in der Begründung als „aus Referenz" zu
+nennen; nur patientenbezogene, unbelegte Angaben (Diagnose, ICD, Datum, Laborwert,
+Dosierung, Medikament, Name, Verlauf) zählen als Erfindung. Ohne `allowed_reference`
+bleibt das Diktat die einzige Faktenquelle. So bestraft der Judge die methodisch
+geforderte Ergänzung von Routine-Schritten (R52) nicht mehr.
+
+### 2.6 Abteilungsstandards im OP-Bericht (WORKSTREAM-OP-STANDARDS)
+Deterministischer Pfad, kein Modell nötig. Für den Dokumenttyp `operationsbericht` wird aus
+`brain/standards/` genau EIN Abteilungsstandard als verbindliches Gerüst in den Prompt
+eingeblendet — **unabhängig vom Anreicherungs-Schalter** (`--enrich`), denn es ist
+Methodenwissen, keine optionale Websuche. Damit kommen die standardgemäßen Routine-Schritte
+(Team-Time-out, Desinfektion, Capnoperitoneum, Netz-Einlage, Wundverschluss …) zurück, ohne
+patientenbezogene Angaben zu erfinden.
+
+* **Auswahl** über die Trigger-Tabelle `brain/standards/index.md`: z. B. `cholezystektomie`/`che`
+  → `che-laparoskopisch.md`, `narbenhernie`/`sublay` → `narbenhernie-sublay.md`, sonst der
+  generische Katalog `op-standardschritte.md`. Jeder andere Dokumenttyp erhält KEINEN Block.
+* **Doppelte Verwendung:** Der Block (`ABTEILUNGSSTANDARD (aus der Methode – verbindliches
+  Gerüst): …`) geht sowohl in den Prompt als auch in den `reference`-Text des Regelcheckers.
+  Dadurch zählen die Routine-Schritte als gedeckt: sie erscheinen als **weiches `R-REFERENZ`**
+  („bitte prüfen") und **nie als hartes `R-INVENT`**; der Korrektur-Retry wird nicht ausgelöst.
+* **Grenze:** Der Standard autorisiert keine patientenindividuellen Situsdetails und keine
+  Blutsperre/Drainage ohne Beleg (`brain/standards/op-standardschritte.md`, Abschnitt
+  „Nicht ohne Beleg ergänzen").
+* **Demo (offline):**
+  `cd /workspace/briefato/app && ../.venv/bin/python -m briefato.brain.demo_standards` — zeigt die
+  Auswahl für CHE und Narbenhernie, den gerenderten Block, den `R-REFERENZ`- statt
+  `R-INVENT`-Befund und die Pipeline-Probe (`generate_letter`, `enrich=False`).
 
 ## 3. Was ausdrücklich NICHT gemessen wird (Ehrlichkeitshinweis)
 
@@ -201,7 +233,10 @@ nicht gelungene Formulierung.
 das Rohmaterial enthält absichtlich keine Routine-Schritte und kein
 `Indikation:`-Label; ein echtes Modell soll sie standardgemäß aus dem Musterbrief
 ergänzen (R52). Der Mock tut das nicht — genau der Pfad, den ein echtes Modell
-beweisen muss.
+beweisen muss. Seit WORKSTREAM-OP-STANDARDS trägt der Prompt den Abteilungsstandard
+(`brain/standards/`, siehe §2.6) unabhängig von `--enrich`; die Mock-Baseline bleibt
+unverändert, weil der Mock ihn nicht ausschreibt — der Echt-Lauf muss zeigen, dass
+`must_contain` steigt, ohne neue `R-INVENT`-Befunde.
 
 **Zur Vorsicht bei Echt-Läufen.** Der erste Echt-Modelllauf (02.10.2026, DeepSeek
 `deepseek-flash`) zeigte, dass die Echo-Similarity desselben Falls zwischen Läufen stark
@@ -248,6 +283,14 @@ Triage-Härtung sind zusätzlich in `app/tests/test_brain.py` bzw.
 als `R-INVENT` gefangen, eine Synonym-Umformulierung nicht; die Umlaut-Karte korrigiert
 `stationaer`/`Fluessigkeit`, lässt `Aerosol`/`Oesophagus`/`Museum`/`Prozess`/`Fluss`
 unangetastet und protokolliert jede Ersetzung.
+
+Die **Abteilungsstandards** (`brain/standards/**`, Auswahl + Prompt-Block + Erdung als
+weiches `R-REFERENZ`) sind in `app/tests/test_op_standards.py` abgedeckt: Trigger-Auswahl
+(CHE/Narbenhernie/Fallback, `che` nie innerhalb eines Wortes), Block in `build_prompt` und
+`build_weave_prompt` bei abgeschalteter Anreicherung, kein Block für andere Dokumenttypen,
+und der Routine-Schritt-Absatz als `R-REFERENZ` (nie `R-INVENT`). Zusätzlich in
+`app/tests/test_reference_grounding.py` (OP-Prompt trägt den Standard auch ohne
+`REFERENZWISSEN`).
 
 ## 8. Grenzen (Zusammenfassung)
 

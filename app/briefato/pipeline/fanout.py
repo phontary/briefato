@@ -250,6 +250,7 @@ def run_weave(
             enrichment=enrichment,
             extra=prompt_extra,
             language=language,
+            dictation=dictation,
         )
         if guard is not None:
             guard(bundle.system, bundle.user)
@@ -258,7 +259,9 @@ def run_weave(
         fixed, umlaut_fixes = autofix_umlauts(restored)
         from ..brain.prompt_assembly import reference_support_text  # local: avoid import cycle
 
-        reference = reference_support_text(templates, enrichment)
+        reference = reference_support_text(
+            templates, enrichment, doc_type=doc_type, dictation=dictation
+        )
         return bundle, result, fixed, rule_check(
             fixed, doc_type, dictation, autofix=umlaut_fixes, reference=reference
         )

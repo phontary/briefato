@@ -19,10 +19,13 @@ from typing import Any, Sequence
 
 from .archive import ArchiveEnricher
 from .base import (
+    ENRICH_DEFAULT_DOC_TYPES,
     Enrichment,
     NullEnricher,
     ResearchProvider,
     enrich_default,
+    enrich_default_for,
+    enrich_default_source,
     filter_generic,
     is_generic_statement,
     research_base_url,
@@ -125,6 +128,7 @@ def enrich_if_enabled(
 
 __all__ = [
     "ArchiveEnricher",
+    "ENRICH_DEFAULT_DOC_TYPES",
     "Enrichment",
     "GroundedEnricher",
     "NullEnricher",
@@ -132,6 +136,8 @@ __all__ = [
     "ResearchProvider",
     "WebEnricher",
     "enrich_default",
+    "enrich_default_for",
+    "enrich_default_source",
     "enrich_if_enabled",
     "filter_generic",
     "get_research_provider",

@@ -28,7 +28,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-from . import brain_loader, retrieval
+from . import brain_loader, retrieval, standards
 
 # The dictation markers live in ``..pipeline.prompts`` (frozen, single source of
 # truth). They are imported lazily inside build_prompt to avoid a circular import
@@ -98,6 +98,7 @@ class PromptBundle:
     doc_types: tuple[str, ...]
     template_files: list[str] = field(default_factory=list)
     reference_only_files: list[str] = field(default_factory=list)
+    standard_files: list[str] = field(default_factory=list)
     kern_rules: int = 0
     regelwerk_rules: int = 0
     prompt_version: str = PROMPT_VERSION
@@ -112,6 +113,7 @@ class PromptBundle:
             "doc_types": list(self.doc_types),
             "template_files": list(self.template_files),
             "reference_only_files": list(self.reference_only_files),
+            "standard_files": list(self.standard_files),
             "kern_rules": self.kern_rules,
             "regelwerk_rules": self.regelwerk_rules,
             "prompt_version": self.prompt_version,
@@ -166,6 +168,68 @@ def _pseudonym_contract() -> str:
         "{{ZIP}}, {{CITY}}, {{PHONE}}, {{EMAIL}}) sind patientenbezogene Daten. Sie sind exakt "
         "(Großschreibung, doppelte Klammern) und unverändert im Text zu belassen, dürfen nie erklärt, "
         "ausgeschrieben, übersetzt oder verändert werden. Erfinden Sie keine Patientendaten."
+    )
+
+
+# The two-category grounding contract. The method forbids inventing *patient-specific*
+# facts but explicitly expects routine procedural content (routine OP steps, standard
+# technique/materials, standard follow-up) for a document whose dictation omits it — as
+# long as it is derived from the REFERENZWISSEN block / a retrieved Musterbrief (R52).
+# Getting this distinction wrong (forbidding all non-dictated content) caused the
+# completeness regression on the OP-Bericht cases (measured 2026-10-02).
+CONTENT_GROUNDING_HEADER = (
+    "INHALT: NICHTS ERFINDEN — ABER STANDARDVERFAHREN VERVOLLSTÄNDIGEN (verbindlich)"
+)
+
+
+def _content_grounding_contract(doc_type: str, has_reference: bool) -> str:
+    """System-prompt section that separates patient facts from standard procedure."""
+    if doc_type == "operationsbericht":
+        standard = (
+            "STANDARDWISSEN ZUM VERFAHREN — routinemäßige Operationsschritte (z. B. "
+            "Team-Time-out, Hautdesinfektion und sterile Abdeckung, Zugang/Technik, "
+            "Verschluss) sowie Standardtechnik, Standardmaterial und übliche Nachsorge — "
+            "sind bei einem Operationsbericht erlaubt und erwartet, "
+        )
+    else:
+        standard = (
+            "STANDARDWISSEN ZUM VERFAHREN — routinemäßige Standardangaben (Standardtechnik, "
+            "Standardmaterial, übliche Nachsorge) — sind erlaubt, "
+        )
+    if has_reference:
+        if doc_type == "operationsbericht":
+            standard += (
+                "SOFERN sie aus dem ABTEILUNGSSTANDARD-Block (dem verbindlichen Gerüst der "
+                "Abteilung) oder dem REFERENZWISSEN-Block bzw. einem eingeblendeten Musterbrief "
+                "stammen. Nutzen Sie den ABTEILUNGSSTANDARD als Gerüst, um fehlende "
+                "Routine-Schritte zu vervollständigen, statt sie wegzulassen — ergänzen Sie sie "
+                "aber nicht aus dem Nichts und nehmen Sie keine Quellenangaben in den Brieftext auf."
+            )
+        else:
+            standard += (
+                "SOFERN und nur sofern sie aus dem REFERENZWISSEN-Block oder einem eingeblendeten "
+                "Musterbrief stammen. Nutzen Sie vorhandenes REFERENZWISSEN, um fehlende "
+                "Routine-Schritte zu vervollständigen, statt sie wegzulassen — ergänzen Sie sie aber "
+                "nicht aus dem Nichts und nehmen Sie keine Quellenangaben in den Brieftext auf."
+            )
+    else:
+        standard += (
+            "SOFERN ein eingeblendeter Musterbrief sie belegt; liegt kein solcher Beleg vor, "
+            "lassen Sie den Schritt weg, statt ihn zu erfinden."
+        )
+    return (
+        f"{CONTENT_GROUNDING_HEADER}\n"
+        "Zwei Kategorien sind strikt zu unterscheiden:\n"
+        "1) PATIENTENBEZOGENE FAKTEN — Diagnosen, Befunde, Mess-/Laborwerte, Datumsangaben, "
+        "Dosierungen, Medikamente/Wirkstoffe, Namen und Verlaufsdetails — dürfen NUR erscheinen, "
+        "wenn sie im DIKTAT ausdrücklich belegt sind; niemals ergänzen.\n"
+        "1a) EBENFALLS NUR MIT BELEG (im DIKTAT oder ausdrücklich im ABTEILUNGSSTANDARD "
+        "vorgegeben): Anästhesieform und Nüchternheit, Aufklärung/Einwilligung, Anzahl der "
+        "Hautdesinfektionen und Desinfektionsmittel, perioperative Antibiotikaprophylaxe, "
+        "Nahtmaterial und Fadenstärke, Instrumenten-/Trokarangaben, Drainagen, "
+        "Blutsperre/Tourniquet, Verband/Bauchgurt sowie Versand zur Histologie. Fehlt der Beleg, "
+        "lassen Sie die Angabe weg — auch wenn sie medizinisch üblich ist.\n"
+        f"2) {standard}"
     )
 
 
@@ -306,6 +370,7 @@ def build_weave_prompt(
     enrichment: list | None = None,
     extra: str = "",
     language: str = "de",
+    dictation: str = "",
 ) -> PromptBundle:
     """Assemble the single final 'weave' prompt from the compressed segments."""
     from ..pipeline.prompts import WEAVE_TASK
@@ -319,6 +384,9 @@ def build_weave_prompt(
     anti = brain_loader.anti_pattern_lines()
     playbook = brain_loader.dokumenttyp_text(doc_type)
     reference = _reference_knowledge_block(enrichment)
+    standard_entry = standards.select(doc_type, dictation)
+    standard_block = standards.standard_block(doc_type, dictation)
+    has_reference = bool(reference) or bool(standard_block)
 
     intro = (
         "Sie sind der Schreibassistent von Briefato für deutschsprachige Arztpraxen. Sie "
@@ -337,6 +405,7 @@ def build_weave_prompt(
         "REGELWERK (R1–R67, jede Regel ist verbindlich):\n" + "\n".join(regelwerk),
         "ANTI-PATTERNS (generisches LLM-Verhalten — verboten):\n" + "\n".join(anti),
         f"PLAYBOOK DOKUMENTTYP „{doc_type}“:\n{playbook}",
+        _content_grounding_contract(doc_type, has_reference),
         _output_mandate(doc_type),
         _pseudonym_contract(),
         f"Prompt-Version: {PROMPT_VERSION} | Sprache: {language} | Dokumenttyp: {doc_type}",
@@ -363,6 +432,7 @@ def build_weave_prompt(
         "PRAXISREGELN DES MITGLIEDS (verbindlich, sofern vorhanden):\n"
         f"{custom}\n\n"
         + (reference + "\n\n" if reference else "")
+        + (standard_block + "\n\n" if standard_block else "")
         + "KOMPRIMIERTE QUELLSEGMENTE (geordnet, in dieser Reihenfolge verweben):\n"
         f"{_compressed_segments_block(compressed)}\n\n"
         "ZUSATZHINWEISE:\n"
@@ -377,6 +447,7 @@ def build_weave_prompt(
         doc_types=(doc_type,),
         template_files=[hit.file for hit in hits],
         reference_only_files=[hit.file for hit in hits if hit.reference_only],
+        standard_files=[standard_entry.file] if standard_entry is not None else [],
         kern_rules=len(kern),
         regelwerk_rules=len(regelwerk),
     )
@@ -421,6 +492,11 @@ def build_prompt(
     types = tuple(doc_types or (doc_type,))
     hits = list(templates or [])
     reference = _reference_knowledge_block(enrichment)
+    # The department standard is method knowledge (not optional web enrichment): it is
+    # injected for every OP-Bericht, even with enrichment OFF.
+    standard_entry = standards.select(doc_type, dictation)
+    standard_block = standards.standard_block(doc_type, dictation)
+    has_reference = bool(reference) or bool(standard_block)
 
     kern = _kern_rules()
     regelwerk = brain_loader.rule_lines()
@@ -447,6 +523,7 @@ def build_prompt(
         "REGELWERK (R1–R67, jede Regel ist verbindlich):\n" + "\n".join(regelwerk),
         "ANTI-PATTERNS (generisches LLM-Verhalten — verboten):\n" + "\n".join(anti),
         f"PLAYBOOK DOKUMENTTYP „{doc_type}“:\n{playbook}",
+        _content_grounding_contract(doc_type, has_reference),
         _output_mandate(doc_type),
         _pseudonym_contract(),
         f"Prompt-Version: {PROMPT_VERSION} | Sprache: {language} | Dokumenttyp: {doc_type}",
@@ -477,6 +554,7 @@ def build_prompt(
         "PRAXISREGELN DES MITGLIEDS (verbindlich, sofern vorhanden):\n"
         f"{custom}\n\n"
         + (reference + "\n\n" if reference else "")
+        + (standard_block + "\n\n" if standard_block else "")
         + f"{('BEIDE FASSUNGEN — ' + concurrency + chr(10)) if concurrency else ''}"
         "DIKTAT (einzige inhaltliche Quelle):\n"
         f"{DICTATION_OPEN}\n{dictation or ''}\n{DICTATION_CLOSE}\n\n"
@@ -492,6 +570,7 @@ def build_prompt(
         doc_types=types,
         template_files=[hit.file for hit in hits],
         reference_only_files=[hit.file for hit in hits if hit.reference_only],
+        standard_files=[standard_entry.file] if standard_entry is not None else [],
         kern_rules=len(kern),
         regelwerk_rules=len(regelwerk),
     )
@@ -501,8 +580,11 @@ def correction_block(correction_instructions: list[str]) -> str:
     """Build the retry 'KORREKTURHINWEISE' text appended after a failed check.
 
     Hard ``R-INVENT`` findings (invented/unsupported clinical content) are pulled out
-    into their own directive block: for those passages the model must either delete the
-    sentence or ground it in the dictation — and must never add generic standard advice.
+    into their own directive block. For those passages the model must delete the
+    sentence or ground it in the dictation — but the two-category contract stays intact:
+    routine procedural content that comes from the REFERENZWISSEN block / a Musterbrief
+    is *not* to be deleted (that both is the method R52 and prevented the OP-Bericht
+    completeness regression). ``R-REFERENZ`` is soft and never reaches this block.
     """
     if not correction_instructions:
         return ""
@@ -522,24 +604,46 @@ def correction_block(correction_instructions: list[str]) -> str:
         )
         parts.append(
             "Für jede oben genannte Passage gilt: den Satz ENTWEDER STREICHEN ODER ausschließlich "
-            "mit einer im DIKTAT ausdrücklich belegten Aussage neu formulieren. Fügen Sie NIEMALS "
-            "generische Standard-Empfehlungen, Nachsorge-, Verlaufs- oder Befundhinweise hinzu, die "
-            "nicht wörtlich im DIKTAT stehen. Erfinden Sie keine Diagnosen, Befunde, Werte, Daten, "
-            "Maßnahmen, Wirkstoffe oder Nachsorgekriterien. Im Zweifel weglassen statt ergänzen."
+            "mit einer im DIKTAT belegten Aussage neu formulieren. Patientenbezogene Fakten "
+            "(Diagnosen, Befunde, Werte, Datumsangaben, Dosierungen, Medikamente, Namen, "
+            "Verlaufsdetails) dürfen Sie NIE ergänzen. Das gilt ebenso für: Anästhesieform und "
+            "Nüchternheit, Aufklärung/Einwilligung, Anzahl der Hautdesinfektionen und "
+            "Desinfektionsmittel, perioperative Antibiotikaprophylaxe, Nahtmaterial und "
+            "Fadenstärke, Instrumenten-/Trokarangaben, Drainagen, Blutsperre/Tourniquet, "
+            "Verband/Bauchgurt und Versand zur Histologie — es sei denn, das DIKTAT oder der "
+            "ABTEILUNGSSTANDARD nennt sie ausdrücklich. Standardwissen zum Verfahren (routinemäßige "
+            "Operationsschritte, Standardtechnik, Standardmaterial, übliche Nachsorge) dagegen ist "
+            "bei einem Operationsbericht erlaubt und erwartet: stammt es aus dem ABTEILUNGSSTANDARD-Block, "
+            "dem REFERENZWISSEN-Block oder einem Musterbrief, übernehmen Sie es (in eigener Formulierung) "
+            "statt es zu streichen. Steht eine Angabe weder im DIKTAT noch in der Referenz, lassen Sie "
+            "sie weg, statt sie zu erfinden."
         )
     return "\n\n".join(parts)
 
 
-def reference_support_text(hits: list | None, enrichments: list | None) -> str:
+def reference_support_text(
+    hits: list | None,
+    enrichments: list | None,
+    *,
+    doc_type: str = "",
+    dictation: str = "",
+) -> str:
     """Text of everything the model received as reference knowledge.
 
     The rule checker uses this to distinguish *invented* content (hard ``R-INVENT``) from content
-    that legitimately came from the retrieved Musterbrief sections or from grounded enrichment
-    (soft ``R-REFERENZ`` note). Without it, a letter that correctly uses archive-derived standard
-    technique would be reported as invention — the opposite of the method's rule that standard
-    details may be derived from the archive.
+    that legitimately came from the retrieved Musterbrief sections, from grounded enrichment, or
+    from the injected department standard (soft ``R-REFERENZ`` note). Without it, a letter that
+    correctly uses archive-derived standard technique — or the routine steps of the department
+    standard — would be reported as invention: the opposite of the method's rule that standard
+    details may be derived from the method.
+
+    ``doc_type`` / ``dictation`` additionally pull in the department standard injected for the
+    OP-Bericht; for every other document type that contribution is empty.
     """
     parts: list[str] = []
+    std = standards.standard_reference(doc_type, dictation)
+    if std:
+        parts.append(std)
     for item in enrichments or []:
         value = getattr(item, "claim", "") or getattr(item, "text", "") or item
         if value:
@@ -567,6 +671,7 @@ def reference_support_text(hits: list | None, enrichments: list | None) -> str:
 
 __all__ = [
     "COMPRESSION_RULES",
+    "CONTENT_GROUNDING_HEADER",
     "DISCHARGE_BLOCK_ORDER",
     "LETTERHEAD_LABELS",
     "PROMPT_VERSION",

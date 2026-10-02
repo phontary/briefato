@@ -52,5 +52,6 @@
     "Diagnosen:",
     "Operation:"
   ],
+  "allowed_reference": "Musterbrief-Standardwissen (generisch, nicht patientenbezogen): Eine Narbenhernienversorgung in Sublay-Technik umfasst routinemäßig das Team-Time-out, die Hautdesinfektion und sterile Abdeckung, den Zugang über die alte Narbe, die Präparation und Darstellung der Bruchpforte, die Reposition bzw. Resektion des Bruchsacks, die retrorektus-/Sublay-Platzierung eines alloplastischen Netzes, die Fixierung bzw. den Verschluss der Rektusscheide und den Wundverschluss.",
   "notes": "Zweiter Enrichment-Fall. Fehlhörer 'Sableb-Technik' → 'Sublay-Technik' (R44) im Quellmaterial angedeutet."
 }

@@ -122,11 +122,16 @@ separately, then the whole thing is rewritten (weave) into the final document.
 | `../research/web.py` | `WebEnricher` — optional SearXNG research (`BRIEFATO_RESEARCH_BASE_URL`), query restricted with `site:` operators to awmf.org, pubmed.ncbi.nlm.nih.gov, doccheck.com, msdmanuals.com, leitlinien.de, bfarm.de. |
 | `../research/__init__.py` | `GroundedEnricher` (archive first, web only supplements) and `get_research_provider`. |
 
-Enrichment is per-request opt-in (`generate_letter(..., enrich=True)`, default `BRIEFATO_ENRICH_DEFAULT`).
-Kept statements are injected into the prompt as `REFERENZWISSEN (generisch, nicht patientenbezogen)`,
-returned on `letter.enrichments` and `letter.last_check['enrichment']` (UI note „aus Referenz ergänzt
-– bitte prüfen“) and audited as event `letter.enriched` with the sources. If research is off or
-unavailable the letter is still produced without it.
+Enrichment is per-request opt-in (`generate_letter(..., enrich=True)`) with a per-document-type
+default: `operationsbericht` is **on by default** (routine OP steps must be completed), every other
+type follows the global `BRIEFATO_ENRICH_DEFAULT`; a per-type `BRIEFATO_ENRICH_DEFAULT_<DOC_TYPE>`
+(e.g. `BRIEFATO_ENRICH_DEFAULT_OPERATIONSBERICHT=false`) overrides both. The decision and its source
+(`request` / `per_type_env` / `global_env` / `doc_type_default`) are reported on
+`letter.last_check['enrichment']`. Kept statements are injected into the prompt as
+`REFERENZWISSEN (generisch, nicht patientenbezogen)`, returned on `letter.enrichments` and
+`letter.last_check['enrichment']` (UI note „aus Referenz ergänzt – bitte prüfen“) and audited as
+event `letter.enriched` with the sources. If research is off or unavailable the letter is still
+produced without it.
 
 `generate_letter` gained keyword-only parameters (`enrich`, `max_parallel`, `research_provider`); the
 frozen signature and the single-pass behaviour are unchanged (≤5 sources, non-stationary types).

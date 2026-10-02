@@ -14,9 +14,11 @@ cannot fully capture:
 Each axis returns a 0–5 score, a one-line reason and — when a rule is violated — a
 citation of the offending passage (``citation``).
 
-The judge is fed the *dictation* (as the only admissible source of facts) and the
-finished *output*, never the patient record. It is explicitly instructed that the
-dictation is the ground truth for "no invention".
+The judge is fed the *dictation* (as the only admissible source of patient facts), the
+optional REFERENZWISSEN reference text the model legitimately had (``allowed_reference``,
+which grounds standard procedural content) and the finished *output*, never the patient
+record. It is explicitly instructed that the dictation is the ground truth for "no
+invention" and that reference-covered standard content is *not* an invention.
 
 No network import happens at module load; the provider is injected. This module is
 never exercised in the offline/mock test run.
@@ -52,15 +54,47 @@ _JUDGE_SYSTEM = (
 )
 
 
-def build_judge_prompt(dictation: str, output: str, doc_type: str) -> tuple[str, str]:
-    """Return ``(system, user)`` for the judge call."""
+def build_judge_prompt(dictation: str, output: str, doc_type: str, reference: str = "") -> tuple[str, str]:
+    """Return ``(system, user)`` for the judge call.
+
+    ``reference`` is the REFERENZWISSEN / Musterbrief text that was legitimately available
+    to the model (the case's ``allowed_reference``). When given, the ``no_invention`` axis
+    must count standard procedural content covered by the reference as grounded — only
+    patient-specific, unsupported content is invention. Without it the dictation remains
+    the only admissible source of facts.
+    """
+    reference = (reference or "").strip()
+    reference_block = ""
+    if reference:
+        reference_block = (
+            "REFERENZWISSEN (generische Standardquelle, kein Patientenfakt — gedeckte "
+            "Standardangaben sind NICHT als Erfindung zu werten):\n"
+            "-----\n"
+            f"{reference}\n"
+            "-----\n\n"
+        )
+    if reference:
+        no_invention = (
+            "- no_invention: kein patientenbezogener Fakt (Diagnose, ICD, Datum, Laborwert, "
+            "Dosierung, Medikament, Name, Verlauf) erscheint, der nicht im DIKTAT steht. "
+            "Standardwissen zum Verfahren (routinemäßige Operationsschritte, Standardtechnik/"
+            "-material, übliche Nachsorge), das durch das REFERENZWISSEN gedeckt ist, gilt als "
+            "BELEGT — nennen Sie solche Stellen in der Begründung ausdrücklich „aus Referenz“ "
+            "und führen Sie sie als citation an; sie sind keine Erfindung.\n"
+        )
+    else:
+        no_invention = (
+            "- no_invention: kein Fakt (Diagnose, ICD, Datum, Laborwert, Medikament, "
+            "Konsil) erscheint, der nicht im Diktat steht.\n"
+        )
     user = (
         f"Dokumenttyp: {doc_type}\n\n"
         "DIKTAT (einzige zulässige Faktenquelle):\n"
         "-----\n"
         f"{dictation}\n"
         "-----\n\n"
-        "ZU BEWERTENDER TEXT:\n"
+        + reference_block
+        + "ZU BEWERTENDER TEXT:\n"
         "-----\n"
         f"{output}\n"
         "-----\n\n"
@@ -72,9 +106,8 @@ def build_judge_prompt(dictation: str, output: str, doc_type: str) -> tuple[str,
         "- structure: Playbook-Reihenfolge und Blocklogik (Anamnese → Untersuchung → "
         "Diagnose → Therapie → Verlauf; Blöcke am Ende).\n"
         "- completeness: jeder im Diktat genannte klinisch relevante Fakt ist enthalten.\n"
-        "- no_invention: kein Fakt (Diagnose, ICD, Datum, Laborwert, Medikament, "
-        "Konsil) erscheint, der nicht im Diktat steht.\n"
-        "- register: sachlicher fachlicher Stil, Abkürzungen direkt verwendet, "
+        + no_invention
+        + "- register: sachlicher fachlicher Stil, Abkürzungen direkt verwendet, "
         "keine Füllwörter, keine Kategorie-Labels im Fließtext.\n"
         "- plain_text: reiner Text, kein Markdown, korrekte Umlaute, höchstens ein Semikolon.\n\n"
         "Antwortformat (NUR dieses JSON, keine Erklärungen außerhalb):\n"
@@ -161,13 +194,16 @@ def judge_output(
     output: str,
     doc_type: str,
     model: str = "",
+    reference: str = "",
 ) -> JudgeResult:
     """Call ``provider`` (an :class:`LLMProvider`) and parse the rubric scores.
 
-    Any failure is captured in :attr:`JudgeResult.error` — a broken judge must never
-    fail the whole evaluation run.
+    ``reference`` is the standard-knowledge text (``allowed_reference``) the model could
+    legitimately use; it is passed to the judge so reference-grounded routine content is
+    not counted as invention. Any failure is captured in :attr:`JudgeResult.error` — a
+    broken judge must never fail the whole evaluation run.
     """
-    system, user = build_judge_prompt(dictation, output, doc_type)
+    system, user = build_judge_prompt(dictation, output, doc_type, reference=reference)
     try:
         result = provider.generate(system, user, max_tokens=1200, temperature=0.0)
     except Exception as exc:  # noqa: BLE001 - judge failures are non-fatal by design
