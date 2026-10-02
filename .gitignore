@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# Runtime data / secrets
+data/
+*.db
+*.db-wal
+*.db-shm
+.env
+stack.env
+*.pem
+*.key
+
+# OS
+.DS_Store

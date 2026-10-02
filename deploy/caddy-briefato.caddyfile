@@ -1,0 +1,18 @@
+# Briefato — Caddy site block.
+# Insert into the live Caddyfile / the stack-54 compose heredoc (see skill: devops/portainer,
+# "Caddy CMD heredoc regenerates Caddyfile on every start"). Indentation must match the anchor line.
+#
+# Staging host: briefato.sabry.io (LAN-internal DNS — *.sabry.io resolves only via Technitium).
+# A public launch needs a real public domain; then swap the site address and keep `tls internal`
+# OR let Caddy obtain a Let's Encrypt certificate once the domain is public.
+
+briefato.sabry.io {
+    tls internal
+    import common
+    import crowdsec_protect
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:8085 {
+        header_up Host {upstream_hostport}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}

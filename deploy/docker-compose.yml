@@ -1,0 +1,28 @@
+# Briefato — Portainer stack (staging on phontary).
+# Deploy path: rsync repo -> /mnt/fast/docker/briefato on the host, then create/update the stack
+# through the Portainer API (see skill: devops/portainer). Do NOT `docker compose up` by hand.
+services:
+  briefato:
+    build:
+      context: /mnt/fast/docker/briefato
+      dockerfile: app/Dockerfile
+    image: briefato:latest
+    container_name: briefato
+    restart: unless-stopped
+    env_file:
+      - /mnt/fast/docker/briefato/deploy/stack.env
+    environment:
+      BRIEFATO_DATA_DIR: /data
+    volumes:
+      - /mnt/fast/docker/briefato/data:/data
+    ports:
+      - "127.0.0.1:8085:8080"   # loopback only; Caddy (host network) proxies to it
+    mem_limit: 512m
+    memswap_limit: 512m         # disable container swap (host swap is under pressure)
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
