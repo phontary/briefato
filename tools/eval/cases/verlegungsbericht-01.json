@@ -1,0 +1,55 @@
+{
+  "id": "verlegungsbericht-01",
+  "doc_type": "arztbrief",
+  "title": "Verlegungsbericht — zur dringenden operativen Versorgung, Zielklinik XXX",
+  "sources": [
+    {
+      "label": "Aufnahme",
+      "text": "30.09.2026 Aufnahme wegen akuter oberer Gastrointestinalblutung, Hb-Abfall."
+    },
+    {
+      "label": "KU",
+      "text": "Blasses Hautkolorit, Tachykardie 104/min, RR 105/65 mmHg, Abdomen weich."
+    },
+    {
+      "label": "Labor 30.09.",
+      "text": "Hb 7,2 g/dl, CRP 14 mg/l, Thrombozyten 180/nl, Kreatinin 1,0 mg/dl."
+    },
+    {
+      "label": "ÖGD",
+      "text": "Blutende Läsion im Antrum, endoskopische Blutstillung nicht dauerhaft erfolgreich."
+    },
+    {
+      "label": "Visite 30.09.",
+      "text": "Erneuter Hb-Abfall, Transfusion von 2 EK, weiterhin Sickerblutung."
+    },
+    {
+      "label": "Chirurgie-Konsil",
+      "text": "Operative Versorgung erforderlich, in unserem Haus nicht durchführbar."
+    },
+    {
+      "label": "Verlegung",
+      "text": "01.10.2026 Verlegung zur weiteren Behandlung und dringenden operativen Versorgung."
+    }
+  ],
+  "dictation": "Die Patientin wurde wegen einer akuten oberen Gastrointestinalblutung aufgenommen. Die Oesophagogastroduodenoskopie zeigte eine blutende Laesion im Antrum, eine dauerhafte endoskopische Blutstillung gelang nicht. Wir nahmen die Patientin zur weiteren Diagnostik bzw. Schmerztherapie stationaer auf.\n\nDa eine operative Versorgung in unserem Hause nicht möglich war, verlegten wir die Patientin am 01.10.2026 zur weiteren Behandlung und dringenden operativen Versorgung in die Klinik fuer Allgemein- und Viszeralchirurgie des XXX. Wir bitten um Übernahme.\n\nDiagnosen:\nakute obere Gastrointestinalblutung bei blutender Antrumlaesion\nAnaemie bei Blutverlust",
+  "must_contain": [
+    "Gastrointestinalblutung",
+    "XXX",
+    "verlegten",
+    "stationär auf",
+    "Diagnosen:"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "ambulante Therapieempfehlungen nach der Entlassung:",
+    "Therapie-Maßnahmen auf der Station:",
+    "Nebenerkrankungen:",
+    "Klinikum Musterstadt"
+  ],
+  "expected_blocks": [
+    "Diagnosen:"
+  ],
+  "notes": "Verlegungsbrief: KEIN Empfehlungsblock (R31), Zielklinik bleibt Platzhalter XXX (R32)."
+}

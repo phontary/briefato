@@ -1,0 +1,145 @@
+{% extends "app_base.html" %}
+{% block title %}{{ letter.title or 'Ergebnis' }} — Briefato{% endblock %}
+
+{% block app_content %}
+{% set locked = letter.status == 'approved' %}
+<div class="page-header">
+  <h1>{{ letter.title or 'Ergebnis' }}</h1>
+  <p class="muted">
+    {% if letter.patient %}
+      Patient/in: <a href="/app/patienten/{{ letter.patient.id }}">{{ letter.patient.display_name }}</a> ·
+    {% endif %}
+    <span class="badge {{ 'badge-ok' if locked else 'badge-accent' }}">{{ LETTER_STATUS_LABELS.get(letter.status, letter.status) }}</span>
+    · Dokumenttyp: <strong>{{ detection.label }}</strong>
+    {% if letter.model %} · Modell: <strong>{{ letter.model }}</strong>{% endif %}
+    {% if letter.tokens_out %} · Tokens: <strong>{{ letter.tokens_in }} / {{ letter.tokens_out }}</strong>{% endif %}
+  </p>
+</div>
+
+{% if error %}
+<div class="alert alert-error" role="alert">
+  <div><span class="alert-title">Der Text konnte nicht erzeugt werden.</span> {{ error }}</div>
+</div>
+{% elif generated %}
+<div class="alert alert-ok" role="status">
+  <div><span class="alert-title">Text erzeugt.</span> Prüfen Sie den Text, kopieren Sie ihn ins KIS oder
+    geben Sie ihn frei.</div>
+</div>
+{% endif %}
+
+<section class="card mt-6">
+  <div class="card-header">
+    <h2>Ergebnis</h2>
+    <a class="btn btn-ghost btn-sm" href="/app/briefe/{{ letter.id }}">Im Archiv öffnen</a>
+  </div>
+  <div class="card-body">
+    {% if content %}
+    <div class="copy-row">
+      <button type="button" class="btn btn-primary" data-copy-target="#result-text">Text kopieren</button>
+      <span class="copy-feedback muted" data-copy-feedback role="status" aria-live="polite"></span>
+      {% if not locked %}
+      <form method="post" action="/app/briefe/{{ letter.id }}/freigeben">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn btn-secondary"
+                data-confirm="Text endgültig freigeben? Danach ist der Text gesperrt.">Freigeben</button>
+      </form>
+      {% endif %}
+      <details class="menu">
+        <summary class="btn btn-ghost btn-sm">Weitere Optionen</summary>
+        <div class="menu-panel">
+          <a href="/app/briefe/{{ letter.id }}/export.docx">DOCX mit Briefkopf herunterladen (optional)</a>
+          <p class="hint">Hauptausgabe ist der reine Text. Das DOCX ist eine optionale Sekundärausgabe.</p>
+          {% if not locked %}
+          <form method="post" action="/app/briefe/{{ letter.id }}/loeschen">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" class="btn btn-ghost btn-sm"
+                    data-confirm="Dieses Dokument endgültig löschen?">Löschen</button>
+          </form>
+          {% endif %}
+        </div>
+      </details>
+    </div>
+    <div class="field mt-2">
+      <pre class="result-pane" id="result-text" tabindex="0"
+           aria-label="Erzeugter Text, reiner Text zum Kopieren">{{ content }}</pre>
+    </div>
+
+    {% if enrichments %}
+    <section class="enrichments" aria-labelledby="enrich-title">
+      <h3 id="enrich-title" class="rule-check-title">Aus Referenz ergänzt – bitte prüfen</h3>
+      <ul class="enrichment-list">
+        {% for item in enrichments %}
+        <li class="enrichment-item">
+          <span class="enrichment-text">{{ item.text }}</span>
+          {% if item.source %}<span class="enrichment-source">Quelle: {{ item.source }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="hint">Diese Angaben stammen aus Referenzvorlagen und nicht aus Ihrem Rohmaterial.
+        Bitte vor der Freigabe prüfen.</p>
+    </section>
+    {% endif %}
+
+    {% if rule_check %}
+    <section class="rule-check {{ 'is-clean' if rule_check.clean else 'is-warn' }}" aria-labelledby="rc-title">
+      <h3 id="rc-title" class="rule-check-title">Regel-Check</h3>
+      {% if rule_check.clean %}
+      <p class="rule-ok">Regeln geprüft (R1–R{{ rule_check.rules_total }})</p>
+      {% else %}
+      <p class="rule-warn-intro">Nicht bestanden — {{ rule_check.findings | length }} Hinweis{% if rule_check.findings | length != 1 %}e{% endif %}:</p>
+      <ul class="rule-findings">
+        {% for finding in rule_check.findings %}
+        <li><span class="rule-id">{{ finding.rule }}</span> {{ finding.message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <p class="hint">
+        {% if rule_check.source == 'methode' %}Prüfung durch die Methode (R1–R{{ rule_check.rules_total }}).
+        {% else %}Portal-seitige Vorprüfung; maßgeblich ist der Regel-Check der Methode.{% endif %}
+      </p>
+    </section>
+    {% endif %}
+
+    <section class="templates-used" aria-labelledby="vt-title">
+      <h3 id="vt-title" class="rule-check-title">Verwendete Vorlagen</h3>
+      {% if used_templates %}
+      <ul class="used-list">
+        {% for template in used_templates %}
+        <li><a href="/app/vorlagen/{{ template.file }}">{{ template.title }}</a>
+          <span class="muted">Treffer {{ template.score }}</span></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="muted">Keine Vorlage gefunden.</p>
+      <a class="btn btn-secondary btn-sm mt-2" href="/app/vorlagen#vorschlag">Vorlage vorschlagen</a>
+      {% endif %}
+    </section>
+
+    {% if not locked %}
+    <details class="mt-6">
+      <summary class="btn btn-ghost btn-sm">Text bearbeiten</summary>
+      <form method="post" action="/app/briefe/{{ letter.id }}/speichern" class="mt-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="field">
+          <label class="visually-hidden" for="content">Text</label>
+          <textarea class="textarea" id="content" name="content" rows="18">{{ content }}</textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-secondary">Änderungen speichern</button>
+        </div>
+      </form>
+    </details>
+    {% endif %}
+    {% else %}
+    <div class="letter-paper is-empty">
+      <p>Noch kein Text.{% if error %} {{ error }}{% endif %}</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<div class="row mt-6">
+  <a class="btn btn-secondary" href="/app/neu">Neues Dokument schreiben</a>
+  <a class="btn btn-ghost" href="/app/briefe">Zu den Briefen</a>
+</div>
+{% endblock %}

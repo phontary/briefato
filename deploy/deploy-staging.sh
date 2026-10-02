@@ -44,6 +44,20 @@ else
   echo "vault: reusing services/briefato"
 fi
 
+# ---------------------------------------------------------------- 1b. model key (from the profile)
+# The staging stack runs the real DeepSeek model (Mohamed's decision 2026-10-02). The key is read
+# from the Schreibdienst profile .env — the single source of truth — and pushed to Portainer as a
+# stack env var. It is never written to the repo, and this script never prints it.
+LLM_KEY_FILE="${LLM_KEY_FILE:-/home/hermeswebui/.hermes/profiles/schreibdienst/.env}"
+llm_key=""
+if grep -q '^BRIEFATO_LLM_MOCK=true' "$REPO_LOCAL/deploy/stack.env.example"; then
+  echo "model: mock provider (no LLM key needed)"
+else
+  llm_key="$(grep -h '^DEEPSEEK_API_KEY=' "$LLM_KEY_FILE" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"'"'"' \r\n')"
+  [ -n "$llm_key" ] || { echo "FATAL: no DEEPSEEK_API_KEY in $LLM_KEY_FILE (and the template is not in mock mode)" >&2; exit 1; }
+  echo "model: real provider, key from $(basename "$(dirname "$LLM_KEY_FILE")") profile (length ${#llm_key})"
+fi
+
 # ---------------------------------------------------------------- 2. host image build
 if [ "${SKIP_BUILD:-0}" != "1" ]; then
   echo "== building image on the host =="
@@ -57,9 +71,9 @@ ssh "${ssh_opts[@]}" "$HOST" 'mkdir -p /mnt/fast/docker/briefato/data && chown 1
 
 # ---------------------------------------------------------------- 3. payload (compose + env)
 python3 - "$REPO_LOCAL/deploy/docker-compose.yml" "$REPO_LOCAL/deploy/stack.env.example" \
-          "$PAYLOAD" "$secret_key" "$field_key" "$STACK" <<'PY'
+          "$PAYLOAD" "$secret_key" "$field_key" "$llm_key" "$STACK" <<'PY'
 import json, sys
-compose_path, env_path, out_path, secret_key, field_key, stack = sys.argv[1:7]
+compose_path, env_path, out_path, secret_key, field_key, llm_key, stack = sys.argv[1:8]
 env: dict[str, str] = {}
 for line in open(env_path):
     line = line.strip()
@@ -69,6 +83,8 @@ for line in open(env_path):
     env[k.strip()] = v.strip()
 env["BRIEFATO_SECRET_KEY"] = secret_key
 env["BRIEFATO_FIELD_KEY"] = field_key
+if llm_key:
+    env["BRIEFATO_LLM_API_KEY"] = llm_key
 payload = {
     "name": stack,
     "stackFileContent": open(compose_path).read(),

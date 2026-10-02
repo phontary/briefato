@@ -39,6 +39,8 @@ from __future__ import annotations
 
 import json
 import logging
+import os
+import re
 from datetime import date, datetime
 from typing import Any
 
@@ -51,6 +53,8 @@ from ..brain.prompt_assembly import PROMPT_VERSION, build_prompt, correction_blo
 from ..brain.rule_checker import check as rule_check
 from ..config import get_settings
 from ..models import Generation, Letter, Subscription
+from ..research import enrich_default, filter_generic, get_research_provider
+from . import fanout, routing, segmenter
 from .letterhead import render_docx  # re-exported for the frozen generate.py API
 from .providers import PipelineError, get_provider
 from .pseudonym import Pseudonymizer
@@ -239,7 +243,91 @@ def _short_findings_summary(check_result: Any) -> str:
     return f"Regelprüfung: {len(check_result.hard)} harte Hinweise ({ids})"[:400]
 
 
-def _generate_document(
+def _fanout_guard(pseudonymizer: Pseudonymizer, settings: Any):
+    """Return a guard that verifies a compression/weave prompt carries MASKED text only.
+
+    It extracts the patient-derived payload (the ``<segment>``/``<segment type=…>``
+    bodies, which are the only patient-originated parts of a fan-out prompt) and applies
+    the same leak + idempotency assertions as the single-pass path.
+    """
+    payload_re = re.compile(r"<segment[^>]*>(.*?)</segment>", re.DOTALL | re.IGNORECASE)
+
+    def guard(_system: str, user: str) -> None:
+        payload = "\n".join(payload_re.findall(user or ""))
+        if not payload:
+            return
+        _assert_prompt_is_pseudonymised(pseudonymizer, payload, settings, ignore="")
+        if pseudonymizer.mask(payload) != payload:
+            raise AssertionError("pseudonymisation is not idempotent: raw identifiers survive masking")
+
+    return guard
+
+
+def _collect_enrichment(
+    *,
+    doc_type: str,
+    masked_dictation: str,
+    raw_patient_values: list[str],
+    settings: Any,
+    research_provider: Any,
+    enrich_flag: bool,
+    raw_patient_context: dict | None = None,
+) -> tuple[list[Any], dict[str, Any]]:
+    """Run grounded enrichment and return ``(items, detail)``.
+
+    Research is opt-in; if it is off, unavailable, or fails, the list is empty and the
+    letter is still produced. Every kept statement passes the generic guardrail and is
+    additionally checked against the patient's strong identifiers (defence in depth).
+    """
+    detail: dict[str, Any] = {
+        "enabled": bool(enrich_flag),
+        "web_available": bool(os.environ.get("BRIEFATO_RESEARCH_BASE_URL", "").strip()),
+        "items": [],
+        "sources": [],
+        "blocked": 0,
+        "ui_note": "",
+    }
+    if not enrich_flag:
+        return [], detail
+
+    provider = research_provider
+    if provider is None:
+        provider = get_research_provider(settings)
+    if provider is None:
+        detail["blocked"] = 0
+        return [], detail
+
+    try:
+        raw_items = provider.enrich(
+            doc_type=doc_type,
+            context_text=masked_dictation or "",
+            patient_context=dict(raw_patient_context or {}),
+            dictation=masked_dictation or "",
+            max_items=6,
+        )
+    except Exception:  # pragma: no cover - research must never break generation
+        logger.exception("enrichment provider failed; continuing without reference knowledge")
+        return [], detail
+
+    kept, blocked = filter_generic(raw_items, dictation=masked_dictation or "")
+    # Never surface a statement that carries a raw patient identifier.
+    survivors = []
+    for item in kept:
+        statement = (getattr(item, "statement", "") or "").lower()
+        if any(value and value in statement for value in raw_patient_values):
+            blocked += 1
+            continue
+        survivors.append(item)
+
+    detail["items"] = [item.as_dict() for item in survivors]
+    detail["sources"] = sorted({str(getattr(item, "source", "")) for item in survivors if getattr(item, "source", "")})
+    detail["blocked"] = blocked
+    if survivors:
+        detail["ui_note"] = "aus Referenz ergänzt – bitte prüfen"
+    return survivors, detail
+
+
+def _single_pass_document(
     *,
     doc_type: str,
     provider: Any,
@@ -252,9 +340,12 @@ def _generate_document(
     settings: Any,
     hits: list,
     dictation: str,
+    enrichment: list | None,
+    tracker: fanout.ConcurrencyTracker,
 ) -> dict[str, Any]:
-    """Generate one document, retrying once on hard rule violations."""
+    """Generate one document in one pass, retrying once on hard rule violations."""
     ignore = " ".join(str(value) for value in letterhead.values())
+    calls_before = tracker.calls
 
     def _call(prompt_extra: str):
         bundle = build_prompt(
@@ -265,6 +356,7 @@ def _generate_document(
             templates=hits,
             custom_rules=custom_rules,
             extra=prompt_extra,
+            enrichment=enrichment,
         )
         # The pseudonymisation guarantee concerns *patient-derived* text only: the masked dictation
         # and the masked patient context are the only patient-originated parts the model sees. The
@@ -302,7 +394,126 @@ def _generate_document(
         "bundle": bundle,
         "check": check_result,
         "retried": retried,
+        "route": None,
+        "compression": None,
+        "calls": tracker.calls - calls_before,
     }
+
+
+def _fanout_document(
+    *,
+    doc_type: str,
+    provider: Any,
+    pseudonymizer: Pseudonymizer,
+    masked_dictation: str,
+    masked_context: dict,
+    letterhead: dict,
+    custom_rules: str,
+    extra: str,
+    settings: Any,
+    hits: list,
+    dictation: str,
+    segments: list,
+    route: routing.RouteDecision,
+    max_parallel: int,
+    enrichment: list | None,
+    tracker: fanout.ConcurrencyTracker,
+) -> dict[str, Any]:
+    """Segment → bounded-parallel compression → one weave (then the existing retry)."""
+    calls_before = tracker.calls
+    guard = _fanout_guard(pseudonymizer, settings)
+    ignore = " ".join(str(value) for value in letterhead.values())
+
+    compressed, stats = fanout.compress_segments(
+        segments,
+        provider=provider,
+        doc_type=doc_type,
+        tracker=tracker,
+        max_parallel=max_parallel,
+        guard=guard,
+        enrichment=enrichment,
+    )
+
+    def _guard_weave(_system: str, user: str) -> None:
+        payload = "\n".join(re.findall(r"<segment[^>]*>(.*?)</segment>", user or "", re.DOTALL | re.IGNORECASE))
+        patient_payload = f"{payload}\n{json.dumps(masked_context, ensure_ascii=False)}"
+        _assert_prompt_is_pseudonymised(pseudonymizer, patient_payload, settings, ignore=ignore)
+
+    weave = fanout.run_weave(
+        doc_type=doc_type,
+        compressed=compressed,
+        provider=provider,
+        pseudonymizer=pseudonymizer,
+        letterhead=letterhead,
+        patient_ctx=masked_context,
+        templates=hits,
+        custom_rules=custom_rules,
+        enrichment=enrichment,
+        extra=extra,
+        guard=_guard_weave,
+        dictation=dictation,
+    )
+    weave["route"] = route
+    weave["compression"] = stats
+    weave["compressed"] = compressed
+    weave["calls"] = tracker.calls - calls_before
+    return weave
+
+
+def _generate_document(
+    *,
+    doc_type: str,
+    provider: Any,
+    pseudonymizer: Pseudonymizer,
+    masked_dictation: str,
+    masked_context: dict,
+    letterhead: dict,
+    custom_rules: str,
+    extra: str,
+    settings: Any,
+    hits: list,
+    dictation: str,
+    segments: list,
+    route: routing.RouteDecision,
+    max_parallel: int,
+    enrichment: list | None,
+    tracker: fanout.ConcurrencyTracker,
+) -> dict[str, Any]:
+    """Dispatch one document to the fan-out or the single-pass pipeline."""
+    if route is not None and route.is_fanout:
+        return _fanout_document(
+            doc_type=doc_type,
+            provider=provider,
+            pseudonymizer=pseudonymizer,
+            masked_dictation=masked_dictation,
+            masked_context=masked_context,
+            letterhead=letterhead,
+            custom_rules=custom_rules,
+            extra=extra,
+            settings=settings,
+            hits=hits,
+            dictation=dictation,
+            segments=segments,
+            route=route,
+            max_parallel=max_parallel,
+            enrichment=enrichment,
+            tracker=tracker,
+        )
+    return _single_pass_document(
+        doc_type=doc_type,
+        provider=provider,
+        pseudonymizer=pseudonymizer,
+        masked_dictation=masked_dictation,
+        masked_context=masked_context,
+        letterhead=letterhead,
+        custom_rules=custom_rules,
+        extra=extra,
+        settings=settings,
+        hits=hits,
+        dictation=dictation,
+        enrichment=enrichment,
+        tracker=tracker,
+    )
 
 
 def generate_letter(
@@ -314,11 +525,21 @@ def generate_letter(
     dictation: str,
     letterhead: dict,
     extra: str = "",
+    enrich: bool | None = None,
+    max_parallel: int | None = None,
+    research_provider: Any = None,
 ) -> Letter:
     settings = get_settings()
 
+    # Routing inputs (WORKSTREAM-ENGINE-V2): the source segmentation and the concurrency
+    # cap are computed once per letter; the >5-source fan-out rule is evaluated per
+    # document type from the segment count.
+    segments = segmenter.segment(dictation or "")
+    max_parallel_cap = fanout.resolve_max_parallel(max_parallel)
+    tracker = fanout.ConcurrencyTracker(max_parallel_cap)
+
     # 1) triage — Auftragsart -> Dokumenttyp (kern.md routing)
-    decision = brain_triage.triage(dictation or "", explicit=kind)
+    decision = brain_triage.triage(dictation or "", explicit=kind, source_count=len(segments))
     doc_types = decision.doc_types
     doc_type = decision.doc_type
 
@@ -355,13 +576,15 @@ def generate_letter(
         "doc_types": list(doc_types),
         "triage_confidence": decision.confidence,
         "prompt_version": PROMPT_VERSION,
+        "source_count": len(segments),
     }
 
     try:
         pseudonymizer = Pseudonymizer.from_patient(patient)
         masked_dictation = pseudonymizer.mask(dictation or "")
+        raw_patient_context = _patient_context(patient)
         masked_context = {
-            key: pseudonymizer.mask(value) for key, value in _patient_context(patient).items()
+            key: pseudonymizer.mask(value) for key, value in raw_patient_context.items()
         }
         effective_letterhead = _effective_letterhead(letterhead, user)
         member_rules = _custom_rules(user)
@@ -372,10 +595,28 @@ def generate_letter(
             for hit in hits
         ]
 
-        provider = get_provider(settings)
+        # Grounded enrichment ('Improvisation') — per-request opt-in, default from the
+        # BRIEFATO_ENRICH_DEFAULT setting. Off/unavailable/failed → empty list.
+        enrich_flag = enrich_default() if enrich is None else bool(enrich)
+        enrichments, enrichment_detail = _collect_enrichment(
+            doc_type=doc_type,
+            masked_dictation=masked_dictation,
+            raw_patient_values=pseudonymizer.sensitive_values(_STRONG_IDENTIFIER_TOKENS),
+            settings=settings,
+            research_provider=research_provider,
+            enrich_flag=enrich_flag,
+            raw_patient_context=raw_patient_context,
+        )
+        diagnostics["enrichment_sources"] = enrichment_detail.get("sources", [])
+        diagnostics["enrichment_blocked"] = enrichment_detail.get("blocked", 0)
+
+        provider = fanout.TrackedProvider(get_provider(settings), tracker)
 
         documents: list[dict[str, Any]] = []
+        routes: list[dict[str, Any]] = []
         for current_type in doc_types:
+            route = routing.decide_route(current_type, len(segments))
+            routes.append(route.as_dict())
             documents.append(
                 _generate_document(
                     doc_type=current_type,
@@ -389,8 +630,14 @@ def generate_letter(
                     settings=settings,
                     hits=hits,
                     dictation=dictation or "",
+                    segments=segments,
+                    route=route,
+                    max_parallel=max_parallel_cap,
+                    enrichment=enrichments,
+                    tracker=tracker,
                 )
             )
+        diagnostics["routing"] = routes
 
         content = "\n\n".join(document["text"] for document in documents)
 
@@ -450,6 +697,8 @@ def generate_letter(
         db.commit()
 
         # Runtime detail for the UI — no schema change (see module docstring).
+        compression = [d.get("compression") for d in documents if d.get("compression")]
+        route_primary = routes[0] if routes else None
         letter.last_check = {
             "doc_type": doc_type,
             "doc_types": list(doc_types),
@@ -461,7 +710,30 @@ def generate_letter(
             "hard_count": len(hard_findings),
             "soft_count": len(all_findings) - len(hard_findings),
             "retried": retried,
+            # --- fan-out / routing (WORKSTREAM-ENGINE-V2) ---
+            "route": route_primary,
+            "routing": routes,
+            "source_count": len(segments),
+            "segments": segmenter.segment_as_dicts(segments),
+            "compression": compression,
+            "max_parallel": max_parallel_cap,
+            "model_calls": tracker.calls,
+            "max_concurrency": tracker.peak,
+            # --- grounded enrichment ('Improvisation') ---
+            "enrichment": enrichment_detail,
         }
+        # Runtime attributes for the UI (no schema change), consumed by the wizard/editor:
+        # the enrichment list (statement + source) and the routing label.
+        letter.enrichments = [
+            {
+                "text": item.get("statement", ""),
+                "source": item.get("source", ""),
+                "kind": item.get("kind", ""),
+                "origin": item.get("origin", ""),
+            }
+            for item in enrichment_detail.get("items", [])
+        ]
+        letter.route_label = route_primary["ui_label"] if route_primary else ""
     except Exception as exc:
         db.rollback()
         logger.exception("letter generation failed letter_id=%s kind=%s", letter.id, kind)
@@ -499,9 +771,45 @@ def generate_letter(
             tokens_out=letter.tokens_out,
             cost_usd=letter.cost_usd,
             pseudonymised=True,
+            route=routes[0]["route"] if routes else None,
+            source_count=len(segments),
+            model_calls=tracker.calls,
+            max_concurrency=tracker.peak,
+            max_parallel=max_parallel_cap,
+            compression_gaps=[
+                gap.get("type")
+                for document in documents
+                for gap in ((document.get("compression") or {}).get("gaps") or [])
+            ],
+            enrichment_sources=enrichment_detail.get("sources", []),
+            enrichment_blocked=enrichment_detail.get("blocked", 0),
         )
     except Exception:  # pragma: no cover - audit failure must not fail the letter
         logger.exception("audit failed for letter %s", letter.id)
+
+    # Enrichment audit (separate event) — only when reference knowledge was actually used.
+    if enrichment_detail.get("items"):
+        try:
+            security.audit(
+                db,
+                event="letter.enriched",
+                user_id=user.id,
+                target_type="letter",
+                target_id=letter.id,
+                kind=doc_type,
+                sources=enrichment_detail.get("sources", []),
+                kinds=sorted(
+                    {str(item.get("kind", "")) for item in enrichment_detail["items"] if item.get("kind")}
+                ),
+                statement_count=len(enrichment_detail["items"]),
+                blocked=enrichment_detail.get("blocked", 0),
+                web_used=any(
+                    str(item.get("origin", "")) == "web" for item in enrichment_detail["items"]
+                ),
+                ui_note=enrichment_detail.get("ui_note", ""),
+            )
+        except Exception:  # pragma: no cover - audit failure must not fail the letter
+            logger.exception("enrichment audit failed for letter %s", letter.id)
 
     return letter
 

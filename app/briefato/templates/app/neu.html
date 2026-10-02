@@ -1,0 +1,139 @@
+{% extends "app_base.html" %}
+{% block title %}Neuer Brief — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="wizard" data-wizard>
+  <div class="page-header">
+    <h1>Neuer Brief</h1>
+    <p class="muted">Eine Frage nach der anderen. Am Ende sehen Sie den reinen Text und kopieren ihn
+      mit einem Klick ins KIS.</p>
+  </div>
+
+  {% if show_progress %}
+  <div class="wizard-head">
+    <p class="wizard-progress">Schritt {{ step_no }} von {{ step_total }}</p>
+    <progress class="wizard-progressbar" value="{{ step_no }}" max="{{ step_total }}"
+              aria-label="Fortschritt: Schritt {{ step_no }} von {{ step_total }}"></progress>
+  </div>
+  {% endif %}
+
+  {% if error %}
+  <div class="alert alert-error mt-4" role="alert">
+    <div><span class="alert-title">Hinweis.</span> {{ error }}</div>
+  </div>
+  {% endif %}
+
+  {% if step.render == 'cards' %}
+  <form class="wizard-step" data-wizard-form method="post" action="/app/neu" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="wiz_state" value="{{ state_json }}">
+    <input type="hidden" name="wiz_step" value="{{ step_index }}">
+    <h2 class="wizard-q" tabindex="-1" data-wizard-heading>{{ step.title }}</h2>
+    {% if step.help %}<p class="wizard-help">{{ step.help }}</p>{% endif %}
+    <div class="wizard-cards">
+      {% for option in wizard_cards %}
+      <button class="wizard-card" type="submit" name="wtype" value="{{ option.key }}">
+        <span class="wizard-card-title">{{ option.label }}</span>
+        <span class="wizard-card-desc">{{ option.desc }}</span>
+      </button>
+      {% endfor %}
+    </div>
+  </form>
+
+  {% elif step.render == 'fields' %}
+  <form class="wizard-step" data-wizard-form method="post" action="/app/neu" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="wiz_state" value="{{ state_json }}">
+    <input type="hidden" name="wiz_step" value="{{ step_index }}">
+    <h2 class="wizard-q" tabindex="-1" data-wizard-heading>{{ step.title }}</h2>
+    {% if step.help %}<p class="wizard-help">{{ step.help }}</p>{% endif %}
+    <div class="wizard-fields">
+      {% for field in step.fields %}
+        {% include "app/_wizard_field.html" %}
+      {% endfor %}
+    </div>
+    <div class="wizard-actions">
+      <button class="btn btn-primary" type="submit" name="action" value="next">Weiter</button>
+      <button class="btn btn-secondary" type="submit" name="action" value="back" data-wizard-back>Zurück</button>
+    </div>
+    {% if step.key == 'patient' and not patients %}
+    <div class="alert alert-info mt-4" role="status">
+      <div>Noch kein Patient angelegt. Legen Sie zuerst einen Patienten an —
+        <a href="/app/patienten/neu">Patient anlegen</a>.</div>
+    </div>
+    {% endif %}
+  </form>
+
+  {% elif step.render == 'sources' %}
+  <form class="wizard-step" data-wizard-form method="post" action="/app/neu" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="wiz_state" value="{{ state_json }}">
+    <input type="hidden" name="wiz_step" value="{{ step_index }}">
+    <h2 class="wizard-q" tabindex="-1" data-wizard-heading>{{ step.title }}</h2>
+    {% if step.help %}<p class="wizard-help">{{ step.help }}</p>{% endif %}
+
+    {% if sources %}
+    <ul class="source-list">
+      {% for source in sources %}
+      <li class="source-item">
+        <span class="badge badge-accent">{{ source.label }}</span>
+        <span class="source-text">{{ source.text }}</span>
+        <button class="btn btn-ghost btn-sm" type="submit" name="remove_source" value="{{ loop.index0 }}">Entfernen</button>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <p class="hint"><span class="source-count">{{ sources | length }} Quelle{% if sources | length != 1 %}n{% endif %} erfasst.</span>
+      {% if sources | length > 5 %} Die Erzeugung teilt die Quellen in Abschnitte auf.{% else %} Ab 6 Quellen teilt die Erzeugung die Quellen automatisch auf.{% endif %}</p>
+
+    <div class="source-add mt-4">
+      <div class="field">
+        <label for="src_label">Art der Quelle</label>
+        <select class="select" id="src_label" name="src_label">
+          {% for label in source_labels %}<option value="{{ label }}">{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="src_text">Inhalt der Quelle</label>
+        <textarea class="textarea" id="src_text" name="src_text" rows="4"
+                  placeholder="Befund, Bericht oder Verlauf hier einfügen…"></textarea>
+      </div>
+    </div>
+
+    <div class="wizard-actions">
+      <button class="btn btn-secondary" type="submit" name="action" value="add_source">Quelle hinzufügen</button>
+      <button class="btn btn-primary" type="submit" name="action" value="next">Weiter</button>
+      <button class="btn btn-ghost" type="submit" name="action" value="back" data-wizard-back>Zurück</button>
+    </div>
+  </form>
+
+  {% elif step.render == 'summary' %}
+  <div class="wizard-step" data-wizard-form>
+    <h2 class="wizard-q" tabindex="-1" data-wizard-heading>{{ step.title }}</h2>
+    {% if step.help %}<p class="wizard-help">{{ step.help }}</p>{% endif %}
+    <div class="wizard-summary">
+      <dl class="dl">
+        {% for row in summary %}
+        <dt>{{ row.label }}</dt><dd>{{ row.value }}</dd>
+        {% endfor %}
+      </dl>
+    </div>
+    <form method="post" action="/app/neu/erzeugen" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="wiz_state" value="{{ state_json }}">
+      <input type="hidden" name="wiz_step" value="{{ step_index }}">
+      <div class="wizard-actions">
+        <button class="btn btn-primary" type="submit">Text erzeugen</button>
+      </div>
+    </form>
+    <form method="post" action="/app/neu" class="mt-4">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="wiz_state" value="{{ state_json }}">
+      <input type="hidden" name="wiz_step" value="{{ step_index }}">
+      <button class="btn btn-ghost" type="submit" name="action" value="back" data-wizard-back>Zurück</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

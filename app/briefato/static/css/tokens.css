@@ -1,26 +1,33 @@
-/* Briefato design tokens — one accent (clinic teal), neutral ramp, type/spacing scales.
-   No framework. Light is the default; dark mode follows the OS and can be forced
-   with [data-theme="dark"] / [data-theme="light"] on <html>. */
+/* Briefato design tokens — "margin" language: warm canvas, one white sheet, one accent.
+   No framework. Light is the default; dark mode follows the OS and can be forced with
+   [data-theme="dark"] / [data-theme="light"] on <html>. WCAG AA kept throughout. */
 
 :root {
   color-scheme: light;
 
-  /* ---- neutral ramp (cool grey) ---- */
+  /* ---- neutral ramp (warm grey) ---- */
   --c-0: #ffffff;
-  --c-25: #fbfcfd;
-  --c-50: #f6f8fa;
-  --c-100: #eef1f5;
-  --c-200: #e0e5eb;
-  --c-300: #c8d0d9;
-  --c-400: #9aa5b1;
-  --c-500: #6b7683;
-  --c-600: #4c5560;
-  --c-700: #353c45;
-  --c-800: #23282e;
-  --c-900: #14181c;
-  --c-950: #0b0e11;
+  --c-25: #faf9f7;
+  --c-50: #f5f4f1;
+  --c-100: #ecebe7;
+  --c-200: #e3e1dc;
+  --c-300: #cfccc5;
+  --c-400: #a29e95;
+  --c-500: #6f6b63;
+  --c-600: #54514a;
+  --c-700: #3b3934;
+  --c-800: #26251f;
+  --c-900: #17170f;
+  --c-950: #0e0e09;
 
-  /* ---- accent ramp (single accent: teal) ---- */
+  /* ---- canvas + sheet (the two surfaces of the reference) ---- */
+  --canvas: #f2f1ef;
+  --canvas-2: #eceae6;
+  --sheet: #ffffff;
+  --sheet-border: #e7e5e2;
+  --hairline: #e7e5e2;
+
+  /* ---- accent ramp (single accent: clinic teal) ---- */
   --a-50: #edfaf6;
   --a-100: #d3f2ea;
   --a-200: #a9e4d6;
@@ -32,25 +39,26 @@
   --a-800: #0e4f48;
   --a-900: #0d413c;
 
-  /* ---- feedback (used only for status, never decoration) ---- */
+  /* ---- feedback (status only, never decoration) ---- */
   --ok-600: #1a7f4b;
   --ok-50: #eaf7ef;
   --warn-700: #8a5a09;
+  --warn-600: #b9791a;
   --warn-50: #fdf4e3;
   --danger-600: #b3261e;
   --danger-700: #911f19;
   --danger-50: #fdecea;
 
   /* ---- semantic surfaces ---- */
-  --bg: var(--c-50);
-  --surface: var(--c-0);
+  --bg: var(--canvas);
+  --surface: var(--sheet);
   --surface-2: var(--c-25);
   --surface-sunken: var(--c-100);
   --text: var(--c-800);
-  --text-strong: var(--c-900);
+  --text-strong: #111111;
   --muted: var(--c-500);
   --muted-strong: var(--c-600);
-  --border: var(--c-200);
+  --border: var(--hairline);
   --border-strong: var(--c-300);
   --primary: var(--a-600);
   --primary-hover: var(--a-700);
@@ -59,6 +67,11 @@
   --primary-soft-border: var(--a-200);
   --on-primary: #ffffff;
   --focus: #0b63ce;
+
+  /* ---- active nav = dark filled pill (reference) ---- */
+  --nav-active-bg: #1f1f1f;
+  --nav-active-fg: #ffffff;
+  --nav-group: var(--c-400);
 
   /* ---- type ---- */
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
@@ -71,7 +84,8 @@
   --fs-xl: 1.375rem;
   --fs-2xl: 1.75rem;
   --fs-3xl: 2.25rem;
-  --lh-tight: 1.2;
+  --fs-4xl: 2.75rem;
+  --lh-tight: 1.15;
   --lh-base: 1.55;
   --fw-normal: 400;
   --fw-medium: 500;
@@ -91,32 +105,40 @@
   --sp-16: 4rem;
   --sp-20: 5rem;
 
-  /* ---- radii ---- */
-  --r-sm: 4px;
-  --r-md: 8px;
-  --r-lg: 12px;
-  --r-xl: 16px;
+  /* ---- radii (12 / 16 / 24 per the reference) ---- */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-2xl: 28px;
   --r-full: 999px;
 
-  /* ---- shadows ---- */
-  --sh-xs: 0 1px 2px rgba(16, 24, 40, 0.06);
-  --sh-sm: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
-  --sh-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
-  --sh-lg: 0 12px 32px rgba(16, 24, 40, 0.12), 0 4px 8px rgba(16, 24, 40, 0.05);
+  /* ---- shadows: layered, soft ---- */
+  --sh-xs: 0 1px 2px rgba(17, 17, 17, 0.05);
+  --sh-sm: 0 1px 3px rgba(17, 17, 17, 0.07), 0 1px 2px rgba(17, 17, 17, 0.04);
+  --sh-md: 0 6px 18px rgba(17, 17, 17, 0.08), 0 2px 6px rgba(17, 17, 17, 0.04);
+  --sh-lg: 0 14px 40px rgba(17, 17, 17, 0.12), 0 4px 10px rgba(17, 17, 17, 0.05);
+  --sh-sheet: 0 28px 70px -28px rgba(17, 17, 17, 0.28), 0 2px 6px rgba(17, 17, 17, 0.04);
 
   --ring: 0 0 0 3px rgba(11, 99, 206, 0.28);
 
-  /* ---- layout ---- */
-  --container: 68rem;
-  --nav-w: 15rem;
-  --header-h: 3.5rem;
+  /* ---- layout: wide working column ---- */
+  --container: 87.5rem;      /* 1400px working width on desktop */
+  --prose: 72ch;             /* comfortable measure for running text */
+  --nav-w: 15.5rem;
+  --header-h: 3.75rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: var(--c-950);
-    --surface: #12171c;
+    --canvas: #0c0f12;
+    --canvas-2: #0a0d10;
+    --sheet: #12171c;
+    --sheet-border: #26303a;
+    --hairline: #26303a;
+    --bg: var(--canvas);
+    --surface: var(--sheet);
     --surface-2: #171d23;
     --surface-sunken: #0e1216;
     --text: #dbe2e9;
@@ -136,17 +158,26 @@
     --danger-50: #2a1512;
     --focus: #7fb2ff;
     --ring: 0 0 0 3px rgba(127, 178, 255, 0.35);
+    --nav-active-bg: #f2f6f9;
+    --nav-active-fg: #0c0f12;
+    --nav-group: #7d8894;
     --sh-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
     --sh-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
-    --sh-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-    --sh-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+    --sh-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+    --sh-lg: 0 14px 40px rgba(0, 0, 0, 0.55);
+    --sh-sheet: 0 28px 70px -28px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.4);
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: var(--c-950);
-  --surface: #12171c;
+  --canvas: #0c0f12;
+  --canvas-2: #0a0d10;
+  --sheet: #12171c;
+  --sheet-border: #26303a;
+  --hairline: #26303a;
+  --bg: var(--canvas);
+  --surface: var(--sheet);
   --surface-2: #171d23;
   --surface-sunken: #0e1216;
   --text: #dbe2e9;
@@ -166,8 +197,12 @@
   --danger-50: #2a1512;
   --focus: #7fb2ff;
   --ring: 0 0 0 3px rgba(127, 178, 255, 0.35);
+  --nav-active-bg: #f2f6f9;
+  --nav-active-fg: #0c0f12;
+  --nav-group: #7d8894;
   --sh-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
   --sh-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
-  --sh-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-  --sh-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  --sh-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+  --sh-lg: 0 14px 40px rgba(0, 0, 0, 0.55);
+  --sh-sheet: 0 28px 70px -28px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.4);
 }

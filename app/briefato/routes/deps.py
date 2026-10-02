@@ -99,12 +99,32 @@ def _fmt_eur(value: object) -> str:
     return f"{amount:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
+def _doc_type_label(value: object) -> str:
+    """Human label for a stored brain document type (``letters.template_id``), else "".
+
+    Lets the lists show the real document type (OP-Bericht, Entlassmedikationsplan, …)
+    even though the frozen ``letters.kind`` column only knows the legacy kinds.
+    """
+    raw = str(value or "").strip()
+    if not raw or raw == "standard":
+        return ""
+    try:
+        from . import brain_bridge
+
+        if raw in {entry["key"] for entry in brain_bridge.available_types()}:
+            return brain_bridge.type_label(raw)
+    except Exception:  # noqa: BLE001 - a broken brain must never break a list page
+        return ""
+    return ""
+
+
 templates.env.globals.update(
     LETTER_KIND_LABELS=LETTER_KIND_LABELS,
     LETTER_STATUS_LABELS=LETTER_STATUS_LABELS,
     MESSAGES=MESSAGES,
     PLAN_CATALOG=PLAN_CATALOG,
 )
+templates.env.globals["doc_type_label"] = _doc_type_label
 templates.env.filters.update(
     fmt_date=_fmt_date,
     fmt_datetime=_fmt_datetime,

@@ -1,0 +1,83 @@
+{
+  "id": "entlassbrief-01",
+  "doc_type": "arztbrief",
+  "title": "Stationärer Entlassbrief — akute Cholezystitis, laparoskopische Cholezystektomie",
+  "sources": [
+    {
+      "label": "NFA-Aufnahme",
+      "text": "12.09.2026 03:40 Aufnahme ueber die NFA. Pat. klagt ueber seit 2 Tagen bestehende rechte Oberbauchschmerzen mit Ausstrahlung in die rechte Schulter, Nausea, kein Fieber. Vormedikation: keine."
+    },
+    {
+      "label": "KU",
+      "text": "Abdomen weich, DS rechter Oberbauch, Murphy-Zeichen positiv, keine AW, Peristaltik regelrecht."
+    },
+    {
+      "label": "Labor 12.09.",
+      "text": "CRP 148 mg/l, Leukozyten 15,8/nl, Hb 13,2 g/dl, GGT 210 U/l, Bilirubin 1,1 mg/dl, Lipase 38 U/l, Kreatinin 0,9 mg/dl."
+    },
+    {
+      "label": "Sonographie 12.09.",
+      "text": "Gallenblase mit multiplen Konkrementen, Wandverdickung 5 mm, pericholezystische Fluessigkeit, kein Konkrement im Ductus choledochus, Gallewege nicht erweitert."
+    },
+    {
+      "label": "CT Abdomen 12.09.",
+      "text": "Akute Cholezystitis mit Wandverdickung, kein Abszess, keine freie Luft, kein Hinweis auf Gallenwegsobstruktion."
+    },
+    {
+      "label": "Visite 13.09.",
+      "text": "Pat. unter Analgesie schmerzarm, Kostaufbau begonnen, Temp 37,8 C, Entzuendungsparameter ruecklaeufig."
+    },
+    {
+      "label": "OP-Protokoll 14.09.",
+      "text": "Laparoskopische Cholezystektomie, transumbilikaler 10-mm-Trokar, Capnoperitoneum 12 mmHg, intraoperativ gedeckt perforierte Cholezystitis, Drainage eingelegt."
+    },
+    {
+      "label": "Pathologie",
+      "text": "Ulcero-phlegmonoese Cholezystitis, ohne Anhalt fuer Malignitaet."
+    },
+    {
+      "label": "Visite 15.09.",
+      "text": "Mobilisation an Gehhilfe, Drainage entfernt, Wunde reizlos, Kostaufbau vertragen."
+    },
+    {
+      "label": "Visite 16.09.",
+      "text": "Temp normotherm, Pat. beschwerdefrei, Entlassung geplant."
+    },
+    {
+      "label": "Pflegeverlauf",
+      "text": "Pat. zur Nacht versorgt, mobil auf Stationsebene, Verbandwechsel taeglich trocken, Trinkmenge ausreichend."
+    },
+    {
+      "label": "Entlassung 17.09.",
+      "text": "Entlassung in die haeusliche Pflege, Wiedervorstellung chirurgische Sprechstunde, Rezept ausgestellt."
+    }
+  ],
+  "dictation": "Patientin Muster, Anna. Seit 2 Tagen bestehende rechtsseitige Oberbauchschmerzen mit Ausstrahlung in die rechte Schulter und Nausea, Aufnahme ueber die NFA. Die Sonographie und die CT des Abdomens zeigten eine akute Cholezystitis bei Cholezystolithiasis ohne Hinweis auf eine Gallewegsobstruktion. Wir nahmen die Patientin zur weiteren Diagnostik bzw. Schmerztherapie stationaer auf.\n\nBei symptomatischer Cholezystolithiasis erfolgte die laparoskopische Cholezystektomie. Intraoperativ zeigte sich eine gedeckt perforierte Cholezystitis. Die Histologie bestaetigte eine ulcero-phlegmonoese Cholezystitis, ohne Anhalt fuer Malignitaet.\n\nPostoperativ gestaltete sich der Verlauf regelrecht, der Kostaufbau wurde vertragen und die Drainage am Folgetag entfernt. Nach klinischer Besserung konnten wir die Patientin am 17.09.2026 in die haeusliche Pflege entlassen.\n\nambulante Therapieempfehlungen nach der Entlassung:\nWir empfahlen die regelmaessige Wundkontrolle sowie ausreichende Mobilisation. Vielen Dank fuer die Weiterbetreuung.\n\nDiagnosen:\nakute Cholezystitis bei Cholezystolithiasis\n\nNebenerkrankungen:\narterielle Hypertonie\n\nTherapie-Maßnahmen auf der Station:\nOP am 14.09.2026: laparoskopische Cholezystektomie\nAnalgetische Therapie\nThromboseprophylaxe",
+  "must_contain": [
+    "Cholezystitis",
+    "Cholezystolithiasis",
+    "stationär auf",
+    "Nausea",
+    "17.09.2026",
+    "Diagnosen:",
+    "Nebenerkrankungen:",
+    "Therapie-Maßnahmen auf der Station:"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "KU:",
+    "Labor:",
+    "Befund:",
+    "Anamnese:",
+    "Troponin",
+    "K81.0"
+  ],
+  "expected_blocks": [
+    "ambulante Therapieempfehlungen nach der Entlassung:",
+    "Diagnosen:",
+    "Nebenerkrankungen:",
+    "Therapie-Maßnahmen auf der Station:"
+  ],
+  "notes": "Kernfall: 12 KIS-Quellen, alle Blöcke diktiert. Prüft Blockreihenfolge und vollständige Diagnoseliste. Hinweis: 'Nachweis'-Wortlaut vermeiden — der bestehende Triage-Treffer '\\bnachweis' würde sonst fälschlich auf Weiterbildungs-Nachweise routen (vom Harness als Typ-Fehlschlag erkannt)."
+}

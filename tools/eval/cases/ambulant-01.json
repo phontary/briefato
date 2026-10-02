@@ -1,0 +1,50 @@
+{
+  "id": "ambulant-01",
+  "doc_type": "ambulant",
+  "title": "Ambulanter/tageschirurgischer Brief — Leistenhernie",
+  "sources": [
+    {
+      "label": "Sprechstunde",
+      "text": "Vorstellung in der chirurgischen Sprechstunde mit seit Monaten bestehender Leistenhernie rechts."
+    },
+    {
+      "label": "KU",
+      "text": "Rechts inguinal tastbare, reponible Bruchpforte, keine Inkarzerationszeichen."
+    },
+    {
+      "label": "Sonographie",
+      "text": "Leistenhernie rechts, keine Inkarzeration."
+    },
+    {
+      "label": "OP-Protokoll",
+      "text": "Ambulante Leistenhernienversorgung rechts in Intubationsnarkose, Netzeinlage 10 x 15 cm."
+    },
+    {
+      "label": "Aufwachraum",
+      "text": "Komplikationslose Aufwachphase, Verlegung auf die Tagesklinik."
+    },
+    {
+      "label": "Entlassung",
+      "text": "Noch am OP-Tag Entlassung in die haeusliche Pflege, Wunde reizlos."
+    }
+  ],
+  "dictation": "Der Patient stellte sich in unserer chirurgischen Sprechstunde mit einer seit Monaten bestehenden Leistenhernie rechts vor. In der Folge wurde die Indikation zur Leistenhernienversorgung gestellt. OP am 12.09.2026: Leistenhernienversorgung rechts in Intubationsnarkose. Intraoperativ zeigte sich eine grosse indirekte Leistenhernie rechts, die mittels Netzeinlage 10 x 15 cm versorgt wurde.\n\nPostoperativ wurde der Patient ueber den Aufwachraum auf die Tagesklinik verlegt, die Wunde zeigte sich reizlos, noch am OP-Tag erfolgte die Entlassung in die haeusliche Pflege.\n\nEmpfohlen werden die regelmaessige ambulante Wundkontrolle sowie die Fortsetzung der Schmerztherapie bei Bedarf. Bei Fieber, Rötung oder zunehmenden Schmerzen bitten wir um sofortige Wiedervorstellung.\n\nDiagnosen:\nLeistenhernie rechts",
+  "must_contain": [
+    "Leistenhernie",
+    "12.09.2026",
+    "Diagnosen:",
+    "Tagesklinik"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "stationär auf",
+    "Therapie-Maßnahmen auf der Station:",
+    "Nebenerkrankungen:",
+    "ambulante Therapieempfehlungen nach der Entlassung:"
+  ],
+  "expected_blocks": [
+    "Diagnosen:"
+  ],
+  "notes": "R58: KEIN 'stationär aufnehmen'-Satz, KEINE Therapie-Maßnahmen-Liste. Ambulante Empfehlungen sind Fließtext, kein Label."
+}

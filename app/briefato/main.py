@@ -26,6 +26,7 @@ from .routes import (
     patients,
     portal,
     public,
+    wizard,
 )
 from .routes.deps import render
 from .routes.library_models import ensure_library_tables
@@ -125,6 +126,8 @@ def create_app() -> FastAPI:
     app.include_router(portal.router)
     app.include_router(patients.router)
     app.include_router(letters.router)
+    # Sequential wizard at /app/neu (its own router; the split editor stays at /app/briefe/{id}).
+    app.include_router(wizard.router)
     app.include_router(account.router)
     app.include_router(billing.router)
     app.include_router(billing.webhook_router)

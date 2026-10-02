@@ -13,6 +13,7 @@ Frozen API: docs/02-spec-interfaces.md §6.
 
 from __future__ import annotations
 
+from . import fanout, routing, segmenter
 from .generate import PipelineGenerationError, generate_letter, render_docx
 from .letterhead import render_docx as render_docx  # noqa: F811  (frozen location lives in letterhead)
 from .prompts import PROMPT_VERSION, system_prompt, user_prompt
@@ -37,9 +38,12 @@ __all__ = [
     "PipelineGenerationError",
     "PipelineProviderError",
     "Pseudonymizer",
+    "fanout",
     "generate_letter",
     "get_provider",
     "render_docx",
+    "routing",
+    "segmenter",
     "system_prompt",
     "user_prompt",
 ]

@@ -1,0 +1,51 @@
+{
+  "id": "pflegebericht-01",
+  "doc_type": "pflegebericht",
+  "title": "Pflegebericht-Integration — umfangreiche Pflegedokumentation zu einem Verlauf",
+  "sources": [
+    {
+      "label": "Pflege Tag 1",
+      "text": "Pat. laut AO versorgt, zur Nacht versorgt, wirkt schlafend bei SK, keine Wünsche."
+    },
+    {
+      "label": "Pflege Tag 2",
+      "text": "Wundverband trocken, Verbandwechsel erfolgt, mobil auf Stationsebene mit Rollator."
+    },
+    {
+      "label": "Pflege Tag 3",
+      "text": "Duenner Stuhlgang, wiederholt, Trinkmenge reduziert, parenterale Fluessigkeit i.v."
+    },
+    {
+      "label": "Pflege Tag 4",
+      "text": "Schmerzangabe NRS 5, Bedarfsmedikation verabreicht, nach erstmaligem Stuhlgang Besserung."
+    },
+    {
+      "label": "Pflege Tag 5",
+      "text": "SpO2-Abfall auf 89 %, Sauerstoffgabe ueber Nasenbrille eingeleitet, Kontrolle engmaschig."
+    },
+    {
+      "label": "Pflege Tag 6",
+      "text": "Mobilisation zunehmend sicher, Stoma foerdert, kein Blut mehr im Stuhl."
+    }
+  ],
+  "dictation": "Pflegebericht zur Integration in den Verlauf.\n\nIm Verlauf klagte die Patientin ueber zunehmende Bauchschmerzen, worunter eine Bedarfsmedikation verabreicht wurde. Nach erstmaligem Stuhlgang besserte sich die Beschwerdesymptomatik, der Kostaufbau wurde vertragen. Die Wunde zeigte sich trocken und reizlos, der Verband wurde regelmaessig gewechselt. Bei einem Abfall der Sauerstoffsaettigung wurde eine Sauerstoffgabe ueber Nasenbrille eingeleitet. Die Mobilisation erfolgte zunehmend sicher mit Rollator.",
+  "must_contain": [
+    "Bedarfsmedikation",
+    "Stuhlgang",
+    "Verband",
+    "Sauerstoffgabe",
+    "Mobilisation"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "zur Nacht versorgt",
+    "laut AO",
+    "meldet sich bei Bedarf",
+    "sonst keine Besonderheiten",
+    "Pflege:",
+    "Sichtkontrolle"
+  ],
+  "expected_blocks": [],
+  "notes": "Pflegejargon filtern (AP-16): 'zur Nacht versorgt', 'laut AO', 'SK' dürfen NICHT übernommen werden; klinisch Relevantes (Wundzustand, Stuhlgang, Schmerz, SpO2) wird eingewoben."
+}

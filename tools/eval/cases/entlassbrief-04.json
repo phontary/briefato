@@ -1,0 +1,84 @@
+{
+  "id": "entlassbrief-04",
+  "doc_type": "arztbrief",
+  "title": "Stationärer Entlassbrief — Rektumkarzinom, anteriore Rektumresektion",
+  "sources": [
+    {
+      "label": "Aufnahme",
+      "text": "12.08.2026 Elektive Aufnahme zur Operation eines Rektumkarzinoms nach Tumorkonferenz."
+    },
+    {
+      "label": "KU",
+      "text": "Abdomen weich, keine Abwehrspannung, rektal-digital kein Tumor tief palpabel."
+    },
+    {
+      "label": "Labor 12.08.",
+      "text": "CRP 8 mg/l, Hb 10,4 g/dl, CEA 6,2 ng/ml, Kreatinin 1,0 mg/dl."
+    },
+    {
+      "label": "Koloskopie",
+      "text": "Raumforderung im mittleren Rektumdrittel, Biopsien entnommen."
+    },
+    {
+      "label": "Pathologie Biopsie",
+      "text": "Adenokarzinom, maessig differenziert (G2)."
+    },
+    {
+      "label": "MRT Becken",
+      "text": "T2-Tumor mit Verdacht auf T3, keine sichere Lymphknotenmetastase, CRM frei."
+    },
+    {
+      "label": "CT Thorax/Abdomen",
+      "text": "Kein Hinweis auf Fernmetastasierung."
+    },
+    {
+      "label": "OP-Protokoll 15.08.",
+      "text": "Anteriore Rektumresektion mit totaler mesorektaler Exzision, protektives Ileostoma, Pouch."
+    },
+    {
+      "label": "Pathologie OP",
+      "text": "Adenokarzinom pT3 pN1 (1/14), R0, G2."
+    },
+    {
+      "label": "Visite 17.08.",
+      "text": "Kostaufbau vertragen, Stoma foerdert, Wunde reizlos."
+    },
+    {
+      "label": "Visite 20.08.",
+      "text": "Mobilisation sicher, Entlassung geplant."
+    },
+    {
+      "label": "Pflegeverlauf",
+      "text": "Pat. zur Nacht versorgt, Stomaversorgung angeleitet, Trinkmenge ausreichend."
+    },
+    {
+      "label": "Entlassung",
+      "text": "22.08.2026 Entlassung in die haeusliche Pflege, onkologische Anbindung."
+    }
+  ],
+  "dictation": "Die Patientin stellte sich zur elektiven Operation eines Rektumkarzinoms vor. Die Koloskopie und die MRT des Beckens zeigten eine Raumforderung im mittleren Rektumdrittel; eine Fernmetastasierung bestand nicht. Wir nahmen die Patientin zur weiteren Diagnostik bzw. Schmerztherapie stationaer auf.\n\nBei Adenokarzinom des Rektums erfolgte die anteriore Rektumresektion mit totaler mesorektaler Exzision und protektivem Ileostoma. Die Histologie bestaetigte ein Adenokarzinom pT3 pN1, R0, G2. Postoperativ gestaltete sich der Verlauf regelrecht, der Kostaufbau wurde vertragen.\n\nNach klinischer Besserung konnten wir die Patientin am 22.08.2026 in die haeusliche Pflege entlassen.\n\nambulante Therapieempfehlungen nach der Entlassung:\nWir empfahlen die onkologische Anbindung sowie die Kontrolle der Stomaversorgung. Vielen Dank fuer die Weiterbetreuung.\n\nDiagnosen:\nAdenokarzinom des mittleren Rektumdrittels pT3 pN1, R0, G2\n\nNebenerkrankungen:\narterielle Hypertonie\n\nTherapie-Maßnahmen auf der Station:\nOP am 15.08.2026: anteriore Rektumresektion mit totaler mesorektaler Exzision\nAnlage eines protektiven Ileostomas\nThromboseprophylaxe",
+  "must_contain": [
+    "Rektumkarzinom",
+    "anteriore Rektumresektion",
+    "Ileostoma",
+    "stationär auf",
+    "22.08.2026",
+    "Diagnosen:",
+    "Therapie-Maßnahmen auf der Station:"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "Pathologie:",
+    "Koloskopie:",
+    "Oxaliplatin",
+    "C20.9"
+  ],
+  "expected_blocks": [
+    "ambulante Therapieempfehlungen nach der Entlassung:",
+    "Diagnosen:",
+    "Nebenerkrankungen:",
+    "Therapie-Maßnahmen auf der Station:"
+  ],
+  "notes": "Onkologischer Fall. Prüft, ob Tumorstadium und OPS-freie Therapieliste korrekt übernommen werden."
+}

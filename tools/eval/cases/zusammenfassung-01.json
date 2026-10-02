@@ -1,0 +1,45 @@
+{
+  "id": "zusammenfassung-01",
+  "doc_type": "zusammenfassung",
+  "title": "Zusammenfassung — mehrzeitiger Verlauf",
+  "sources": [
+    {
+      "label": "Episode 1",
+      "text": "Juni 2025 Glutealabszess-Operation, Exzision einer chronischen Fistel mit radikalem Débridement."
+    },
+    {
+      "label": "Episode 1 Verlauf",
+      "text": "Postoperativ Hb-Abfall mit Transfusion von 2 EK."
+    },
+    {
+      "label": "Episode 2",
+      "text": "Nov. 2025 erneute Aufnahme bei akuten Rückenschmerzen, CT mit osteochondrotischen Veränderungen."
+    },
+    {
+      "label": "Episode 2 Verlauf",
+      "text": "Unter Analgesie und Mobilisation Rückbildung der Beschwerden."
+    },
+    {
+      "label": "Episode 3",
+      "text": "Sep. 2026 Wiedervorstellung, beschwerdefrei, keine weitere Therapie erforderlich."
+    }
+  ],
+  "dictation": "Zusammenfassung.\n\nDer Patient wurde nach Z.n. Glutealabszess-Operation im Juni 2025 notfallmässig mit Exzision einer chronischen Fistel und radikalem Débridement versorgt, postoperativ kam es zu einem Hb-Abfall mit Transfusion von 2 EK. Im Nov. 2025 erfolgte bei akuten Rückenschmerzen eine erneute Aufnahme, die CT zeigte osteochondrotische Veränderungen, unter Analgesie und Mobilisation bildeten sich die Beschwerden zurück. Im Sep. 2026 stellte sich der Patient beschwerdefrei vor, eine weitere Therapie war nicht erforderlich.\n\nDiagnosen:\nZ.n. Glutealabszess mit Fistel",
+  "must_contain": [
+    "Glutealabszess",
+    "Rückenschmerzen",
+    "Juni 2025",
+    "Nov. 2025",
+    "Sep. 2026"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "###",
+    "Diagnosen:",
+    "Therapie-Maßnahmen auf der Station:",
+    "Nebenerkrankungen:"
+  ],
+  "expected_blocks": [],
+  "notes": "R24: keine Diagnoseliste und keine Therapie-Maßnahmen-Liste — auch wenn das Diktat eine Diagnosen-Zeile enthält. Datum abgekürzt als Monat."
+}

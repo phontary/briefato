@@ -91,17 +91,45 @@ Research sources (retrieved 2026-10-02):
 cd /workspace/briefato
 
 # unit + integration tests (offline, mock provider)
-BRIEFATO_LLM_MOCK=true .venv/bin/python -m pytest app/tests/test_pipeline.py app/tests/test_brain.py -q
+BRIEFATO_LLM_MOCK=true .venv/bin/python -m pytest app/tests -q
+
+# fan-out + research suites only
+BRIEFATO_LLM_MOCK=true .venv/bin/python -m pytest app/tests/test_fanout.py app/tests/test_research.py -q
 
 # real end-to-end smoke: one Arztbrief through the full flow
 BRIEFATO_LLM_MOCK=true .venv/bin/python app/briefato/pipeline/scripts/smoke.py
 
 # brain self-check demo: triage + retrieval + generated text + checker findings
 .venv/bin/python app/briefato/brain/demo_brain.py
+
+# ENGINE-V2 demo: a 14-source Entlassbrief through segmenter → fan-out → weave + enrichment
+BRIEFATO_LLM_MOCK=true .venv/bin/python tools/demo_fanout.py --max-parallel 3 --enrich
 ```
 
-The smoke script prints the letter status, token counts, the encrypted-storage prefix, the DOCX
-path and the first 400 characters of the restored German letter.
+## Fan-out pipeline + grounded enrichment (WORKSTREAM-ENGINE-V2)
+
+Mohamed's decision (2026-10-02): a **stationary** letter (Entlass-/Aufnahme-/Verlegungsbrief)
+with **more than five** source documents is processed as a fan-out — every source is summarised
+separately, then the whole thing is rewritten (weave) into the final document.
+
+| File | Responsibility |
+|---|---|
+| `segmenter.py` | Split a KIS-style multi-source input into labelled segments (Anamnese/KU, imaging, endoscopy, OP, Pathologie, Diabetologie, Pflege, Visiten, Labor, Konsile …) with a per-segment confidence. Robust to form-label noise, duplicate labels (adjacent merge, non-adjacent `duplicate_of`) and missing labels (one `rohtext` fallback). |
+| `routing.py` | `decide_route(doc_type, source_count)` — stationary **and** `>5` sources → `fan-out`, else `single-pass`; emits reason + UI label `Route: Fan-out (14 Quellen)`. Threshold: `BRIEFATO_FANOUT_THRESHOLD` (default 5). |
+| `fanout.py` | Bounded-parallel per-segment compression (**hard cap 3**, `BRIEFATO_MAX_PARALLEL`, clamped 1–8) with a `ConcurrencyTracker`, then ONE weave call. A segment that fails is retried once; a still-failing segment becomes a reported **gap** (never invented, never silently dropped). `TrackedProvider` counts calls and peak concurrency. |
+| `../research/base.py` | `Enrichment` (statement + source), `ResearchProvider`, `NullEnricher`, and the generic-knowledge guardrail (`is_generic_statement`/`filter_generic`): blocks dates, dosings, ICD codes, patient identifiers, patient-possessives and verbatim dictation copies. |
+| `../research/archive.py` | `ArchiveEnricher` — derives standard technique / materials / follow-up from the retrieved Musterbriefe (licence-review templates contribute structure only; their prose is never used). |
+| `../research/web.py` | `WebEnricher` — optional SearXNG research (`BRIEFATO_RESEARCH_BASE_URL`), query restricted with `site:` operators to awmf.org, pubmed.ncbi.nlm.nih.gov, doccheck.com, msdmanuals.com, leitlinien.de, bfarm.de. |
+| `../research/__init__.py` | `GroundedEnricher` (archive first, web only supplements) and `get_research_provider`. |
+
+Enrichment is per-request opt-in (`generate_letter(..., enrich=True)`, default `BRIEFATO_ENRICH_DEFAULT`).
+Kept statements are injected into the prompt as `REFERENZWISSEN (generisch, nicht patientenbezogen)`,
+returned on `letter.enrichments` and `letter.last_check['enrichment']` (UI note „aus Referenz ergänzt
+– bitte prüfen“) and audited as event `letter.enriched` with the sources. If research is off or
+unavailable the letter is still produced without it.
+
+`generate_letter` gained keyword-only parameters (`enrich`, `max_parallel`, `research_provider`); the
+frozen signature and the single-pass behaviour are unchanged (≤5 sources, non-stationary types).
 
 ## Notes / boundaries
 

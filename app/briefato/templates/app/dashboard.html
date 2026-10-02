@@ -10,29 +10,29 @@
       angemeldet als {{ current_user.email }}
     </p>
   </div>
-  <a class="btn btn-primary" href="/app/briefe/neu">Neuen Brief schreiben</a>
+  <a class="btn btn-primary" href="/app/neu">Neuen Brief schreiben</a>
 </div>
 
-<div class="grid grid-4">
-  <section class="stat">
-    <p class="stat-label">Patienten</p>
-    <p class="stat-value">{{ counters.patients }}</p>
-    <p class="stat-hint">ohne archivierte</p>
+<div class="kpi">
+  <section class="kpi-cell">
+    <p class="kpi-label">Patienten</p>
+    <p class="kpi-value">{{ counters.patients }}</p>
+    <p class="kpi-hint">ohne archivierte</p>
   </section>
-  <section class="stat">
-    <p class="stat-label">Briefe diesen Monat</p>
-    <p class="stat-value">{{ counters.letters_month }}</p>
-    <p class="stat-hint">angelegte Entwürfe und Briefe</p>
+  <section class="kpi-cell">
+    <p class="kpi-label">Briefe diesen Monat</p>
+    <p class="kpi-value">{{ counters.letters_month }}</p>
+    <p class="kpi-hint">angelegte Entwürfe und Dokumente</p>
   </section>
-  <section class="stat">
-    <p class="stat-label">Kontingent übrig</p>
-    <p class="stat-value">{{ quota.remaining }}</p>
-    <p class="stat-hint">von {{ quota.quota }} im Plan {{ PLAN_CATALOG.get(quota.plan, {}).get('label', quota.plan) }}</p>
+  <section class="kpi-cell">
+    <p class="kpi-label">Kontingent übrig</p>
+    <p class="kpi-value">{{ quota.remaining }}</p>
+    <p class="kpi-hint">von {{ quota.quota }} im Plan {{ PLAN_CATALOG.get(quota.plan, {}).get('label', quota.plan) }}</p>
   </section>
-  <section class="stat">
-    <p class="stat-label">Wartet auf Freigabe</p>
-    <p class="stat-value">{{ counters.pending_approval }}</p>
-    <p class="stat-hint">erzeugte, nicht freigegebene Briefe</p>
+  <section class="kpi-cell">
+    <p class="kpi-label">Wartet auf Freigabe</p>
+    <p class="kpi-value">{{ counters.pending_approval }}</p>
+    <p class="kpi-hint">erzeugte, nicht freigegebene Dokumente</p>
   </section>
 </div>
 
@@ -68,7 +68,7 @@
         <tr>
           <td><a href="/app/briefe/{{ letter.id }}">{{ letter.title or 'Ohne Titel' }}</a></td>
           <td>{{ letter.patient.display_name if letter.patient else '—' }}</td>
-          <td>{{ LETTER_KIND_LABELS.get(letter.kind, letter.kind) }}</td>
+          <td>{{ doc_type_label(letter.template_id) or LETTER_KIND_LABELS.get(letter.kind, letter.kind) }}</td>
           <td><span class="badge {{ 'badge-ok' if letter.status == 'approved' else ('badge-warn' if letter.status == 'failed' else 'badge-accent') }}">{{ LETTER_STATUS_LABELS.get(letter.status, letter.status) }}</span></td>
           <td class="muted">{{ letter.updated_at | fmt_datetime }}</td>
         </tr>
@@ -82,7 +82,7 @@
       <h3>Noch kein Brief angelegt</h3>
       <p>Legen Sie einen Patienten an und diktieren Sie den ersten Brief — Briefato formatiert ihn
         auf Ihrem Briefkopf.</p>
-      <a class="btn btn-primary" href="/app/briefe/neu">Ersten Brief schreiben</a>
+      <a class="btn btn-primary" href="/app/neu">Ersten Brief schreiben</a>
     </div>
   </div>
   {% endif %}

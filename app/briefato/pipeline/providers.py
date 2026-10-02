@@ -30,7 +30,13 @@ from typing import Any, Protocol, runtime_checkable
 
 import httpx
 
-from .prompts import DICTATION_CLOSE, DICTATION_OPEN
+from .prompts import (
+    COMPRESSION_TASK,
+    DICTATION_CLOSE,
+    DICTATION_OPEN,
+    SEGMENT_TYPE_LINE,
+    WEAVE_TASK,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -145,6 +151,70 @@ _MOCK_OPS_LABELS = {
 _WORD_RE_MOCK = re.compile(r"[A-Za-zÄÖÜäöüß]+")
 _DIAG_PREFIX_RE = re.compile(r"^\s*(?:dg\.?|diagnose[n]?)\s*:\s*", re.IGNORECASE)
 
+# --- fan-out parsing (WORKSTREAM-ENGINE-V2) ---------------------------------
+_SEGMENT_TYPE_RE = re.compile(r"Segmenttyp:\s*([a-z_]+)", re.IGNORECASE)
+_SEGMENT_BODY_RE = re.compile(r"<segment>\s*(.*?)\s*</segment>", re.DOTALL | re.IGNORECASE)
+_TYPED_SEGMENT_RE = re.compile(
+    r'<segment\s+type="([^"]+)"[^>]*>\s*(.*?)\s*</segment>', re.DOTALL | re.IGNORECASE
+)
+_DATE_AM_RE = re.compile(r"\bam\s+\d{1,2}\.\d{1,2}\.?\d{0,4}\b", re.IGNORECASE)
+_PFLICHTSATZ = "Wir nahmen die Pat. zur weiteren Diagnostik bzw. Schmerztherapie stationär auf."
+
+# Per segment type, how many distilled sentences the mock keeps.
+_COMPRESSION_BUDGET: dict[str, int] = {
+    "anamnese_ku": 3,
+    "roentgen": 2,
+    "ct": 2,
+    "mrt": 2,
+    "sono": 2,
+    "echo": 2,
+    "oegd": 3,
+    "kolo": 3,
+    "endosonographie": 3,
+    "op_bericht": 2,
+    "pathologie": 2,
+    "diabetologie": 2,
+    "pflegeberichte": 2,
+    "visiten": 4,
+    "labor": 2,
+    "konsile": 1,
+    "diagnosen": 20,
+    "therapie_empfehlung": 10,
+    "rohtext": 3,
+}
+
+
+def _mock_neutralize_dates(text: str) -> str:
+    """Drop 'am TT.MM.' from narrative text (R10: no dates in the Verlauf)."""
+    return " ".join(_DATE_AM_RE.sub("", text or "").split())
+
+
+# German abbreviations whose dot is not a sentence end (the splitter must not cut them).
+_MOCK_ABBREV = (
+    "Pat.", "pat.", "z.B.", "z. B.", "bzw.", "ca.", "Dr.", "med.", "ggf.", "etc.",
+    "usw.", "Prof.", "bzgl.", "evtl.", "inkl.", "sog.", "u.a.", "d.h.", "o.g.",
+    "Nr.", "Abb.", "Tab.", "Kdr.", "mind.", "max.", "resp.", "ggü.", "Z.n.", "z.n.",
+)
+
+
+def _mock_split_sentences(text: str) -> list[str]:
+    """Sentence split that keeps common German abbreviations intact."""
+    protected = text or ""
+    tokens: list[tuple[str, str]] = []
+    for index, abbreviation in enumerate(_MOCK_ABBREV):
+        placeholder = f"\x00{index}\x00"
+        if abbreviation in protected:
+            protected = protected.replace(abbreviation, placeholder)
+            tokens.append((placeholder, abbreviation))
+    parts = re.split(r"(?<=[.!?])\s+", protected)
+    out: list[str] = []
+    for part in parts:
+        for placeholder, abbreviation in tokens:
+            part = part.replace(placeholder, abbreviation)
+        if part.strip():
+            out.append(part.strip())
+    return out
+
 
 def _mock_fold(text: str) -> str:
     text = (text or "").lower()
@@ -193,10 +263,22 @@ def _mock_strip_forbidden_labels(text: str, *, allow_ops: bool) -> str:
     words = list(_MOCK_FORBIDDEN_LABELS)
     if not allow_ops:
         words += ["indikation", "op", "operation", "präparat", "praeparat"]
+    word_set = set(words)
     for word in sorted(words, key=len, reverse=True):
         pattern = r"(?<![A-Za-zÄÖÜäöüß])" + re.escape(word) + r"\s*:"
         text = re.sub(pattern, " ", text, flags=re.IGNORECASE)
-    return text
+
+    # A leading label whose FIRST token is a category word ("CT Abdomen:", "Sonographie
+    # Abdomen:") is stripped too — the rule checker keys on the first token.
+    lead_re = re.compile(
+        r"^\s*([A-Za-zÄÖÜäöüß][\wÄÖÜäöüß.\-/]*(?:\s+[\wÄÖÜäöüß.\-/]+){0,3})\s*:\s*"
+    )
+
+    def _lead(match: re.Match[str]) -> str:
+        first = match.group(1).split()[0].lower().strip("-.")
+        return " " if first in word_set else match.group(0)
+
+    return lead_re.sub(_lead, text)
 
 
 def _mock_clean_line(line: str) -> str:
@@ -234,9 +316,16 @@ class MockProvider:
         temperature: float = 0.2,
     ) -> LLMResult:
         started = time.perf_counter()
-        dictation = self._extract_dictation(user)
-        kind = self._extract_kind(user)
-        text = self._compose(dictation, kind)
+        # Fan-out call kinds (WORKSTREAM-ENGINE-V2): per-segment compression and the final
+        # weave are recognised by their task marker before the single-pass path applies.
+        if COMPRESSION_TASK in (user or ""):
+            text = self._compose_compression(user)
+        elif WEAVE_TASK in (user or ""):
+            text = self._compose_weave(user, self._extract_kind(user))
+        else:
+            dictation = self._extract_dictation(user)
+            kind = self._extract_kind(user)
+            text = self._compose(dictation, kind)
         latency_ms = max(1, int((time.perf_counter() - started) * 1000))
         return LLMResult(
             text=text,
@@ -352,6 +441,148 @@ class MockProvider:
         if not diagnoses:
             return "keine Angabe im Diktat", zn
         return "\n".join(diagnoses), zn
+
+    # -- fan-out: compression + weave (WORKSTREAM-ENGINE-V2) ----------------
+
+    @staticmethod
+    def _relevant_pflege(sentence: str) -> bool:
+        low = sentence.lower()
+        return any(
+            word in low
+            for word in (
+                "wunde", "wund", "schmerz", "mobil", "fieber", "vital", "temperatur",
+                "oedem", "ödem", "belag", "sekret", "blutung", "kostaufbau", "stuhlgang",
+                "auffällig", "atem", "kreislauf", "verband", "drainage", "verwirrt",
+            )
+        )
+
+    @classmethod
+    def _compress_text(cls, segment_type: str, raw: str) -> str:
+        """Deterministically compress one source segment to its distilled insights."""
+        budget = _COMPRESSION_BUDGET.get(segment_type, 3)
+        pieces: list[str] = []
+        for line in (raw or "").splitlines():
+            for sentence in _mock_split_sentences(line.strip()):
+                cleaned = _mock_clean_line(sentence)
+                # No category label may survive a compression (R5) — incl. OP labels.
+                cleaned = _mock_strip_forbidden_labels(cleaned, allow_ops=False)
+                cleaned = _mock_neutralize_dates(cleaned)
+                if len(cleaned) >= 15:
+                    pieces.append(cleaned)
+        if not pieces:
+            return ""
+        if segment_type == "pflegeberichte":
+            relevant = [piece for piece in pieces if cls._relevant_pflege(piece)]
+            pieces = relevant or []
+        if segment_type in ("diagnosen", "therapie_empfehlung"):
+            # A Diagnosen/Therapieempfehlungen block is a list — keep one entry per line.
+            return "\n".join(pieces[:budget]).strip()
+        return " ".join(pieces[:budget]).strip()
+
+    @classmethod
+    def _compose_compression(cls, user: str) -> str:
+        match = _SEGMENT_TYPE_RE.search(user or "")
+        segment_type = match.group(1).lower() if match else "rohtext"
+        body_match = _SEGMENT_BODY_RE.search(user or "")
+        raw = body_match.group(1) if body_match else ""
+        if not raw.strip():
+            return "keine Angabe im Segment."
+        compressed = cls._compress_text(segment_type, raw)
+        if not compressed:
+            return ""  # no distilled insight in this source (e.g. pure care routine)
+        return cls._finalize(compressed)
+
+    @classmethod
+    def _weave_paragraphs(cls, chunks: list[str]) -> list[str]:
+        paragraphs: list[str] = []
+        for chunk in chunks:
+            lines = [line.strip() for line in chunk.splitlines() if line.strip()]
+            text = _mock_strip_markdown(" ".join(lines))
+            text = _mock_strip_forbidden_labels(text, allow_ops=False)
+            text = _mock_fix_umlauts(text)
+            text = _mock_neutralize_dates(text)
+            text = cls._cap_semicolons(text)
+            text = " ".join(text.split())
+            if text:
+                paragraphs.append(text)
+        return cls._dedupe_sentences(paragraphs)
+
+    @classmethod
+    def _compose_weave(cls, user: str, kind: str) -> str:
+        pairs = _TYPED_SEGMENT_RE.findall(user or "")
+        if not pairs:
+            pairs = [("rohtext", body) for body in _SEGMENT_BODY_RE.findall(user or "")]
+
+        narrative: list[str] = []
+        op_chunks: list[str] = []
+        diag_lines: list[str] = []
+        empfehlung_lines: list[str] = []
+        for segment_type, body in pairs:
+            segment_type = (segment_type or "rohtext").lower()
+            body = (body or "").strip()
+            if not body:
+                continue
+            if segment_type == "diagnosen":
+                diag_lines.extend(line for line in body.splitlines() if line.strip())
+            elif segment_type == "therapie_empfehlung":
+                empfehlung_lines.extend(line for line in body.splitlines() if line.strip())
+            else:
+                narrative.append(body)
+                if segment_type == "op_bericht":
+                    op_chunks.append(body)
+
+        paragraphs = cls._weave_paragraphs(narrative)
+        joined = " ".join(paragraphs).strip()
+
+        if kind == "zusammenfassung":
+            sentences = _mock_split_sentences(joined)
+            return cls._finalize(" ".join(sentences[:4]).strip()) or "keine Angabe im Diktat."
+
+        if kind == "arztbrief":
+            if "stationär auf" not in joined.lower():
+                joined = (joined + " " + _PFLICHTSATZ).strip()
+
+        parts: list[str] = [joined] if joined else []
+
+        if kind == "operationsbericht":
+            diag, zn = cls._diagnoses(diag_lines)
+            parts.append("Diagnosen:\n" + diag)
+            op_text = cls._clean_block(op_chunks) or "keine Angabe im Diktat"
+            parts.append("Operation:\n" + op_text)
+            if zn:
+                parts.append("OP:\n" + "\n".join(zn))
+            return cls._finalize("\n\n".join(part for part in parts if part.strip()))
+
+        if kind == "arztbrief":
+            if empfehlung_lines:
+                parts.append(
+                    "ambulante Therapieempfehlungen nach der Entlassung:\n"
+                    + cls._clean_block(empfehlung_lines)
+                )
+            diag, zn = cls._diagnoses(diag_lines)
+            parts.append("Diagnosen:\n" + diag)
+            parts.append("Nebenerkrankungen:\nkeine")
+            station_lines: list[str] = []
+            for chunk in op_chunks:
+                sentences = _mock_split_sentences(cls._clean_block([chunk]))
+                if sentences:
+                    # A distinct 'OP am XXX:' line (R9) — the narrative keeps the prose,
+                    # the block lists the measure without duplicating a whole sentence.
+                    station_lines.append("OP am XXX: " + sentences[0])
+            if zn:
+                station_lines.append("\n".join(zn))
+            if not station_lines:
+                station_lines = ["keine Angabe im Diktat"]
+            parts.append("Therapie-Maßnahmen auf der Station:\n" + "\n".join(station_lines))
+            return cls._finalize("\n\n".join(part for part in parts if part.strip()))
+
+        # Any other type: prose plus the Diagnosen list only when the sources carried one.
+        if diag_lines:
+            diag, zn = cls._diagnoses(diag_lines)
+            parts.append("Diagnosen:\n" + diag)
+            if zn:
+                parts.append("\n".join(zn))
+        return cls._finalize("\n\n".join(part for part in parts if part.strip())) or "keine Angabe im Diktat."
 
     @classmethod
     def _compose(cls, dictation: str, kind: str) -> str:

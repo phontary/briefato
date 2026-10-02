@@ -1,0 +1,71 @@
+{
+  "id": "entlassbrief-05",
+  "doc_type": "arztbrief",
+  "title": "Stationärer Entlassbrief — akute Divertikulitis, konservative Therapie",
+  "sources": [
+    {
+      "label": "Aufnahme",
+      "text": "28.09.2026 Aufnahme wegen linksseitiger Unterbauchschmerzen und Fieber, kein Erbrechen."
+    },
+    {
+      "label": "KU",
+      "text": "Abdomen druckschmerzhaft linker Unterbauch, lokale Abwehrspannung, Darmgeraeusche erhalten."
+    },
+    {
+      "label": "Labor 28.09.",
+      "text": "CRP 96 mg/l, Leukozyten 13,2/nl, Kreatinin 0,9 mg/dl."
+    },
+    {
+      "label": "CT Abdomen",
+      "text": "Akute Sigmadivertikulitis ohne Abszess und ohne freie Perforation, Wandverdickung 7 mm."
+    },
+    {
+      "label": "Visite 29.09.",
+      "text": "Klinische Besserung unter Antibiose, Kostaufbau begonnen, Temp 37,5 C."
+    },
+    {
+      "label": "Visite 30.09.",
+      "text": "Schmerzarm, Entzuendungsparameter ruecklaeufig, Kostaufbau vertragen."
+    },
+    {
+      "label": "Visite 01.10.",
+      "text": "Beschwerdefrei, Entlassung geplant."
+    },
+    {
+      "label": "Pflegeverlauf",
+      "text": "Pat. zur Nacht versorgt, mobil auf Stationsebene, Stuhlgang regelrecht."
+    },
+    {
+      "label": "Ernährungsberatung",
+      "text": "Beratung zu faserreicher Ernaehrung erfolgt."
+    },
+    {
+      "label": "Entlassung",
+      "text": "02.10.2026 Entlassung in die haeusliche Pflege."
+    }
+  ],
+  "dictation": "Die Patientin klagte ueber seit zwei Tagen bestehende linksseitige Unterbauchschmerzen und Fieber. Die CT des Abdomens zeigte eine akute Sigmadivertikulitis ohne Abszess und ohne freie Perforation. Wir nahmen die Patientin zur weiteren Diagnostik bzw. Schmerztherapie stationaer auf.\n\nUnter kalkulierter Antibiotikatherapie kam es zu einer klinischen Besserung, der Kostaufbau wurde vertragen. Nach Beschwerdefreiheit konnten wir die Patientin am 02.10.2026 in die haeusliche Pflege entlassen.\n\nambulante Therapieempfehlungen nach der Entlassung:\nWir empfahlen eine faserreiche Ernaehrung sowie die ambulante Kontrolle in 6 Wochen. Vielen Dank fuer die Weiterbetreuung.\n\nDiagnosen:\nakute Sigmadivertikulitis\n\nNebenerkrankungen:\nkeine\n\nTherapie-Maßnahmen auf der Station:\nkalkulierte Antibiotikatherapie\nAnalgetische Therapie\nThromboseprophylaxe",
+  "must_contain": [
+    "Divertikulitis",
+    "stationär auf",
+    "02.10.2026",
+    "Diagnosen:",
+    "Nebenerkrankungen:",
+    "Therapie-Maßnahmen auf der Station:"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "CT:",
+    "Labor:",
+    "Hernie",
+    "K57.3"
+  ],
+  "expected_blocks": [
+    "ambulante Therapieempfehlungen nach der Entlassung:",
+    "Diagnosen:",
+    "Nebenerkrankungen:",
+    "Therapie-Maßnahmen auf der Station:"
+  ],
+  "notes": "Konservativ behandelter Fall ohne OP — Therapieblock enthält keine OP-Zeile. Nebenerkrankungen = keine."
+}

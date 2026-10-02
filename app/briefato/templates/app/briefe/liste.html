@@ -7,7 +7,7 @@
     <h1>Briefe</h1>
     <p class="muted">Diktate, erzeugte Briefe und freigegebene Dokumente.</p>
   </div>
-  <a class="btn btn-primary" href="/app/briefe/neu">Neuen Brief schreiben</a>
+  <a class="btn btn-primary" href="/app/neu">Neuen Brief schreiben</a>
 </div>
 
 <form class="row mt-4" method="get" action="/app/briefe" role="search">
@@ -42,7 +42,7 @@
         <tr>
           <td><a href="/app/briefe/{{ letter.id }}">{{ letter.title or 'Ohne Titel' }}</a></td>
           <td>{{ letter.patient.display_name if letter.patient else '—' }}</td>
-          <td>{{ LETTER_KIND_LABELS.get(letter.kind, letter.kind) }}</td>
+          <td>{{ doc_type_label(letter.template_id) or LETTER_KIND_LABELS.get(letter.kind, letter.kind) }}</td>
           <td><span class="badge {{ 'badge-ok' if letter.status == 'approved' else ('badge-warn' if letter.status == 'failed' else 'badge-accent') }}">{{ LETTER_STATUS_LABELS.get(letter.status, letter.status) }}</span></td>
           <td class="muted">{{ letter.created_at | fmt_datetime }}</td>
         </tr>
@@ -61,7 +61,7 @@
     {% else %}
     <p>Diktieren Sie einen Brief und lassen Sie ihn auf Ihrem Briefkopf formatieren. Sie prüfen und
       geben erst danach frei.</p>
-    <a class="btn btn-primary" href="/app/briefe/neu">Ersten Brief schreiben</a>
+    <a class="btn btn-primary" href="/app/neu">Ersten Brief schreiben</a>
     {% endif %}
   </div>
 </div>

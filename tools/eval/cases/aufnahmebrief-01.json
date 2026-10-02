@@ -1,0 +1,59 @@
+{
+  "id": "aufnahmebrief-01",
+  "doc_type": "arztbrief",
+  "title": "Aufnahmebrief — akute Appendizitis, OP ausstehend",
+  "sources": [
+    {
+      "label": "Aufnahme",
+      "text": "02.10.2026 21:15 Aufnahme ueber die NFA wegen seit 10 Stunden bestehender rechtsseitiger Unterbauchschmerzen, Nausea, subfebrile Temperaturen."
+    },
+    {
+      "label": "KU",
+      "text": "Abdomen druckschmerzhaft rechter Unterbauch mit LLS, lokale Abwehrspannung, Darmgeraeusche erhalten."
+    },
+    {
+      "label": "Labor 02.10.",
+      "text": "CRP 64 mg/l, Leukozyten 14,9/nl, keine Cholestase."
+    },
+    {
+      "label": "Sonographie Abdomen",
+      "text": "Verdickte, nicht komprimierbare Appendix, freie Fluessigkeit im Unterbauch."
+    },
+    {
+      "label": "CT Abdomen",
+      "text": "Akute Appendizitis ohne Abszess, keine freie Luft."
+    },
+    {
+      "label": "Gynäkologie-Konsil",
+      "text": "Gynakologisch kein wegweisender Befund, Konsil erfolgt."
+    },
+    {
+      "label": "Planung",
+      "text": "Geplante laparoskopische Appendektomie am Folgetag, Aufklärung erfolgt."
+    },
+    {
+      "label": "Pflegeverlauf",
+      "text": "Pat. zur Nacht versorgt, Schmerzangabe NRS 6, Bedarfsmedikation verabreicht."
+    }
+  ],
+  "dictation": "Die Patientin wurde ueber die NFA wegen seit 10 Stunden bestehender rechtsseitiger Unterbauchschmerzen mit Nausea und subfebrilen Temperaturen aufgenommen. In der KU zeigte sich ein druckschmerzhaftes Abdomen im rechten Unterbauch mit lokaler Abwehrspannung bei erhaltenen Darmgeraeuschen. Die Sonographie und die CT zeigten eine akute Appendizitis ohne Abszess. Wir nahmen die Patientin zur weiteren Diagnostik bzw. Schmerztherapie stationaer auf.\n\nDie geplante laparoskopische Appendektomie ist fuer den Folgetag angesetzt, die Aufklaerung erfolgte.\n\nDiagnosen:\nakute Appendizitis",
+  "must_contain": [
+    "Appendizitis",
+    "stationär auf",
+    "Diagnosen:"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "Sonographie:",
+    "Labor:",
+    "ambulante Therapieempfehlungen nach der Entlassung:",
+    "Therapie-Maßnahmen auf der Station:",
+    "Nebenerkrankungen:",
+    "Appendektomie erfolgt"
+  ],
+  "expected_blocks": [
+    "Diagnosen:"
+  ],
+  "notes": "Aufnahmebrief: Verlauf läuft weiter (OP am Folgetag). KEIN Empfehlungsblock, KEINE stationäre Therapieliste (R30/R31-Analogon)."
+}

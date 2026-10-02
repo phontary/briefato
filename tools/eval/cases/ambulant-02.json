@@ -1,0 +1,45 @@
+{
+  "id": "ambulant-02",
+  "doc_type": "ambulant",
+  "title": "Ambulanter Brief — NFA-Vorstellung, Kopfplatzwunde eines Kindes",
+  "sources": [
+    {
+      "label": "NFA-Aufnahme",
+      "text": "Das Kind stellte sich in Begleitung der Mutter vor, nachdem es sich beim Spielen den Kopf gestossen hatte."
+    },
+    {
+      "label": "KU",
+      "text": "An der Stirn oberhalb der linken Augenbraue ca. 0,5 cm grosse Kopfplatzwunde; neurologisch unauffaellig."
+    },
+    {
+      "label": "Wundversorgung",
+      "text": "Wunddesinfektion, Adaptation mit Fibrinkleber, Pflasterverband."
+    },
+    {
+      "label": "Aufklärung",
+      "text": "Die Mutter wurde über das weitere Vorgehen aufgeklaert; der Hautkleber löst sich nach etwa 3 Tagen von selbst."
+    },
+    {
+      "label": "Dokumentation",
+      "text": "Keine stationaere Aufnahme erforderlich, Entlassung nach Hause."
+    }
+  ],
+  "dictation": "Das Kind stellte sich in Begleitung seiner Mutter in der NFA vor, nachdem es sich beim Spielen den Kopf gestossen hatte. In der KU zeigte sich an der Stirn oberhalb der linken Augenbraue eine ca. 0,5 cm grosse Kopfplatzwunde; neurologisch war das Kind unauffaellig.\n\nDie Wunde wurde desinfiziert, mit Fibrinkleber adaptiert und mit Pflaster verbunden. Die Mutter wurde über das weitere Vorgehen aufgeklaert; der Hautkleber löst sich nach etwa 3 Tagen von selbst. Eine stationaere Aufnahme war nicht erforderlich.\n\nDiagnosen:\nPlatzwunde der Stirn\nCommotio cerebri ausgeschlossen",
+  "must_contain": [
+    "Platzwunde",
+    "Fibrinkleber",
+    "Diagnosen:",
+    "Commotio"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "stationär auf",
+    "Therapie-Maßnahmen auf der Station:",
+    "Nebenerkrankungen:"
+  ],
+  "expected_blocks": [
+    "Diagnosen:"
+  ],
+  "notes": "Rein konservative NFA-Vorstellung ohne OP. Keine stationären Blöcke, kein Aufnahmesatz."
+}

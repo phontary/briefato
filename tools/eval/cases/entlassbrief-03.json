@@ -1,0 +1,82 @@
+{
+  "id": "entlassbrief-03",
+  "doc_type": "arztbrief",
+  "title": "Stationärer Entlassbrief — ambulant erworbene Pneumonie mit Delir",
+  "sources": [
+    {
+      "label": "Aufnahme",
+      "text": "01.10.2026 Aufnahme wegen seit 4 Tagen bestehender Dyspnoe, Fieber bis 38,9 C und reduziertem AZ."
+    },
+    {
+      "label": "KU",
+      "text": "Tachypnoe 24/min, SpO2 91 % unter Raumluft, feuchte Rasselgeraeusche rechts basal, orientiert."
+    },
+    {
+      "label": "Labor 01.10.",
+      "text": "CRP 210 mg/l, Leukozyten 18,4/nl, PCT 1,8 ng/ml, Kreatinin 1,4 mg/dl, Hb 10,9 g/dl."
+    },
+    {
+      "label": "Röntgen Thorax",
+      "text": "Infiltratbildung im rechten Unterlappen, kein Pleuraerguss."
+    },
+    {
+      "label": "CT Thorax",
+      "text": "Bestaetigung der Infiltratbildung im rechten Unterlappen, keine Lungenembolie."
+    },
+    {
+      "label": "Mikrobiologie",
+      "text": "Sputum: Nachweis von Streptococcus pneumoniae."
+    },
+    {
+      "label": "Visite 02.10.",
+      "text": "Pat. zunehmend verwirrt und unruhig, Delirtherapie begonnen, Antibiose i.v."
+    },
+    {
+      "label": "Visite 03.10.",
+      "text": "Klinisch und laborchemisch Besserung, Temp ruecklaeufig, Mobilisation begonnen."
+    },
+    {
+      "label": "Visite 04.10.",
+      "text": "Pat. wieder orientiert, SpO2 96 % unter Raumluft, Kostaufbau vertragen."
+    },
+    {
+      "label": "Visite 05.10.",
+      "text": "Beschwerdefrei, Entlassung geplant."
+    },
+    {
+      "label": "Pflegeverlauf",
+      "text": "Pat. zur Nacht versorgt, Trinkmenge ausreichend, mobil auf Stationsebene, Stuhlgang regelrecht."
+    },
+    {
+      "label": "Entlassung",
+      "text": "05.10.2026 Entlassung in die haeusliche Pflege, hausaerztliche Kontrolle empfohlen."
+    }
+  ],
+  "dictation": "Die Patientin wurde wegen seit vier Tagen bestehender Dyspnoe, Fieber und reduziertem Allgemeinzustand aufgenommen. Die Roentgenaufnahme des Thorax und die CT zeigten eine Infiltratbildung im rechten Unterlappen, ein Pleuraerguss bestand nicht. Wir nahmen die Patientin zur weiteren Diagnostik bzw. Schmerztherapie stationaer auf.\n\nUnter kalkulierter parenteraler Antibiose kam es zu einer laborchemischen und klinischen Besserung. Im Verlauf war die Patientin vorübergehend verwirrt und unruhig, worunter eine Delirtherapie erforderlich wurde. Nach Rückbildung der Beschwerden und komplikationslosem Verlauf konnten wir die Patientin am 05.10.2026 in die haeusliche Pflege entlassen.\n\nambulante Therapieempfehlungen nach der Entlassung:\nWir empfahlen die Fortsetzung der oralen Antibiose sowie eine hausaerztliche Kontrolle. Vielen Dank fuer die Weiterbetreuung.\n\nDiagnosen:\nambulant erworbene Pneumonie des rechten Unterlappens\nDelir bei Infektion\n\nNebenerkrankungen:\nDiabetes mellitus Typ 2\nchronische Niereninsuffizienz\n\nTherapie-Maßnahmen auf der Station:\nkalkulierte parenterale Antibiose\nSauerstoffgabe\nThromboseprophylaxe",
+  "must_contain": [
+    "Pneumonie",
+    "Unterlappen",
+    "stationär auf",
+    "05.10.2026",
+    "Delir",
+    "Diagnosen:",
+    "Nebenerkrankungen:",
+    "Thromboseprophylaxe"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "Labor:",
+    "Mikrobiologie:",
+    "Befund:",
+    "Amoxicillin",
+    "J18.9"
+  ],
+  "expected_blocks": [
+    "ambulante Therapieempfehlungen nach der Entlassung:",
+    "Diagnosen:",
+    "Nebenerkrankungen:",
+    "Therapie-Maßnahmen auf der Station:"
+  ],
+  "notes": "Internistischer Fall. Pflege-/Verlaufsinformationen müssen eingewoben, nicht als Block zitiert werden."
+}

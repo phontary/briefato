@@ -1,0 +1,48 @@
+{
+  "id": "entlassmedikationsplan-01",
+  "doc_type": "entlassmedikationsplan",
+  "title": "Entlassmedikationsplan anpassen — Dosisabweichungen und bedingter Verabreichungsplan",
+  "sources": [
+    {
+      "label": "KIS-Plan",
+      "text": "Insulin glargin (Lantus) 10 IE zur Nacht; Insulin glulisin (Apidra) nach Verabreichungsplan."
+    },
+    {
+      "label": "Verlauf",
+      "text": "Diabetologische Anpassung auf 18 IE zur Nacht dokumentiert, KIS-Plan nicht nachgezogen."
+    },
+    {
+      "label": "Aufenthaltsdiagnosen",
+      "text": "DM Typ 2, Hypokaliämie, Demenz mit Aggressivitätsneigung."
+    },
+    {
+      "label": "Unverändert",
+      "text": "ASS 100 mg 0-1-0-0, Eisen(II) 50 mg, Simvastatin 20 mg."
+    },
+    {
+      "label": "Nicht Teil",
+      "text": "i.v. Antibiose des Aufenthalts, abgeschlossen."
+    }
+  ],
+  "dictation": "Bitte den Medikationsplan fuer diesen Fall anpassen.\n\nGeaenderte Zeilen:\nInsulin glargin (Lantus): zur Nacht 10 IE → 18 IE um 21:00 Uhr (Pruefhinweis: KIS-Plan nicht nachgezogen, letzte diabetologische Anpassung).\n\nVerabreichungsplan:\nInsulin glulisin: siehe Verabreichungsplan mit Bedingungen — 161–200 mg/dl: 2 IE; > 401 Arztinfo: 8 IE.\n\nGrund ergaenzt:\nDM Typ 2 (Insuline), Hypokaliämie (Kaliumpraeparat), Demenz mit Aggressivitätsneigung (Risperidon).\n\nUnveraendert:\nASS 100 mg (0-1-0-0), Eisen(II) 50 mg (2-2-2-0), Simvastatin 20 mg (0-0-1-0).\n\nNicht Teil der Entlassmedikation: die i.v. Antibiose des Aufenthalts (abgeschlossen).",
+  "must_contain": [
+    "Insulin glargin",
+    "18 IE",
+    "Pruefhinweis",
+    "Insulin glulisin",
+    "Verabreichungsplan",
+    "DM Typ 2",
+    "ASS 100 mg",
+    "Nicht Teil der Entlassmedikation"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "PDF",
+    "Als PDF",
+    "<html>",
+    "Risperidon 4 mg"
+  ],
+  "expected_blocks": [],
+  "notes": "R63: nur Text im Chat. Dosisabweichung NICHT stillschweigend korrigieren, sondern Prüfhinweis (R45/AP-15). Kein PDF/HTML-Export."
+}

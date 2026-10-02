@@ -169,6 +169,219 @@ def _pseudonym_contract() -> str:
     )
 
 
+# --- fan-out: per-segment compression (WORKSTREAM-ENGINE-V2) ----------------
+#
+# The compression policy is transcribed from kern K0.2/K3.6/K3.15 and stolperfallen
+# PIT-10/PIT-17/PIT-21: only see the distilled insights, each source compressed to its
+# documented budget, no normal findings, no invented values.
+COMPRESSION_RULES: dict[str, str] = {
+    "anamnese_ku": (
+        "Aufnahme-Anamnese in max. 2 Sätzen, KU in 1–2 Sätzen (diagnoseführender Befund + "
+        "wegweisende Ausschlussbefunde). Den Pflichtsatz „Wir nahmen die Pat. zur weiteren "
+        "Diagnostik bzw. Schmerztherapie stationär auf.“ beibehalten, wenn er im Segment steht."
+    ),
+    "roentgen": "Max. 2 Sätze: diagnoseführende Kernaussage + ein fallrelevanter Nebenbefund. Keine Normalbefunde, keine Maße.",
+    "ct": "Max. 2 Sätze: diagnoseführende Kernaussage + ein fallrelevanter Nebenbefund. Keine Normalbefunde, keine Maße.",
+    "mrt": "Max. 2 Sätze: diagnoseführende Kernaussage + ein fallrelevanter Nebenbefund. Keine Normalbefunde, keine Maße.",
+    "sono": "Max. 2 Sätze: diagnoseführende Kernaussage + ein fallrelevanter Nebenbefund. Keine Normalbefunde, keine Maße.",
+    "echo": "Max. 2 Sätze: nur EF/Kinetik, relevante Klappen, PASP/TAPSE. Keine Normalbefunde.",
+    "oegd": "Befund + entnommene PEs/Biopsien + Histologie-Status („Die Histologie steht noch aus.“, falls unbekannt).",
+    "kolo": "Befund + entnommene PEs/Biopsien + Histologie-Status („Die Histologie steht noch aus.“, falls unbekannt).",
+    "endosonographie": "Befund + Punktion/PE + Histologie-Status („Die Histologie steht noch aus.“, falls unbekannt).",
+    "op_bericht": "1–2 Sätze: Indikation + Zugang + Kernbefund + entscheidende Maßnahme + Drainagen. Keine Nahttechniken, Materialstärken, Instrumentenzählung, Lagerung oder Desinfektion.",
+    "pathologie": "Nur das Histologie-Ergebnis mit Diagnose/Grading, knapp.",
+    "diabetologie": "Nur BZ-Werte, HbA1c und die Insulin-/Therapie-Situation, knapp.",
+    "pflegeberichte": "Nur klinisch relevante Beobachtungen (Wundverhältnisse, Mobilität, Schmerzniveau, Vitalparameter-Veränderungen, besondere Vorkommnisse). Pflege-Routine und Jargon entfallen.",
+    "visiten": "Die klinischen Änderungen als Zeitachse (Besserung, Kostaufbau, Mobilisation, Stuhlgang, Beschwerdefreiheit); keine Datumsauflistung, jeder Befund nur einmal.",
+    "labor": "Nur die auffälligen Werte und ihre klinische Einordnung, knapp.",
+    "konsile": "Nur das belegte Konsilergebnis; ist nur die Anforderung dokumentiert, nur die Anforderung nennen.",
+    "diagnosen": "Die Diagnosen unverändert als Liste (ein Eintrag pro Zeile), keine Z.n.-Zeilen, nichts ergänzen.",
+    "therapie_empfehlung": "Die Empfehlungen unverändert knapp als Liste, nichts ergänzen.",
+    "rohtext": "Auf die diagnostisch/therapeutisch wesentlichen Aussagen verdichten (max. 3 Sätze).",
+}
+
+_COMPRESSION_SYSTEM = (
+    "Sie sind der Kompressionsschritt der Briefato-Methode. Sie verdichten genau EIN "
+    "Quellsegment eines stationären Behandlungsverlaufs auf seine ‚distilled insights' "
+    "(kern K0.2). Sie formulieren nur um — Sie recherchieren nicht, Sie ergänzen keine "
+    "Diagnosen, Befunde, Werte, Daten, Dosierungen oder Namen. Fehlt eine Angabe, lassen "
+    "Sie sie weg. Ausgabe: reiner deutscher Plain-Text, keine Einleitung, kein Schluss, "
+    "kein Markdown, keine Kategorie-Labels, korrekte Umlaute."
+)
+
+
+def compression_rule(segment_type: str) -> str:
+    return COMPRESSION_RULES.get(segment_type, COMPRESSION_RULES["rohtext"])
+
+
+def _reference_knowledge_block(enrichments: list | None) -> str:
+    if not enrichments:
+        return ""
+    lines: list[str] = []
+    for item in enrichments:
+        if isinstance(item, dict):
+            statement = str(item.get("statement") or "").strip()
+            source = str(item.get("source") or "").strip()
+            kind = str(item.get("kind") or "standard").strip()
+        else:
+            statement = str(getattr(item, "statement", "") or "").strip()
+            source = str(getattr(item, "source", "") or "").strip()
+            kind = str(getattr(item, "kind", "standard") or "standard").strip()
+        if statement:
+            lines.append(f"- [{kind}] {statement} (Quelle: {source})")
+    if not lines:
+        return ""
+    return (
+        "REFERENZWISSEN (generisch, nicht patientenbezogen):\n"
+        + "\n".join(lines)
+        + "\nHinweis: Dieses Referenzwissen darf ausschließlich für generische Standardangaben "
+        "(Standardtechnik, Standardmaterial, typische Nachsorgeintervalle, Standard-"
+        "Wirkstoffklassen) verwendet werden. Leiten Sie daraus KEINE patientenbezogenen "
+        "Diagnosen, Befunde, Werte, Datumsangaben, Dosierungen oder Namen ab und fügen Sie "
+        "keine Quellenangaben in den Brieftext ein."
+    )
+
+
+def build_compression_prompt(
+    *,
+    doc_type: str,
+    segment_type: str,
+    segment_text: str,
+    language: str = "de",
+    enrichment: list | None = None,
+) -> PromptBundle:
+    """Assemble the per-segment compression prompt for the fan-out pipeline.
+
+    ``segment_text`` must already be pseudonymised by the caller.
+    """
+    from ..pipeline.prompts import COMPRESSION_TASK, SEGMENT_CLOSE, SEGMENT_OPEN, SEGMENT_TYPE_LINE
+
+    label = brain_loader.DOKUMENTTYP_LABELS.get(doc_type, doc_type)
+    reference = _reference_knowledge_block(enrichment)
+    user = (
+        f"{COMPRESSION_TASK}\n"
+        f"Dokumenttyp: {label} ({doc_type})\n"
+        f"{SEGMENT_TYPE_LINE} {segment_type}\n"
+        f"KOMPRESSIONSREGEL: {compression_rule(segment_type)}\n"
+        "Nur das folgende Segment verdichten — nichts erfinden, nichts weglassen, was "
+        "dokumentationsrelevant ist.\n"
+        f"{SEGMENT_OPEN}\n{segment_text or ''}\n{SEGMENT_CLOSE}\n"
+    )
+    if reference:
+        user += "\n" + reference + "\n"
+    user += f"\nAusgabesprache: {language}"
+    return PromptBundle(
+        system=_COMPRESSION_SYSTEM,
+        user=user,
+        doc_type=doc_type,
+        doc_types=(doc_type,),
+        prompt_version=PROMPT_VERSION,
+    )
+
+
+def _compressed_segments_block(compressed: list | None) -> str:
+    if not compressed:
+        return "- (keine komprimierten Segmente)"
+    lines: list[str] = []
+    for item in compressed:
+        if isinstance(item, dict):
+            segment_type = str(item.get("type") or item.get("segment_type") or "rohtext")
+            text = str(item.get("text") or "").strip()
+        else:
+            segment_type = str(getattr(item, "segment_type", "rohtext") or "rohtext")
+            text = str(getattr(item, "text", "") or "").strip()
+        if text:
+            lines.append(f'<segment type="{segment_type}">\n{text}\n</segment>')
+    return "\n".join(lines) or "- (keine komprimierten Segmente)"
+
+
+def build_weave_prompt(
+    *,
+    doc_type: str,
+    compressed: list | None,
+    letterhead: dict | None = None,
+    patient_ctx: dict | None = None,
+    templates: list[retrieval.TemplateHit] | None = None,
+    custom_rules: str = "",
+    enrichment: list | None = None,
+    extra: str = "",
+    language: str = "de",
+) -> PromptBundle:
+    """Assemble the single final 'weave' prompt from the compressed segments."""
+    from ..pipeline.prompts import WEAVE_TASK
+
+    if doc_type not in brain_loader.DOKUMENTTYPEN:
+        raise ValueError(f"unknown document type: {doc_type!r}")
+
+    hits = list(templates or [])
+    kern = _kern_rules()
+    regelwerk = brain_loader.rule_lines()
+    anti = brain_loader.anti_pattern_lines()
+    playbook = brain_loader.dokumenttyp_text(doc_type)
+    reference = _reference_knowledge_block(enrichment)
+
+    intro = (
+        "Sie sind der Schreibassistent von Briefato für deutschsprachige Arztpraxen. Sie "
+        "erhalten je Quellsegment eine fertige Verdichtung und weben daraus genau ein "
+        "fertiges Dokument. Sie erfinden keine patientenbezogenen Angaben."
+    )
+    if reference:
+        intro += (
+            " Für generische Standardangaben steht Ihnen das klar gekennzeichnete "
+            "REFERENZWISSEN zur Verfügung."
+        )
+
+    system_parts = [
+        intro,
+        "KERN-METHODE (verbindlich):\n" + "\n".join(f"- {line}" for line in kern),
+        "REGELWERK (R1–R67, jede Regel ist verbindlich):\n" + "\n".join(regelwerk),
+        "ANTI-PATTERNS (generisches LLM-Verhalten — verboten):\n" + "\n".join(anti),
+        f"PLAYBOOK DOKUMENTTYP „{doc_type}“:\n{playbook}",
+        _output_mandate(doc_type),
+        _pseudonym_contract(),
+        f"Prompt-Version: {PROMPT_VERSION} | Sprache: {language} | Dokumenttyp: {doc_type}",
+    ]
+    system = "\n\n".join(system_parts)
+
+    sender = _render_pairs(dict(letterhead or {}), LETTERHEAD_LABELS) or "- (keine Angaben)"
+    patient = _render_pairs(dict(patient_ctx or {}), {k: k for k in (patient_ctx or {})}) or "- (keine Angaben)"
+    custom = (custom_rules or "").strip() or "—"
+    extra_text = (extra or "").strip() or "—"
+
+    user = (
+        f"{WEAVE_TASK}\n"
+        f"Dokumenttyp: {brain_loader.DOKUMENTTYP_LABELS.get(doc_type, doc_type)} ({doc_type})\n"
+        f"Sprache: {language}\n"
+        "Hinweis: Alle Platzhalter in doppelten geschweiften Klammern sind patientenbezogene "
+        "Daten und unverändert zu übernehmen.\n\n"
+        "PRAXIS / ABSENDER (Briefkopf — nicht verändern, nicht erfinden):\n"
+        f"{sender}\n\n"
+        "PATIENTENBEZUG (dient nur der Zuordnung):\n"
+        f"{patient}\n\n"
+        "MUSTERBRIEF-STRUKTUR (nur Sektionen als Referenz):\n"
+        f"{_structure_reference(hits)}\n\n"
+        "PRAXISREGELN DES MITGLIEDS (verbindlich, sofern vorhanden):\n"
+        f"{custom}\n\n"
+        + (reference + "\n\n" if reference else "")
+        + "KOMPRIMIERTE QUELLSEGMENTE (geordnet, in dieser Reihenfolge verweben):\n"
+        f"{_compressed_segments_block(compressed)}\n\n"
+        "ZUSATZHINWEISE:\n"
+        f"{extra_text}\n\n"
+        f"Erzeugen Sie jetzt ausschließlich den fertigen Text „{doc_type}“."
+    )
+
+    return PromptBundle(
+        system=system,
+        user=user,
+        doc_type=doc_type,
+        doc_types=(doc_type,),
+        template_files=[hit.file for hit in hits],
+        reference_only_files=[hit.file for hit in hits if hit.reference_only],
+        kern_rules=len(kern),
+        regelwerk_rules=len(regelwerk),
+    )
+
+
 def _structure_reference(templates: list[retrieval.TemplateHit]) -> str:
     if not templates:
         return "- (keine Musterbrief-Treffer; Struktur ausschließlich aus dem Playbook ableiten)"
@@ -195,6 +408,7 @@ def build_prompt(
     extra: str = "",
     doc_types: tuple[str, ...] | None = None,
     language: str = "de",
+    enrichment: list | None = None,
 ) -> PromptBundle:
     """Assemble the system + user prompt for one document of ``doc_type``.
 
@@ -206,16 +420,29 @@ def build_prompt(
 
     types = tuple(doc_types or (doc_type,))
     hits = list(templates or [])
+    reference = _reference_knowledge_block(enrichment)
 
     kern = _kern_rules()
     regelwerk = brain_loader.rule_lines()
     anti = brain_loader.anti_pattern_lines()
     playbook = brain_loader.dokumenttyp_text(doc_type)
 
-    system_parts = [
+    intro = (
         "Sie sind der Schreibassistent von Briefato für deutschsprachige Arztpraxen. "
         "Sie arbeiten nach der dokumentierten Methode des Schreibdienstes und formulieren "
-        "ausschließlich um — Sie recherchieren nicht und erfinden nichts.",
+        "ausschließlich um."
+    )
+    if reference:
+        intro += (
+            " Für generische Standardangaben (Standardtechnik, Standardmaterial, typische "
+            "Nachsorge, Standard-Wirkstoffklassen) steht Ihnen das klar gekennzeichnete "
+            "REFERENZWISSEN zur Verfügung. Patientenbezogene Angaben erfinden Sie nie."
+        )
+    else:
+        intro += " Sie recherchieren nicht und erfinden nichts."
+
+    system_parts = [
+        intro,
         "KERN-METHODE (verbindlich):\n" + "\n".join(f"- {line}" for line in kern),
         "REGELWERK (R1–R67, jede Regel ist verbindlich):\n" + "\n".join(regelwerk),
         "ANTI-PATTERNS (generisches LLM-Verhalten — verboten):\n" + "\n".join(anti),
@@ -249,7 +476,8 @@ def build_prompt(
         f"{_structure_reference(hits)}\n\n"
         "PRAXISREGELN DES MITGLIEDS (verbindlich, sofern vorhanden):\n"
         f"{custom}\n\n"
-        f"{('BEIDE FASSUNGEN — ' + concurrency + chr(10)) if concurrency else ''}"
+        + (reference + "\n\n" if reference else "")
+        + f"{('BEIDE FASSUNGEN — ' + concurrency + chr(10)) if concurrency else ''}"
         "DIKTAT (einzige inhaltliche Quelle):\n"
         f"{DICTATION_OPEN}\n{dictation or ''}\n{DICTATION_CLOSE}\n\n"
         "ZUSATZHINWEISE:\n"
@@ -281,10 +509,14 @@ def correction_block(correction_instructions: list[str]) -> str:
 
 
 __all__ = [
+    "COMPRESSION_RULES",
     "DISCHARGE_BLOCK_ORDER",
     "LETTERHEAD_LABELS",
     "PROMPT_VERSION",
     "PromptBundle",
+    "build_compression_prompt",
     "build_prompt",
+    "build_weave_prompt",
+    "compression_rule",
     "correction_block",
 ]

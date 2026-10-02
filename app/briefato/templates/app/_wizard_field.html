@@ -1,0 +1,27 @@
+{% set f = field %}
+{% if f.type == 'checkbox' %}
+<label class="checkbox" for="wf-{{ f.name }}">
+  <input type="checkbox" id="wf-{{ f.name }}" name="{{ f.name }}" value="1"{% if f.value %} checked{% endif %}>
+  <span>{{ f.label }}</span>
+</label>
+{% if f.hint %}<p class="hint">{{ f.hint }}</p>{% endif %}
+{% else %}
+<div class="field{% if f.type == 'textarea' %} field-full{% endif %}">
+  <label for="wf-{{ f.name }}">{{ f.label }}{% if f.required %} <span class="req" aria-hidden="true">*</span>{% endif %}</label>
+  {% if f.type == 'textarea' %}
+  <textarea class="textarea" id="wf-{{ f.name }}" name="{{ f.name }}" rows="{{ f.rows }}"{% if f.placeholder %} placeholder="{{ f.placeholder }}"{% endif %}>{{ f.value }}</textarea>
+  {% elif f.type == 'select' %}
+  <select class="select" id="wf-{{ f.name }}" name="{{ f.name }}"{% if f.required %} required{% endif %}>
+    {% if f.source == 'patients' %}
+    <option value="">Bitte wählen…</option>
+    {% for p in patients %}<option value="{{ p.id }}"{% if f.value == p.id %} selected{% endif %}>{{ p.display_name }}</option>{% endfor %}
+    {% else %}
+    {% for opt in f.options %}<option value="{{ opt.value }}"{% if f.value == opt.value %} selected{% endif %}>{{ opt.label }}</option>{% endfor %}
+    {% endif %}
+  </select>
+  {% else %}
+  <input class="input" id="wf-{{ f.name }}" name="{{ f.name }}" type="{{ f.type }}" value="{{ f.value }}"{% if f.placeholder %} placeholder="{{ f.placeholder }}"{% endif %}>
+  {% endif %}
+  {% if f.hint %}<p class="hint">{{ f.hint }}</p>{% endif %}
+</div>
+{% endif %}

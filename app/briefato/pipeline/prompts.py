@@ -81,6 +81,17 @@ LETTERHEAD_LABELS: dict[str, str] = {
 DICTATION_OPEN = "<diktat>"
 DICTATION_CLOSE = "</diktat>"
 
+# --- fan-out (WORKSTREAM-ENGINE-V2) -------------------------------------------------
+# A single source segment is wrapped in these markers so the provider (and the offline
+# mock) can locate exactly the text to compress. The task markers identify the two
+# additional call kinds introduced by the fan-out pipeline.
+SEGMENT_OPEN = "<segment>"
+SEGMENT_CLOSE = "</segment>"
+COMPRESSION_TASK = "AUFGABE: SEGMENT-KOMPRESSION"
+WEAVE_TASK = "AUFGABE: WEAVE"
+#: Line the compression prompt uses to name the segment type (parsed by the mock).
+SEGMENT_TYPE_LINE = "Segmenttyp:"
+
 
 def _sections(kind: str) -> str:
     return " → ".join(KIND_STRUCTURE.get(kind, KIND_STRUCTURE["sonstiges"]))
@@ -175,6 +186,11 @@ __all__ = [
     "LETTERHEAD_LABELS",
     "DICTATION_OPEN",
     "DICTATION_CLOSE",
+    "SEGMENT_OPEN",
+    "SEGMENT_CLOSE",
+    "COMPRESSION_TASK",
+    "WEAVE_TASK",
+    "SEGMENT_TYPE_LINE",
     "system_prompt",
     "user_prompt",
 ]

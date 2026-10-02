@@ -129,11 +129,62 @@
     });
   }
 
+  /* Wizard: fade between steps, move focus to the step heading, Esc = back.
+     The fade re-submits with the clicked submitter (requestSubmit) so the button's
+     name/value — which carries the wizard action — is preserved. */
+  function prefReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
+  function initWizard() {
+    var heading = document.querySelector("[data-wizard-heading]");
+    if (heading && typeof heading.focus === "function") {
+      try {
+        heading.focus();
+      } catch (err) {
+        /* focus can fail in odd embedding contexts; the heading is still visible */
+      }
+    }
+
+    document.addEventListener("submit", function (event) {
+      var form = event.target;
+      if (!form || form.tagName !== "FORM") return;
+      if (!form.closest("[data-wizard-form]")) return;
+      if (form.dataset.wizardBypass === "1") {
+        form.dataset.wizardBypass = "0";
+        return;
+      }
+      if (prefReducedMotion() || typeof form.requestSubmit !== "function") return;
+      event.preventDefault();
+      var panel = form.closest(".wizard-step");
+      if (panel) panel.classList.add("wizard-step--leaving");
+      var submitter = event.submitter || null;
+      window.setTimeout(function () {
+        form.dataset.wizardBypass = "1";
+        try {
+          form.requestSubmit(submitter || undefined);
+        } catch (err) {
+          form.dataset.wizardBypass = "0";
+          form.submit();
+        }
+      }, 180);
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape") return;
+      var back = document.querySelector("[data-wizard-back]");
+      if (!back) return;
+      event.preventDefault();
+      back.click();
+    });
+  }
+
   onReady(function () {
     initCtrlEnter();
     initConfirms();
     initToasts();
     initCopy();
     initHtmxErrors();
+    initWizard();
   });
 })();

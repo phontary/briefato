@@ -1,0 +1,56 @@
+{
+  "id": "opbericht-02",
+  "doc_type": "operationsbericht",
+  "title": "OP-Bericht — Narbenhernie, Sublay-Netzimplantation (lückenhafte Routineangaben)",
+  "sources": [
+    {
+      "label": "Auftrag",
+      "text": "OP-Bericht zur Narbenhernienversorgung."
+    },
+    {
+      "label": "KIS-Eingriff",
+      "text": "Narbenhernienversorgung, Sublay-Technik, Netz 15 x 20 cm."
+    },
+    {
+      "label": "Präparat",
+      "text": "kein Präparat entnommen, keine Drainage."
+    },
+    {
+      "label": "Diagnose",
+      "text": "Narbenhernie nach Medianlaparotomie."
+    },
+    {
+      "label": "Fehlend",
+      "text": "Kein Verlaufsprotokoll zu Präparation, Bruchsack und Netzbefestigung."
+    }
+  ],
+  "dictation": "OP-Bericht.\n\nBei dem 68-jaehrigen Patienten besteht eine Narbenhernie nach Medianlaparotomie mit zunehmender Grösse und Beschwerden. Die operative Versorgung erfolgte mittels Sublay-Technik und Netzimplantation 15 x 20 cm.\n\nOP:\nOP am 29.09.2026: Narbenhernienversorgung in Sublay-Technik. Intraoperativ zeigte sich eine ca. 6 cm grosse Narbenhernie ohne Inkarzeration.\n\nDiagnosen:\nNarbenhernie nach Medianlaparotomie\n\nOperation:\nNarbenhernienversorgung in Sublay-Technik",
+  "must_contain": [
+    "Narbenhernie",
+    "Sublay",
+    "29.09.2026",
+    "Indikation:",
+    "OP:",
+    "Diagnosen:",
+    "Operation:",
+    "Team-Time-out",
+    "Desinfektion",
+    "Netz",
+    "Wundverschluss"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "Sableb",
+    "Onlay",
+    "Bruchsackgrösse erfunden",
+    "Adhäsionen"
+  ],
+  "expected_blocks": [
+    "Indikation:",
+    "OP:",
+    "Diagnosen:",
+    "Operation:"
+  ],
+  "notes": "Zweiter Enrichment-Fall. Fehlhörer 'Sableb-Technik' → 'Sublay-Technik' (R44) im Quellmaterial angedeutet."
+}

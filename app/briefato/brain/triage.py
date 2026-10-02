@@ -171,13 +171,20 @@ def _dictation_route(text: str) -> tuple[tuple[str, ...], float, str, tuple[str,
     return ("arztbrief",), 0.4, "Rohmaterial ohne speziellen Auftrag → stationärer Arztbrief (Default)", ()
 
 
-def triage(dictation: str, explicit: str | None = None) -> TriageDecision:
+def triage(dictation: str, explicit: str | None = None, *, source_count: int = 0) -> TriageDecision:
     """Decide the document type for ``dictation``.
 
     ``explicit`` is the type/kinds hint the caller supplies (the frozen portal passes
     one of ``letters.kind``). A real brain type is honoured unless the dictation asks
     for a *combination*; a generic legacy kind (attest/befund/…) falls back to the
     dictation routing.
+
+    ``source_count`` is the number of recognised source segments (the fan-out
+    segmentation). A genuine multi-source KIS export (>= 3 labelled sources) records the
+    *document type the member chose*, so a source heading such as „OP-Bericht:" inside a
+    stationary letter must not switch the order to a standalone OP-Bericht. When an
+    explicit real document type is supplied and the input is such an export, that type
+    wins over the source-heading triggers.
     """
     text = (dictation or "").lower()
 
@@ -193,6 +200,21 @@ def triage(dictation: str, explicit: str | None = None) -> TriageDecision:
             confidence=max(routed_conf, 0.9),
             reason=routed_reason,
             signals=routed_signals,
+        )
+
+    # A multi-source export with an explicitly chosen real document type: the choice wins.
+    # (The source headings are the material, not the order.)
+    if explicit_clean in DOC_TYPES and int(source_count) >= 3:
+        return TriageDecision(
+            doc_type=explicit_clean,
+            doc_types=(explicit_clean,),
+            confidence=0.85,
+            reason=(
+                f"Multi-Quellen-Export ({int(source_count)} Quellen) — gewählter Dokumenttyp "
+                f"„{DOC_TYPE_LABELS.get(explicit_clean, explicit_clean)}“ hat Vorrang vor den "
+                "Quellen-Überschriften."
+            ),
+            signals=(explicit_clean,),
         )
 
     if explicit_clean in DOC_TYPES:

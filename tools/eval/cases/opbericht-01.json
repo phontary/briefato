@@ -1,0 +1,64 @@
+{
+  "id": "opbericht-01",
+  "doc_type": "operationsbericht",
+  "title": "OP-Bericht — laparoskopische Cholezystektomie (lückenhafte Routineangaben)",
+  "sources": [
+    {
+      "label": "Auftrag",
+      "text": "OP-Bericht zur laparoskopischen Cholezystektomie."
+    },
+    {
+      "label": "KIS-Eingriff",
+      "text": "Laparoskopische Cholezystektomie, ICPM 5-511.11."
+    },
+    {
+      "label": "KIS-Materialliste",
+      "text": "Standardartikel Laparoskopie (Veress-Nadel, Trokare, Optik, Clips)."
+    },
+    {
+      "label": "Präparat",
+      "text": "Gallenblase, Präparat ad Histologie."
+    },
+    {
+      "label": "Diagnose",
+      "text": "Symptomatische Cholezystolithiasis."
+    },
+    {
+      "label": "Fehlend",
+      "text": "Kein diktiertes OP-Verlaufsprotokoll; Lagerung, Zugang und Verschluss nicht dokumentiert."
+    }
+  ],
+  "dictation": "OP-Bericht.\n\nBei der 54-jaehrigen Patientin besteht eine symptomatische Cholezystolithiasis ohne Anhalt fuer eine Gallenwegsobstruktion. Bei symptomatischem Steinleiden erfolgte die geplante laparoskopische Cholezystektomie.\n\nOP:\nOP am 23.09.2026: laparoskopische Cholezystektomie. Intraoperativ zeigte sich eine chronisch entzuendete Gallenblase mit multiplen Konkrementen.\n\nPräparat:\nGallenblase, Präparat ad Histologie.\n\nDiagnosen:\nSymptomatische Cholezystolithiasis\n\nOperation:\nLaparoskopische Cholezystektomie",
+  "must_contain": [
+    "Cholezystolithiasis",
+    "Cholezystektomie",
+    "23.09.2026",
+    "Indikation:",
+    "OP:",
+    "Präparat:",
+    "Diagnosen:",
+    "Operation:",
+    "Gallenblase",
+    "Team-Time-out",
+    "Desinfektion",
+    "Capnoperitoneum",
+    "Wundverschluss"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "Veress-Nadel",
+    "Situs",
+    "Adhäsionen",
+    "Lipom",
+    "Erste Assistenz"
+  ],
+  "expected_blocks": [
+    "Indikation:",
+    "OP:",
+    "Präparat:",
+    "Diagnosen:",
+    "Operation:"
+  ],
+  "notes": "Enrichment-Pfad: das Rohmaterial enthält KEINE Routine-Schritte (Lagerung, Team-Time-out, Desinfektion, Capnoperitoneum, Verschluss). Ein echtes Modell ergänzt sie standardgemäß aus dem Musterbrief (R52); der Mock tut das NICHT → Abdeckung sinkt. Veress-Nadel bleibt verboten (Pitfall)."
+}

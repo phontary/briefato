@@ -1,0 +1,97 @@
+{
+  "id": "entlassbrief-02",
+  "doc_type": "arztbrief",
+  "title": "Stationärer Entlassbrief — mediale Schenkelhalsfraktur, Hüft-TEP",
+  "sources": [
+    {
+      "label": "NFA-Aufnahme",
+      "text": "18.09.2026 Sturz auf die rechte Seite, seitdem starke Hueftschmerzen, Gehunfaehigkeit. Aufnahme ueber die NFA."
+    },
+    {
+      "label": "KU",
+      "text": "Rechtes Bein verkuerzt und aussenrotiert, Druckschmerz Leiste, periphere Pulse tastbar, pDMS intakt."
+    },
+    {
+      "label": "Labor 18.09.",
+      "text": "CRP 22 mg/l, Leukozyten 9,1/nl, Hb 11,8 g/dl, Kreatinin 1,1 mg/dl, GFR 58 ml/min."
+    },
+    {
+      "label": "Röntgen Becken",
+      "text": "Dislozierte mediale Schenkelhalsfraktur rechts, keine Acetabulumfraktur."
+    },
+    {
+      "label": "CT Becken",
+      "text": "Bestaetigung der dislozierten medialen Schenkelhalsfraktur rechts, keine weitere Fraktur."
+    },
+    {
+      "label": "Anästhesie",
+      "text": "ASA III, Spinalanästhesie, perioperative Antibiose mit Cefazolin."
+    },
+    {
+      "label": "OP-Protokoll 21.09.",
+      "text": "Implantation einer Huefttotalendoprothese rechts, zementfreie Pfanne, Schaft zementiert, keine Drainage."
+    },
+    {
+      "label": "Visite 22.09.",
+      "text": "Pat. mobilisiert an Unterarmgehstuetzen, Wunde reizlos, Schmerz NRS 3, Temp 37,4 C."
+    },
+    {
+      "label": "Visite 23.09.",
+      "text": "Mobilisation zunehmend sicher, Kostaufbau vertragen, Entzuendungsparameter ruecklaeufig."
+    },
+    {
+      "label": "Visite 24.09.",
+      "text": "Pat. beschwerdearm, Entlassung geplant, Rezept ausgestellt."
+    },
+    {
+      "label": "Physiotherapie",
+      "text": "Gangschule an Unterarmgehstuetzen, Treppensteigen geuebt."
+    },
+    {
+      "label": "Pflegeverlauf",
+      "text": "Pat. zur Nacht versorgt, Verbandwechsel trocken, Trinkmenge ausreichend, Stuhlgang regelrecht."
+    },
+    {
+      "label": "Sozialdienst",
+      "text": "Entlassung in die haeusliche Pflege bei Unterstuetzung durch die Tochter."
+    },
+    {
+      "label": "Medikation",
+      "text": "ASS 100 mg, Ramipril 5 mg, Cholecalciferol 1000 IE, Pantoprazol 40 mg, Enoxaparin 40 IE."
+    },
+    {
+      "label": "Orthopädie-Konsil",
+      "text": "Konsil erfolgt, Empfehlung Belastungsaufbau nach Schema, Kontrolle nach 6 Wochen."
+    },
+    {
+      "label": "Entlassung",
+      "text": "24.09.2026 Entlassung in die haeusliche Pflege, Wiedervorstellung."
+    }
+  ],
+  "dictation": "Die Patientin stuerzte auf die rechte Seite und klagte seitdem ueber starke Hueftschmerzen mit Gehunfaehigkeit, Aufnahme ueber die NFA. Die Röntgenaufnahme des Beckens und die CT zeigten eine dislozierte mediale Schenkelhalsfraktur rechts. Wir nahmen die Patientin zur weiteren Diagnostik bzw. Schmerztherapie stationaer auf.\n\nBei dislozierter medialer Schenkelhalsfraktur rechts erfolgte die Implantation einer Huefttotalendoprothese. Intraoperativ zeigte sich eine dislozierte Schenkelhalsfraktur ohne Anhalt fuer eine periprothetische Situation. Postoperativ gestaltete sich der Verlauf regelrecht, die Mobilisation erfolgte an Unterarmgehstuetzen.\n\nNach klinischer Besserung konnten wir die Patientin am 24.09.2026 in die haeusliche Pflege entlassen.\n\nambulante Therapieempfehlungen nach der Entlassung:\nWir empfahlen die Fortsetzung der Thromboseprophylaxe sowie eine intensive krankengymnastische Weiterbehandlung. Vielen Dank fuer die Weiterbetreuung.\n\nDiagnosen:\ndislozierte mediale Schenkelhalsfraktur rechts\nZ.n. Implantation einer Huefttotalendoprothese rechts\n\nNebenerkrankungen:\nOsteoporose\narterielle Hypertonie\n\nTherapie-Maßnahmen auf der Station:\nOP am 21.09.2026: Implantation einer Huefttotalendoprothese rechts\nKrankengymnastik\nThromboseprophylaxe",
+  "must_contain": [
+    "Schenkelhalsfraktur",
+    "Hüfttotalendoprothese",
+    "stationär auf",
+    "24.09.2026",
+    "Diagnosen:",
+    "Therapie-Maßnahmen auf der Station:",
+    "Osteoporose"
+  ],
+  "must_not_contain": [
+    "Dg.:",
+    "**",
+    "Labor:",
+    "Röntgen:",
+    "Osteosynthese",
+    "Cephalomedullär",
+    "S72.0"
+  ],
+  "expected_blocks": [
+    "ambulante Therapieempfehlungen nach der Entlassung:",
+    "Diagnosen:",
+    "Nebenerkrankungen:",
+    "Therapie-Maßnahmen auf der Station:"
+  ],
+  "notes": "16 KIS-Quellen. Enthält eine Z.n.-Zeile im Diagnosenblock (R23) und Komorbiditäten."
+}
