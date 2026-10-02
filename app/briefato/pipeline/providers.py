@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import time
 from dataclasses import dataclass
@@ -41,6 +42,9 @@ from .prompts import (
 logger = logging.getLogger(__name__)
 
 _MAX_PROVIDER_MESSAGE = 300
+# Empty-content recovery for reasoning models (see OpenAICompatProvider.generate).
+_EMPTY_RETRY_MIN = 12000
+_EMPTY_RETRY_CAP = 32000
 
 
 class PipelineError(Exception):
@@ -670,6 +674,14 @@ class OpenAICompatProvider:
         self._client = client
         self._max_retries = int(max_retries)
         self._retry_backoff_s = float(retry_backoff_s)
+        # Reasoning models burn the output budget on their chain-of-thought, so a small
+        # max_tokens yields finish_reason=length with empty content. Floor the budget and allow
+        # one retry with a much bigger one (env-tunable, no config.py change).
+        try:
+            self._min_output_tokens = max(256, int(os.environ.get("BRIEFATO_LLM_MIN_OUTPUT_TOKENS", "6000")))
+        except ValueError:
+            self._min_output_tokens = 6000
+        self._empty_retried = False
 
     # -- helpers ---------------------------------------------------------------
 
@@ -753,6 +765,10 @@ class OpenAICompatProvider:
             "max_tokens": max_tokens,
             "temperature": temperature,
         }
+        # Reasoning models need headroom for their chain-of-thought, otherwise the content comes
+        # back empty with finish_reason=length (observed with deepseek-flash, 2026-10-02).
+        budget = max(int(max_tokens or 0), self._min_output_tokens)
+        payload["max_tokens"] = budget
         started = time.perf_counter()
         response = self._post_with_retries(payload)
         latency_ms = int((time.perf_counter() - started) * 1000)
@@ -775,8 +791,54 @@ class OpenAICompatProvider:
                 provider=self.name,
             ) from exc
         if not isinstance(text, str) or not text.strip():
+            # Reasoning models (DeepSeek V4.1 Flash, …) spend the output budget on their
+            # chain-of-thought: with a small max_tokens the answer comes back with
+            # finish_reason=length and an EMPTY content field. Retry ONCE with a much larger
+            # budget before failing — and report the diagnosis instead of a bare "empty".
+            choice = (data.get("choices") or [{}])[0]
+            finish = choice.get("finish_reason")
+            message = choice.get("message") or {}
+            reasoning_chars = len(
+                str(message.get("reasoning_content") or message.get("reasoning") or "")
+            )
+            if not self._empty_retried:
+                self._empty_retried = True
+                try:
+                    bigger = dict(payload)
+                    bigger["max_tokens"] = min(max(budget * 3, _EMPTY_RETRY_MIN), _EMPTY_RETRY_CAP)
+                    retry_started = time.perf_counter()
+                    response = self._post_with_retries(bigger)
+                    data = response.json()
+                    retry_text = data["choices"][0]["message"]["content"]
+                except Exception:  # noqa: BLE001 - fall through to the diagnostic error
+                    retry_text = ""
+                finally:
+                    self._empty_retried = False
+                if isinstance(retry_text, str) and retry_text.strip():
+                    text = retry_text
+                    latency_ms = int((time.perf_counter() - started) * 1000)
+                    usage = data.get("usage") or {}
+                    tokens_in = int(usage.get("prompt_tokens") or 0)
+                    tokens_out = int(usage.get("completion_tokens") or 0)
+                    cost_usd = (
+                        tokens_in / 1000.0
+                        * float(getattr(self._settings, "llm_cost_in_per_1k", 0.0) or 0.0)
+                        + tokens_out / 1000.0
+                        * float(getattr(self._settings, "llm_cost_out_per_1k", 0.0) or 0.0)
+                    )
+                    return LLMResult(
+                        text=text,
+                        model=str(data.get("model") or self._settings.llm_model),
+                        provider=self.name,
+                        tokens_in=tokens_in,
+                        tokens_out=tokens_out,
+                        cost_usd=cost_usd,
+                        latency_ms=latency_ms,
+                    )
             raise PipelineProviderError(
-                "Antwort des Modellanbieters war leer.",
+                "Antwort des Modellanbieters war leer "
+                f"(finish_reason={finish}, max_tokens={budget}, "
+                f"Reasoning-Zeichen={reasoning_chars}, Modell={self._settings.llm_model}).",
                 status_code=response.status_code,
                 provider=self.name,
             )
