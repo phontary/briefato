@@ -1,0 +1,485 @@
+{
+  "run_id": "20261002-195939-openai-deepseek-flash",
+  "timestamp": "2026-10-02T19:59:39+00:00",
+  "provider": "openai",
+  "model": "deepseek-flash",
+  "base_url": "https://api.deepseek.com/v1",
+  "enrich": false,
+  "judge_model": "deepseek-flash",
+  "is_mock": false,
+  "quality_claim": "Echter Modelllauf — Schreibqualität wird gemessen",
+  "prompt_version": "brain-1",
+  "aggregate": {
+    "cases": 5,
+    "completed": 5,
+    "failed": [],
+    "mean_similarity": 0.716,
+    "mean_jaccard": 0.7722,
+    "echo_cases": [
+      "entlassbrief-03",
+      "zusammenfassung-01"
+    ],
+    "echo_count": 2,
+    "echo_baseline": "2/5",
+    "content_echo_cases": [
+      "entlassbrief-03",
+      "zusammenfassung-01"
+    ],
+    "content_echo_count": 2,
+    "content_echo_baseline": "2/5",
+    "hard_findings_total": 1,
+    "soft_findings_total": 1,
+    "cases_with_hard_findings": [
+      "entlassbrief-03"
+    ],
+    "must_contain_matched": 38,
+    "must_contain_total": 38,
+    "must_contain_coverage": 1.0,
+    "must_not_contain_violating_cases": [],
+    "structure_failures": [],
+    "doc_type_mismatches": [],
+    "mean_judge_score": 4.32
+  },
+  "cases": [
+    {
+      "id": "ambulant-02",
+      "title": "Ambulanter Brief — NFA-Vorstellung, Kopfplatzwunde eines Kindes",
+      "doc_type_expected": "ambulant",
+      "enrich": false,
+      "status": "ok",
+      "error": "",
+      "notes": "Rein konservative NFA-Vorstellung ohne OP. Keine stationären Blöcke, kein Aufnahmesatz.",
+      "doc_type_actual": "ambulant",
+      "doc_type_match": true,
+      "retried": false,
+      "findings": {
+        "hard_count": 0,
+        "soft_count": 0,
+        "hard_ids": [],
+        "soft_ids": []
+      },
+      "echo": {
+        "similarity": 0.8106,
+        "token_ratio": 0.9,
+        "jaccard": 0.8077,
+        "verdict": "eigene Formulierung (kein Echo)",
+        "is_echo": false,
+        "content_echo": false,
+        "threshold": 0.85,
+        "shared_tokens": 42,
+        "input_tokens": 45,
+        "output_tokens": 55
+      },
+      "must_contain": {
+        "matched": [
+          "Platzwunde",
+          "Fibrinkleber",
+          "Diagnosen:",
+          "Commotio"
+        ],
+        "missing": [],
+        "total": 4,
+        "coverage": 1.0
+      },
+      "must_not_contain_violations": [],
+      "structure": {
+        "present": [
+          "Diagnosen:"
+        ],
+        "missing": [],
+        "order_ok": true,
+        "canonical_missing": [],
+        "canonical_order_ok": true,
+        "ok": true
+      },
+      "tokens_in": 7245,
+      "tokens_out": 949,
+      "content_chars": 707,
+      "judge": {
+        "model": "deepseek-flash",
+        "scores": {
+          "structure": 5,
+          "completeness": 5,
+          "no_invention": 1,
+          "register": 5,
+          "plain_text": 5
+        },
+        "reasons": {
+          "structure": "Reihenfolge Vorstellung/Anamnese → Untersuchung → Therapie → Verlauf/Hinweis, Diagnoseblock am Ende; keine Überschriften oder Labels im Fließtext.",
+          "completeness": "Alle klinisch relevanten Fakten des Diktats (Vorstellung in NFA mit Mutter, Kopfstoß beim Spielen, KU-Befund mit Lokalisation und Größe, neurologischer Befund, Desinfektion/Fibrinkleber/Pflaster, Aufklärung der Mutter, selbstständige Lösung des Hautklebers nach ca. 3 Tagen, keine stationäre Aufnahme, beide Diagnosen) sind enthalten.",
+          "no_invention": "Ein vollständiger Empfehlungssatz mit Wundkontrolle und Wiedervorstellungskriterien (Rötung, Schwellung, Schmerzen, Fieber) steht nicht im Diktat und wurde frei ergänzt; damit werden mehrere nicht belegte Fakten hinzugefügt.",
+          "register": "Sachlicher fachlicher Stil, Abkürzungen (NFA, KU, ca.) korrekt direkt verwendet, keine Füllwörter, keine Kategorie-Labels im Fließtext.",
+          "plain_text": "Reiner Fließtext ohne Markdown, korrekte Umlaute (gestoßen, große, unauffällig, aufgeklärt, stationäre), genau ein Semikolon."
+        },
+        "citations": {
+          "structure": "",
+          "completeness": "",
+          "no_invention": "Empfohlen werden die regelmäßige Wundkontrolle sowie die Wiedervorstellung bei Rötung, Schwellung, zunehmenden Schmerzen oder Fieber.",
+          "register": "",
+          "plain_text": ""
+        },
+        "mean": 4.2,
+        "overall_comment": "Der Brief übernimmt das Diktat vollständig, struktur- und stilgerecht; einziger und gravierender Mangel ist der frei erfundene Empfehlungssatz, der nicht durch das Diktat gedeckt ist.",
+        "error": ""
+      }
+    },
+    {
+      "id": "entlassbrief-01",
+      "title": "Stationärer Entlassbrief — akute Cholezystitis, laparoskopische Cholezystektomie",
+      "doc_type_expected": "arztbrief",
+      "enrich": false,
+      "status": "ok",
+      "error": "",
+      "notes": "Kernfall: 12 KIS-Quellen, alle Blöcke diktiert. Prüft Blockreihenfolge und vollständige Diagnoseliste. Hinweis: 'Nachweis'-Wortlaut vermeiden — der bestehende Triage-Treffer '\\bnachweis' würde sonst fälschlich auf Weiterbildungs-Nachweise routen (vom Harness als Typ-Fehlschlag erkannt).",
+      "doc_type_actual": "arztbrief",
+      "doc_type_match": true,
+      "retried": false,
+      "findings": {
+        "hard_count": 0,
+        "soft_count": 0,
+        "hard_ids": [],
+        "soft_ids": []
+      },
+      "echo": {
+        "similarity": 0.3938,
+        "token_ratio": 0.8118,
+        "jaccard": 0.7975,
+        "verdict": "eigene Formulierung (kein Echo)",
+        "is_echo": false,
+        "content_echo": false,
+        "threshold": 0.85,
+        "shared_tokens": 63,
+        "input_tokens": 85,
+        "output_tokens": 85
+      },
+      "must_contain": {
+        "matched": [
+          "Cholezystitis",
+          "Cholezystolithiasis",
+          "stationär auf",
+          "Nausea",
+          "17.09.2026",
+          "Diagnosen:",
+          "Nebenerkrankungen:",
+          "Therapie-Maßnahmen auf der Station:"
+        ],
+        "missing": [],
+        "total": 8,
+        "coverage": 1.0
+      },
+      "must_not_contain_violations": [],
+      "structure": {
+        "present": [
+          "ambulante Therapieempfehlungen nach der Entlassung:",
+          "Diagnosen:",
+          "Nebenerkrankungen:",
+          "Therapie-Maßnahmen auf der Station:"
+        ],
+        "missing": [],
+        "order_ok": true,
+        "canonical_missing": [],
+        "canonical_order_ok": true,
+        "ok": true
+      },
+      "tokens_in": 8882,
+      "tokens_out": 1934,
+      "content_chars": 1282,
+      "judge": {
+        "model": "deepseek-flash",
+        "scores": {
+          "structure": 5,
+          "completeness": 4,
+          "no_invention": 5,
+          "register": 5,
+          "plain_text": 5
+        },
+        "reasons": {
+          "structure": "Die Reihenfolge des Diktats ist eingehalten: Aufnahmeanlass/Anamnese, Diagnostik (Sonographie, CT), Therapie (Operation, Histologie), postoperativer Verlauf, danach die Blöcke ambulante Empfehlungen, Diagnosen, Nebenerkrankungen und stationäre Maßnahmen am Ende.",
+          "completeness": "Alle klinischen Fakten (Beschwerden, NFA, Sonographie/CT, Cholezystolithiasis ohne Gallewegsobstruktion, stationäre Aufnahme, OP, intraoperativer und histologischer Befund, Verlauf, Entlassdatum, Empfehlungen, Diagnosen, Nebenerkrankungen, Maßnahmen) sind enthalten; die im Diktat genannte Patientin \"Muster, Anna\" wird jedoch nicht erwähnt.",
+          "no_invention": "Keine zusätzliche Diagnose, kein ICD, kein Laborwert, Medikament oder Konsil; alle Angaben (inkl. 14.09.2026 und 17.09.2026) stammen aus dem Diktat.",
+          "register": "Sachlicher fachlicher Stil, Abkürzungen (NFA, CT) direkt verwendet, keine Füllwörter, die Blocklabels stehen nur als Überschriften und nicht im Fließtext.",
+          "plain_text": "Reiner Text ohne Markdown, durchgängig korrekte Umlaute und ß, kein Semikolon enthalten."
+        },
+        "citations": {
+          "structure": "",
+          "completeness": "",
+          "no_invention": "",
+          "register": "",
+          "plain_text": ""
+        },
+        "mean": 4.8,
+        "overall_comment": "Der Brief gibt den Diktatsinhalt in korrekter Reihenfolge, vollständigem klinischem Umfang und ohne Zusatzerfindungen wieder. Einzige Beanstandung ist das Fehlen der Patientennamensangabe; sprachlich und formal ist der Text einwandfrei.",
+        "error": ""
+      }
+    },
+    {
+      "id": "entlassbrief-03",
+      "title": "Stationärer Entlassbrief — ambulant erworbene Pneumonie mit Delir",
+      "doc_type_expected": "arztbrief",
+      "enrich": false,
+      "status": "ok",
+      "error": "",
+      "notes": "Internistischer Fall. Pflege-/Verlaufsinformationen müssen eingewoben, nicht als Block zitiert werden.",
+      "doc_type_actual": "arztbrief",
+      "doc_type_match": true,
+      "retried": true,
+      "findings": {
+        "hard_count": 1,
+        "soft_count": 0,
+        "hard_ids": [
+          "R6"
+        ],
+        "soft_ids": []
+      },
+      "echo": {
+        "similarity": 0.9157,
+        "token_ratio": 0.9,
+        "jaccard": 1.0,
+        "verdict": "ECHO (keine eigene Formulierung)",
+        "is_echo": true,
+        "content_echo": true,
+        "threshold": 0.85,
+        "shared_tokens": 71,
+        "input_tokens": 80,
+        "output_tokens": 80
+      },
+      "must_contain": {
+        "matched": [
+          "Pneumonie",
+          "Unterlappen",
+          "stationär auf",
+          "05.10.2026",
+          "Delir",
+          "Diagnosen:",
+          "Nebenerkrankungen:",
+          "Thromboseprophylaxe"
+        ],
+        "missing": [],
+        "total": 8,
+        "coverage": 1.0
+      },
+      "must_not_contain_violations": [],
+      "structure": {
+        "present": [
+          "ambulante Therapieempfehlungen nach der Entlassung:",
+          "Diagnosen:",
+          "Nebenerkrankungen:",
+          "Therapie-Maßnahmen auf der Station:"
+        ],
+        "missing": [],
+        "order_ok": true,
+        "canonical_missing": [],
+        "canonical_order_ok": true,
+        "ok": true
+      },
+      "tokens_in": 8968,
+      "tokens_out": 1509,
+      "content_chars": 1123,
+      "judge": {
+        "model": "deepseek-flash",
+        "scores": {
+          "structure": 5,
+          "completeness": 5,
+          "no_invention": 5,
+          "register": 5,
+          "plain_text": 5
+        },
+        "reasons": {
+          "structure": "Reihenfolge und Blocklogik eingehalten: Aufnahmegrund, Diagnostik, Therapie/Verlauf, Empfehlungen, danach Diagnosen, Nebenerkrankungen und Maßnahmen.",
+          "completeness": "Alle im Diktat genannten klinisch relevanten Fakten sind enthalten, einschließlich Diagnosen, Nebenerkrankungen und Therapiemaßnahmen.",
+          "no_invention": "Keine zusätzlichen Diagnosen, Daten, Medikamente oder Konsile; nur diktierte Inhalte, orthographisch angepasst.",
+          "register": "Sachlicher fachlicher Stil, Abkürzungen direkt verwendet, keine Füllwörter oder Kategorie-Labels im Fließtext.",
+          "plain_text": "Reiner Text ohne Markdown, korrekte Umlaute, kein Semikolon."
+        },
+        "citations": {
+          "structure": "",
+          "completeness": "",
+          "no_invention": "",
+          "register": "",
+          "plain_text": ""
+        },
+        "mean": 5.0,
+        "overall_comment": "Der Text ist vollständig und faktentreu; Struktur und Register entsprechen den Vorgaben.",
+        "error": ""
+      }
+    },
+    {
+      "id": "opbericht-01",
+      "title": "OP-Bericht — laparoskopische Cholezystektomie (lückenhafte Routineangaben)",
+      "doc_type_expected": "operationsbericht",
+      "enrich": false,
+      "status": "ok",
+      "error": "",
+      "notes": "Enrichment-Pfad: das Rohmaterial enthält KEINE Routine-Schritte (Lagerung, Team-Time-out, Desinfektion, Capnoperitoneum, Verschluss). Ein echtes Modell ergänzt sie standardgemäß aus dem Musterbrief (R52); der Mock tut das NICHT → Abdeckung sinkt. Veress-Nadel bleibt verboten (Pitfall).",
+      "doc_type_actual": "operationsbericht",
+      "doc_type_match": true,
+      "retried": false,
+      "findings": {
+        "hard_count": 0,
+        "soft_count": 1,
+        "hard_ids": [],
+        "soft_ids": [
+          "R10"
+        ]
+      },
+      "echo": {
+        "similarity": 0.5031,
+        "token_ratio": 0.4407,
+        "jaccard": 0.2821,
+        "verdict": "eigene Formulierung (kein Echo)",
+        "is_echo": false,
+        "content_echo": false,
+        "threshold": 0.85,
+        "shared_tokens": 22,
+        "input_tokens": 31,
+        "output_tokens": 87
+      },
+      "must_contain": {
+        "matched": [
+          "Cholezystolithiasis",
+          "Cholezystektomie",
+          "23.09.2026",
+          "Indikation:",
+          "OP:",
+          "Präparat:",
+          "Diagnosen:",
+          "Operation:",
+          "Gallenblase",
+          "Team-Time-out",
+          "Desinfektion",
+          "Capnoperitoneum",
+          "Wundverschluss"
+        ],
+        "missing": [],
+        "total": 13,
+        "coverage": 1.0
+      },
+      "must_not_contain_violations": [],
+      "structure": {
+        "present": [
+          "Indikation:",
+          "OP:",
+          "Präparat:",
+          "Diagnosen:",
+          "Operation:"
+        ],
+        "missing": [],
+        "order_ok": true,
+        "canonical_missing": [],
+        "canonical_order_ok": true,
+        "ok": true
+      },
+      "tokens_in": 7541,
+      "tokens_out": 1407,
+      "content_chars": 1204,
+      "judge": {
+        "model": "deepseek-flash",
+        "scores": {
+          "structure": 4,
+          "completeness": 5,
+          "no_invention": 0,
+          "register": 3,
+          "plain_text": 5
+        },
+        "reasons": {
+          "structure": "Die Blockfolge Indikation, OP, Präparat, Diagnosen, Operation entspricht der Diktatlogik und stellt die Zusatzblöcke ans Ende; die Indikation ist jedoch mit dem OP-Abschnitt inhaltlich doppelt besetzt.",
+          "completeness": "Alle im Diktat genannten Fakten (54-jährige Patientin, symptomatische Cholezystolithiasis ohne Gallenwegsobstruktion, Datum 23.09.2026, chronisch entzündete Gallenblase mit multiplen Konkrementen, Präparat ad Histologie, Diagnose und Operation) sind enthalten.",
+          "no_invention": "Der gesamte operative Ablauf ist frei erfunden und im Diktat nicht belegt, einschließlich Lagerung, Team-Time-out, Trokargrößen, Druckwerten, Nahtmaterial und Verbandsmaterial.",
+          "register": "Sachlicher Fachstil grundsätzlich gewahrt, jedoch Kategorie-Labels im Text sowie umgangssprachlich-schwache Formulierungen und Wiederholungen.",
+          "plain_text": "Reiner Text ohne Markdown, korrekte Umlaute und kein Semikolon."
+        },
+        "citations": {
+          "structure": "",
+          "completeness": "",
+          "no_invention": "Nach Team-Time-out erfolgt die Hautdesinfektion gefärbt sowie die sterile Abdeckung des Abdomens.",
+          "register": "Abschließende Kontrolle auf intraabdominelle Bluttrockenheit, welche besteht.",
+          "plain_text": ""
+        },
+        "mean": 3.4,
+        "overall_comment": "Der Bericht gibt alle Diktatfakten vollständig und formal sauber wieder, erfindet aber den kompletten operativen Detailablauf samt Material- und Druckangaben, die nicht diktiert wurden. In dieser Form ist er als aktenkundiger Operationsbericht inhaltlich nicht belegbar und damit nicht verwendbar.",
+        "error": ""
+      }
+    },
+    {
+      "id": "zusammenfassung-01",
+      "title": "Zusammenfassung — mehrzeitiger Verlauf",
+      "doc_type_expected": "zusammenfassung",
+      "enrich": false,
+      "status": "ok",
+      "error": "",
+      "notes": "R24: keine Diagnoseliste und keine Therapie-Maßnahmen-Liste — auch wenn das Diktat eine Diagnosen-Zeile enthält. Datum abgekürzt als Monat.",
+      "doc_type_actual": "zusammenfassung",
+      "doc_type_match": true,
+      "retried": false,
+      "findings": {
+        "hard_count": 0,
+        "soft_count": 0,
+        "hard_ids": [],
+        "soft_ids": []
+      },
+      "echo": {
+        "similarity": 0.9566,
+        "token_ratio": 0.963,
+        "jaccard": 0.9737,
+        "verdict": "ECHO (keine eigene Formulierung)",
+        "is_echo": true,
+        "content_echo": true,
+        "threshold": 0.85,
+        "shared_tokens": 37,
+        "input_tokens": 42,
+        "output_tokens": 39
+      },
+      "must_contain": {
+        "matched": [
+          "Glutealabszess",
+          "Rückenschmerzen",
+          "Juni 2025",
+          "Nov. 2025",
+          "Sep. 2026"
+        ],
+        "missing": [],
+        "total": 5,
+        "coverage": 1.0
+      },
+      "must_not_contain_violations": [],
+      "structure": {
+        "present": [],
+        "missing": [],
+        "order_ok": true,
+        "canonical_missing": [],
+        "canonical_order_ok": true,
+        "ok": true
+      },
+      "tokens_in": 7258,
+      "tokens_out": 271,
+      "content_chars": 512,
+      "judge": {
+        "model": "deepseek-flash",
+        "scores": {
+          "structure": 3,
+          "completeness": 3,
+          "no_invention": 5,
+          "register": 5,
+          "plain_text": 5
+        },
+        "reasons": {
+          "structure": "Der zusammenfassende Verlauf ist chronologisch korrekt wiedergegeben, der im Diktat am Ende stehende Diagnosenblock fehlt jedoch vollständig, sodass die Blocklogik (Blöcke am Ende) nicht eingehalten ist.",
+          "completeness": "Alle Verlaufsfakten (Notfallversorgung Juni 2025, Hb-Abfall mit 2 EK, Aufnahme Nov. 2025 mit CT-Befund, Beschwerderückbildung, beschwerdefreie Vorstellung Sep. 2026) sind enthalten, die im Diktat aufgeführte Diagnose fehlt aber.",
+          "no_invention": "Es werden ausschließlich Fakten aus dem Diktat verwendet; keine zusätzlichen Diagnosen, Codes, Daten, Werte oder Maßnahmen.",
+          "register": "Sachlicher fachlicher Stil, gängige Abkürzungen (Z.n., EK, CT, Hb) direkt verwendet, keine Füllwörter und keine Kategorie-Labels im Fließtext.",
+          "plain_text": "Reiner Fließtext ohne Markdown, korrekte Umlaute und kein Semikolon."
+        },
+        "citations": {
+          "structure": "",
+          "completeness": "",
+          "no_invention": "",
+          "register": "",
+          "plain_text": ""
+        },
+        "mean": 4.2,
+        "overall_comment": "Die Wiedergabe des Zusammenfassungstextes ist inhaltlich und sprachlich korrekt sowie frei von Erfindungen. Einziger wesentlicher Mangel ist das Fehlen des Diagnosenblocks (Diagnosen: Z.n. Glutealabszess mit Fistel), weshalb Vollständigkeit und Struktur abgewertet werden.",
+        "error": ""
+      }
+    }
+  ]
+}
