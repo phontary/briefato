@@ -30,7 +30,7 @@ from typing import Any, Protocol, runtime_checkable
 
 import httpx
 
-from .prompts import DICTATION_CLOSE, DICTATION_OPEN, KIND_LABELS
+from .prompts import DICTATION_CLOSE, DICTATION_OPEN
 
 logger = logging.getLogger(__name__)
 
@@ -95,10 +95,12 @@ class LLMProvider(Protocol):
 class MockProvider:
     """Deterministic, offline provider.
 
-    It does not invent clinical content: it only re-emits the (pseudonymised)
-    dictation wrapped in a plausible German letter skeleton, so token restoration
-    and the end-to-end flow can be exercised without a network call. Token counts
-    are estimated from character counts; cost is always 0.
+    It does not invent clinical content: it re-emits the (pseudonymised) dictation
+    verbatim (light paragraph normalisation), so token restoration, the rule checker
+    and the end-to-end flow can be exercised without a network call. It deliberately
+    adds no salutation, no "Betreff:" heading and no closing — those are exactly the
+    anti-patterns the brain forbids. Token counts are estimated from character counts;
+    cost is always 0.
     """
 
     name = "mock"
@@ -115,9 +117,8 @@ class MockProvider:
         temperature: float = 0.2,
     ) -> LLMResult:
         started = time.perf_counter()
-        kind = self._extract_kind(user)
         dictation = self._extract_dictation(user)
-        text = self._compose(kind, dictation)
+        text = self._compose(dictation)
         latency_ms = max(1, int((time.perf_counter() - started) * 1000))
         return LLMResult(
             text=text,
@@ -131,7 +132,7 @@ class MockProvider:
 
     @staticmethod
     def _extract_kind(user: str) -> str:
-        match = re.search(r"Dokumenttyp:\s*[^(\n]+\((\w+)\)", user)
+        match = re.search(r"Dokumenttyp:\s*[^(\n]+\(([\w-]+)\)", user)
         return match.group(1) if match else "sonstiges"
 
     @staticmethod
@@ -146,16 +147,11 @@ class MockProvider:
         return (user or "").strip()
 
     @staticmethod
-    def _compose(kind: str, dictation: str) -> str:
-        label = KIND_LABELS.get(kind, KIND_LABELS["sonstiges"])
-        paragraphs = [p.strip() for p in re.split(r"\n\s*\n|\n", dictation) if p.strip()]
-        body = "\n\n".join(paragraphs) or "Keine Angaben übermittelt."
-        return (
-            "Sehr geehrte Damen und Herren,\n\n"
-            f"Betreff: {label}\n\n"
-            f"{body}\n\n"
-            "Mit freundlichen Grüßen"
-        )
+    def _compose(dictation: str) -> str:
+        # Split on blank lines only — single newlines inside a block (e.g. the
+        # Diagnosen list) are preserved so the checker sees intact blocks.
+        paragraphs = [p.strip() for p in re.split(r"\n\s*\n", dictation) if p.strip()]
+        return "\n\n".join(paragraphs) or "Keine Angaben übermittelt."
 
 
 # --------------------------------------------------------------------------- openai-compatible

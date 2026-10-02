@@ -38,6 +38,32 @@ strukturiert die Eingabe des Behandelnden**. Es liefert keine Diagnose, keine Be
 Therapie-/Dosierungs-/Triageentscheidung. Der medizinische Inhalt stammt vom Behandelnden; das
 Mitglied **gibt jeden Brief frei**.
 
+### 1.2 Ausgabeform: Plain Text ist Schreibhilfe, nicht Behandlungsdokument
+
+Die primäre Ausgabe ist **reiner Text**; das Mitglied **kopiert ihn in sein eigenes KIS/AIS** und
+trägt ihn dort als eigenen Eintrag ein. Der DOCX-Export mit Briefkopf ist eine optionale
+Sekundärausgabe. Daraus folgt für die Abgrenzung:
+
+- Die Ausgabe ist ein **Schreib-/Formatierhilfsmittel**; sie wird **nicht** selbst Teil der
+  Patientenakte und ersetzt **keine** ärztliche Dokumentations- oder Entscheidungshandlung.
+- **Verantwortlich bleibt die Praxis / das Mitglied** — für Inhalt, Richtigkeit und die Übernahme
+  ins eigene System. Jeder Brief muss vor Nutzung **freigegeben** werden (Approval-Workflow, T13).
+- Kein Ausgabedatum und keine Archivierung auf Briefato-Seite begründet eine eigene
+  Dokumentationspflicht; die Aufbewahrung richtet sich nach der Weisung der Praxis (`01`, `04`).
+
+### 1.3 Die Musterbrief-Bibliothek ist Referenzstruktur, nicht medizinische Empfehlung
+
+Die Referenzbibliothek (`10-brain-library.md`) liefert dem Produkt **Struktur und Format** (welche
+Sektionen ein Brief welcher Indikation typischerweise trägt) — sie ist **keine** medizinische
+Empfehlung, **keine** Behandlungsleitlinie und **kein** Diagnosewerkzeug. Konsequenzen:
+
+- Der Inhalt eines generierten Briefes stammt weiterhin **ausschließlich** aus der Eingabe des
+  Behandelnden; die Bibliothek steuert nur **Aufbau/Formulierung**, nicht die medizinische Aussage.
+- Ein Template darf dem Modell **keine** therapie-/diagnosegebende Aussage vorgeben (vgl. „Do not
+  do“, Abschnitt 4) — sonst kippt die Einordnung in Richtung MDSW.
+- Lizenzierte Fremdprosa aus Vorlagen darf **nicht** in Kundenbriefe gelangen (Urheberrecht, siehe
+  `10`/`11`) — auch das ist Teil der Verteidigungslinie „Referenz, nicht Inhalt“.
+
 ## 2. KI-VO-Einordnung
 
 | Frage | Bewertung |
@@ -74,6 +100,9 @@ Mitglied **gibt jeden Brief frei**.
 - [ ] **Prompt-/System-Prompt-Versionierung** (`pipeline/prompts.py`): Systemprompt darf keine
       medizinischen Empfehlungen verlangen.
 - [ ] **Freigabe-Log** je Brief (`letters.approved_at`) als Nachweis der menschlichen Letztentscheidung.
+- [ ] **Bibliothek-Referenz dokumentieren:** Musterbrief-Bibliothek ist Struktur-/Formatreferenz, nicht
+      medizinische Empfehlung; keine therapie-/diagnosegebenden Vorgaben daraus (`10`, `11`).
+- [ ] **Ausgabeform dokumentieren:** Plain Text = Schreibhilfe, Kunde kopiert ins eigene KIS.
 - [ ] **KI-VO-Zeitachsen-Review** vor jedem Launch-Meilenstein.
 
 ## 4. „Do not do“ — Produktregeln, die uns aus dem MDR-Scope halten
@@ -94,12 +123,16 @@ Mitglied **gibt jeden Brief frei**.
 
 **Erlaubt (Kernprodukt):**
 - Strukturieren/Formatieren des **vom Mitglied diktierten** Inhalts.
+- **Reiner Text (Copy-Paste ins KIS) als Primärausgabe**; DOCX mit Briefkopf als optionale Sekundärausgabe.
 - Einsetzen von Briefkopf/Praxislogik, Rechtschreibung, Stil, Standardfloskeln, Layout.
 - DOCX-Export, Verlauf, Suche, Mehrsprachigkeit der Ausgabe.
+- Nutzung der Musterbrief-Bibliothek als **Struktur-/Formatreferenz** (nicht als Inhaltsquelle).
 
 **Sicherung im Produkt:**
 - Ein klarer **Disclaimer** im UI: „Schreibhilfe. Kein Medizinprodukt. Die medizinische
   Verantwortung liegt beim Behandelnden.“
+- Der **Plain-Text-Charakter** der Ausgabe ist dokumentiert: kein Behandlungsdokument, sondern
+  Kopiervorlage für das KIS der Praxis.
 - Jeder Brief muss **freigegeben** werden, bevor er genutzt/exportiert wird.
 - Kein Feature-Flag darf die Verbote per Konfiguration umgehbar machen.
 
@@ -112,3 +145,5 @@ Mitglied **gibt jeden Brief frei**.
 - **offen:** Marketing-Claims gegen V9 prüfen.
 - **muss bestätigt werden:** ob die Ausgabe-Mehrsprachigkeit oder „Verbesserung der Formulierungen“
   in Richtung „inhaltliche Bearbeitung“ kippt — Grenze anwaltlich ziehen.
+- **muss bestätigt werden:** ob die Musterbrief-Bibliothek als reine Struktur-/Formatreferenz sauber
+  von einer „medizinischen Inhaltsquelle“ abgegrenzt ist — anwaltlich prüfen (`10`, `11`).

@@ -8,6 +8,8 @@ Checks (hard, exit 1 on failure):
   B) no placeholder markers (T-O-D-O / l-o-r-e-m) in the markdown
   C) every external URL in the markdown is on a line that carries a retrieval date
      (YYYY-MM-DD); URLs inside `inline code` and fenced ```code``` blocks are ignored
+  E) the new library/hygiene documents (10-*, 11-*) carry a minimum number of
+     retrieval dates ("abgerufen YYYY-MM-DD")
 Soft (informational):
   D) prints a checklist of open items ("offen", "muss bestätigt werden", "fehlt")
 """
@@ -32,7 +34,18 @@ EXPECTED = [
     "07-legal-texts-briefing.md",
     "08-mdr-boundary.md",
     "09-provider-dpa-briefing.md",
+    "10-brain-library.md",
+    "11-template-hygiene-checklist.md",
 ]
+
+# New documents must cite retrieval dates ("abgerufen YYYY-MM-DD").
+
+# Built from parts so this file itself never contains the literal markers.
+NEW_CITE_REQUIRED = {
+    "10-brain-library.md": 4,
+    "11-template-hygiene-checklist.md": 3,
+}
+ABRUF_RE = re.compile(r"abgerufen\s+20\d{2}-\d{2}-\d{2}")
 
 # built from parts so this file itself never contains the literal markers
 FORBIDDEN = ["TO" + "DO", "lo" + "rem", "Lo" + "rem", "LO" + "REM", "FIX" + "ME", "XXX"]
@@ -94,6 +107,19 @@ def main() -> int:
                     errors.append(f"URL ohne Abrufdatum: {p.name}:{lineno} {url}")
                     print(f"  [FAIL] {p.name}:{lineno} -> {url}")
     print(f"  -> {url_count} URLs geprüft")
+
+    # E) new documents cite retrieval dates
+    print("\n[E] Neue Dateien zitieren Abrufdaten")
+    for name, minimum in NEW_CITE_REQUIRED.items():
+        p = ROOT / name
+        if not p.exists():
+            continue
+        n = len(ABRUF_RE.findall(p.read_text(encoding="utf-8")))
+        if n < minimum:
+            errors.append(f"{name}: nur {n} Abrufdaten (mind. {minimum})")
+            print(f"  [FAIL] {name}: {n} Abrufdaten (< {minimum})")
+        else:
+            print(f"  [ ok ] {name}: {n} Abrufdaten (>= {minimum})")
 
     # D) open items checklist
     print("\n[D] Offene Punkte / Checkliste")

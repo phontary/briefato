@@ -26,7 +26,8 @@ Operator-Agent (SYSADMIN) ──SSH/Docker──► Host & Repo   ⚠ privilegie
 
 **Assets:** (A1) klinischer Text/Briefe, (A2) Patienten-PII inkl. Versicherungsnr., (A3) Feld-Key
 `BRIEFATO_FIELD_KEY`, (A4) Session-/CSRF-Tokens, (A5) Passwort-Hashes, (A6) Stripe-Keys/Webhook-Secret,
-(A7) SQLite-Datei + Backups, (A8) Verfügbarkeit des Dienstes, (A9) Audit-Log.
+(A7) SQLite-Datei + Backups, (A8) Verfügbarkeit des Dienstes, (A9) Audit-Log,
+(A10) Referenzbibliothek Musterbriefe (Produkt-Abzug = Metadaten; Quellarchiv = Volltext).
 
 ## 1. Spoofing
 
@@ -68,6 +69,8 @@ Operator-Agent (SYSADMIN) ──SSH/Docker──► Host & Repo   ⚠ privilegie
 | I7 | Backup-Leak off-host | M | H | Verschlüsselung + Zugriffskontrolle | **geplant (M12)** |
 | I8 | IP in `audit_events`/`auth_sessions` | M | L | Kürzung/Short-TTL | **fehlt (T11)** |
 | I9 | Fehlerantworten verraten Existenz fremder IDs | M | L | einheitliche 404 | nicht verifiziert |
+| I10 | **Re-Identifikation über Templates**: eine Vorlage trägt eine Patientenspur (Fallkennung/Name/exaktes Datum); per Verkettung mit einer Visitenliste wird eine reale Person bestimmbar | M | **H** | 3 belastete Dateien vom Ingest ausgeschlossen; Scrub-Report; Anonymisierungsstandard (`10` § 4) | **kein automatisiertes Gate** (T33) — heute manuell; `Cholezystolithiasis.md` ist per Verkettung mit `visitenliste-2026-09-22.md` **real** re-identifizierbar |
+| I11 | **Model-Output gibt lizenzierte Fremdprosa einer Vorlage wieder** und liefert sie an zahlende Kunden (Urheber-/Nutzungsrechtsverstoß) | M | M | 4 Dateien `licence_risk = review`; Paraphrase-Regel (`11` B) | **kein formaler Lizenz-Prüfprozess** (T34); Prosa darf nicht ausgeliefert werden |
 
 ## 5. Denial of Service
 
@@ -77,6 +80,7 @@ Operator-Agent (SYSADMIN) ──SSH/Docker──► Host & Repo   ⚠ privilegie
 | D2 | LLM-Kosten-Abuse (Quota umgehen) | M | M | `subscriptions.letters_quota/used`, Quota-Enforcement | Vertrag; **Stub** |
 | D3 | Riesiges Diktat / Endlos-Input | M | M | Input-Längenlimit, `max_tokens`, `llm_timeout_s=180` | teilweise in `providers.py` (Vertrag) |
 | D4 | Bot-Traffic auf Landing/Login | H | L | CrowdSec `import crowdsec_protect`, Caddy | Host-Ebene; Schutzgrad prüfen |
+| D5 | **Persönliches Quellarchiv als Single Point of Failure**: `/workspace/schreibdienst/musterbriefe/` ist weder versioniert noch gesichert; Verlust/Veränderung trifft die Vorlagengrundlage des Produkts | M | H | Git + verschlüsseltes Off-host-Backup (empfohlen) | **fehlt** (T35, M15) — kein Git, kein Backup |
 
 ## 6. Elevation of Privilege
 
@@ -107,6 +111,8 @@ Operator-Agent (SYSADMIN) ──SSH/Docker──► Host & Repo   ⚠ privilegie
 5. **Geteilter Host + Swap-Druck** → Verfügbarkeit.
 6. **Betreibender Agent** hat tiefe Host-Rechte → Insider-Risiko.
 7. **Kein unabhängiger Pen-Test.**
+8. **Referenzbibliothek**: keine automatische Anonymisierung, kein Lizenz-Prüfprozess, unversioniertes
+   Quellarchiv (I10, I11, D5 / T33–T35).
 
 ## 9. Monitoring-Hooks (an Art. 32 Abs. 1 lit. d DSGVO)
 
@@ -129,3 +135,5 @@ Operator-Agent (SYSADMIN) ──SSH/Docker──► Host & Repo   ⚠ privilegie
 - **muss bestätigt werden:** Regelwerk für den betreibenden Agenten (kein Patientendatenzugriff,
   Secrets nur aus `pass`).
 - **offen:** SCA/Dependency-Scan und Versionierung.
+- **offen (Blocker):** Anonymisierungs- und Lizenz-Gate der Musterbrief-Bibliothek (I10/I11; `10` § 4/§ 7; `11`).
+- **offen:** Quellarchiv der Musterbriefe versionieren und off-host sichern (D5; M15).

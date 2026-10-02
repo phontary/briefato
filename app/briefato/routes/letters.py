@@ -15,6 +15,7 @@ from ..config import get_settings
 from ..models import LETTER_KINDS, Generation, Letter, Patient, new_id, utcnow
 from ..pipeline import generate as pipeline_generate
 from ..security import audit, decrypt_field, encrypt_field
+from . import brain_bridge
 from .deps import (
     CSRF,
     DB,
@@ -60,11 +61,25 @@ def _quota(db, user) -> dict:
 
 
 def _editor_context(db, user, letter: Letter, **extra) -> dict:
+    dictation = decrypt_field(letter.dictation_enc)
+    content = decrypt_field(letter.content_enc)
+    selected_type = brain_bridge.resolve_explicit_type(letter.template_id)
+    detection = brain_bridge.detect_type(dictation, selected_type)
+    has_text = bool((dictation or "").strip() or (content or "").strip())
     context = {
         "letter": letter,
-        "dictation": decrypt_field(letter.dictation_enc),
-        "content": decrypt_field(letter.content_enc),
+        "dictation": dictation,
+        "content": content,
         "quota": _quota(db, user),
+        # Method (brain) view for the editor.
+        "doc_types": brain_bridge.available_types(),
+        "selected_type": selected_type,
+        "detection": detection,
+        "used_templates": brain_bridge.search_templates(dictation or content) if has_text else [],
+        "rule_check": brain_bridge.check_rules(content, detection["key"], dictation) if content.strip() else None,
+        "brain_available": brain_bridge.brain_available(),
+        "method_message": brain_bridge.method_message(),
+        "custom_rules": str((user.letterhead_json or {}).get("custom_rules", "") or ""),
         "active": "briefe",
         "error": None,
         "generated": False,
@@ -270,6 +285,7 @@ async def erzeugen(request: Request, db: DB, user: CurrentUser, letter_id: str):
 
     form = await request.form()
     dictation = str(form.get("dictation", "")).strip()
+    doc_type = brain_bridge.resolve_explicit_type(str(form.get("doc_type", "")))
     if not dictation:
         return _editor_response(
             request, db, user, letter, htmx=htmx, error="Bitte geben Sie zuerst ein Diktat ein.",
@@ -287,6 +303,10 @@ async def erzeugen(request: Request, db: DB, user: CurrentUser, letter_id: str):
         )
 
     letter.dictation_enc = encrypt_field(dictation)
+    # The explicit document-type choice (or "auto") is persisted on the frozen ``template_id``
+    # column; it is written again after folding because the pipeline result carries its own
+    # default for that field.
+    letter.template_id = doc_type
     db.commit()
 
     patient = letter.patient
@@ -318,6 +338,7 @@ async def erzeugen(request: Request, db: DB, user: CurrentUser, letter_id: str):
     # The pipeline keeps its own accounting (quota + audit); the portal only folds the
     # resulting letter row (or the failed one) back onto the member's draft.
     _fold_pipeline_letters(db, user, letter, before_ids, result)
+    letter.template_id = doc_type
     if error is not None and letter.status != "failed":
         letter.status = "failed"
         letter.error = error

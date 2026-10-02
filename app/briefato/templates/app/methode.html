@@ -1,0 +1,118 @@
+{% extends "app_base.html" %}
+{% block title %}Methode — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>Methode</h1>
+  <p class="muted">Die Schreibweise hinter Briefato: Kern, prüfbare Regeln, Praxis-Regeln und
+    Anti-Patterns. Diese Seite ist eine Leseansicht; sie ändert die Methode nicht.</p>
+</div>
+
+{% if not brain_available %}
+<div class="alert alert-info" role="status">
+  <div><span class="alert-title">Hinweis zur Umgebung.</span> {{ method_message }}</div>
+</div>
+{% endif %}
+
+<section class="card mt-6" aria-labelledby="kern-title">
+  <div class="card-header"><h2 id="kern-title">Kern</h2></div>
+  <div class="card-body">
+    <p class="muted">Die Kernregeln (K0–K8) bestimmen Ausgabeform, Routing, Formatierung und
+      Verbote. Sie gelten für jede Erzeugung.</p>
+    {% for section in kern %}
+    <details class="method-section">
+      <summary>{{ section.title }} <span class="muted">({{ section.rules | length }})</span></summary>
+      <ul class="method-rules">
+        {% for rule in section.rules %}
+        <li>
+          <span class="rule-id">{{ rule.id }}</span>
+          <strong>{{ rule.title }}</strong>
+          {% if rule.text %}<p class="method-text">{{ rule.text }}</p>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card mt-6" aria-labelledby="rules-title">
+  <div class="card-header"><h2 id="rules-title">Regelwerk ({{ rule_total }} Regeln)</h2></div>
+  <div class="card-body">
+    <p class="muted">Jede Regel ist ein Satz und wird beim Erzeugen maschinell geprüft.</p>
+    {% for group in rule_groups %}
+    <details class="method-section">
+      <summary>{{ group.title }} <span class="muted">({{ group.rules | length }})</span></summary>
+      <ul class="method-rules">
+        {% for rule in group.rules %}
+        <li>
+          <span class="rule-id">{{ rule.id }}</span>
+          <p class="method-text">{{ rule.text }}</p>
+          {% if rule.provenance %}<p class="hint">Provenienz: {{ rule.provenance }}</p>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card mt-6" aria-labelledby="praxis-title">
+  <div class="card-header"><h2 id="praxis-title">Regeln aus der Praxis ({{ practice_total }} Regeln)</h2></div>
+  <div class="card-body">
+    <p class="muted">Aus dem Schreibdienst abgeleitete Regeln (P1…Pn), belegt mit ihrer Herkunft.</p>
+    {% for group in practice_groups %}
+    <details class="method-section">
+      <summary>{{ group.title }} <span class="muted">({{ group.rules | length }})</span></summary>
+      <ul class="method-rules">
+        {% for rule in group.rules %}
+        <li>
+          <span class="rule-id">{{ rule.id }}</span>
+          <p class="method-text">{{ rule.text }}</p>
+          {% if rule.provenance %}<p class="hint">Provenienz: {{ rule.provenance }}</p>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card mt-6" aria-labelledby="anti-title">
+  <div class="card-header"><h2 id="anti-title">Anti-Patterns ({{ anti_patterns | length }})</h2></div>
+  <div class="card-body">
+    <p class="muted">Verhaltensweisen, die ein generisches Sprachmodell produziert und die hier
+      ausdrücklich nicht erwünscht sind.</p>
+    {% for item in anti_patterns %}
+    <details class="method-section">
+      <summary>{{ item.id }} — {{ item.title }}</summary>
+      {% if item.generic %}<p class="method-text"><strong>Vermeiden:</strong> {{ item.generic }}</p>{% endif %}
+      {% if item.replacement %}<p class="method-text"><strong>Stattdessen:</strong> {{ item.replacement }}</p>{% endif %}
+      {% if item.provenance %}<p class="hint">Provenienz: {{ item.provenance }}</p>{% endif %}
+    </details>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card mt-6" id="meine-regeln" aria-labelledby="custom-title">
+  <div class="card-header"><h2 id="custom-title">Meine Regeln</h2></div>
+  <div class="card-body">
+    <p class="muted">Eigene Ergänzungen werden nach dem Kern in den Auftrag aufgenommen. Sie
+      können die harten Regeln des Kerns nicht außer Kraft setzen.</p>
+    <form method="post" action="/app/methode/regeln">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="field">
+        <label for="custom_rules">Eigene Regeln</label>
+        <textarea class="textarea" id="custom_rules" name="custom_rules" rows="8"
+                  aria-describedby="custom-hint"
+                  placeholder="Eine Regel pro Zeile, z. B.: Verwende „Pat.“ statt „Patient/in“.">{{ custom_rules }}</textarea>
+        <p id="custom-hint" class="hint">Wird nach dem Kern ergänzt. Die harten Kernregeln
+          (Ausgabeform, keine Erfindungen, Diagnosen am Ende) bleiben verbindlich.</p>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Regeln speichern</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

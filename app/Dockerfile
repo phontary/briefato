@@ -19,6 +19,10 @@ RUN pip install --no-cache-dir -r /srv/briefato/app/requirements.txt
 COPY app /srv/briefato/app
 COPY landing /srv/briefato/landing
 
+# The method brain (kern/rules/dokumenttypen + the packaged Musterbrief library). Without it the
+# portal degrades to "Methode nicht eingebunden" — see tools/pack-brain.py for what is packaged.
+COPY brain /srv/briefato/brain
+
 RUN useradd --system --uid 10001 --home /srv/briefato briefato \
  && mkdir -p /data && chown -R briefato:briefato /data /srv/briefato
 

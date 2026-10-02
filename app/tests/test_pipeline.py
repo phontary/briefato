@@ -481,3 +481,164 @@ def test_generate_letter_failure_marks_failed_and_keeps_quota(db, monkeypatch):
 
     assert db.query(AuditEvent).filter_by(event="letter.failed", target_id=letter.id).count() == 1
     assert db.query(AuditEvent).filter_by(event="letter.generated", target_id=letter.id).count() == 0
+
+
+# --------------------------------------------------------------------------- brain wiring
+
+_COMPLIANT_DICTATION = (
+    "Die Patientin stellte sich mit dem Rettungsdienst bei seit vier Wochen bestehender "
+    "atraumatischer Ulzeration am rechten Unterschenkel vor. Wir nahmen die Patientin zur "
+    "weiteren Diagnostik bzw. Schmerztherapie stationär auf.\n"
+    "In der KU zeigte sich eine 3 × 3 cm große Ulzeration mit fibrinbelegtem Wundgrund, die "
+    "peripheren Pulse waren tastbar.\n"
+    "Zur Abklärung erfolgte eine Duplexsonographie, wobei sich eine chronisch venöse "
+    "Insuffizienz zeigte.\n"
+    "Im Verlauf gestaltete sich die Wundheilung regelrecht, der Kostaufbau wurde vertragen.\n"
+    "Nach klinischer Besserung entließen wir die Patientin am 07.05.2026 in die häusliche Pflege.\n\n"
+    "ambulante Therapieempfehlungen nach der Entlassung:\n"
+    "Wir empfahlen die regelmäßige Wundkontrolle und ausreichende Mobilisation. Vielen Dank "
+    "für die Weiterbetreuung.\n\n"
+    "Diagnosen:\n"
+    "Ulcus cruris venosum\n"
+    "Chronisch venöse Insuffizienz\n\n"
+    "Nebenerkrankungen:\n"
+    "keine\n\n"
+    "Therapie-Maßnahmen auf der Station:\n"
+    "OP am 17.04.2026: Wunddébridement\n"
+    "Kompressionstherapie"
+)
+
+
+def _seed(db):
+    user = _sample_user()
+    db.add(user)
+    db.commit()
+    patient = _sample_patient(user.id)
+    db.add(patient)
+    subscription = Subscription(user_id=user.id, plan_code="starter", letters_quota=40, letters_used=0)
+    db.add(subscription)
+    db.commit()
+    return user, patient, subscription
+
+
+def test_generate_letter_brain_compliant_end_to_end(db):
+    user, patient, _ = _seed(db)
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation=_COMPLIANT_DICTATION,
+        letterhead={"practice_name": "Praxis Dr. Weber", "full_name": "Dr. med. Weber"},
+    )
+    content = security.decrypt_field(letter.content_enc)
+
+    assert letter.status == "done"
+    assert letter.kind == "arztbrief"
+    assert "{{" not in content and "}}" not in content  # plain text, tokens restored
+    assert "*" not in content and "#" not in content  # no markdown
+    assert "Diagnosen:" in content
+    # Diagnosen block is the last block before the terminal station blocks
+    assert content.index("Diagnosen:") > content.index("ambulante Therapieempfehlungen")
+    assert content.rstrip().endswith("Kompressionstherapie")
+
+    last = getattr(letter, "last_check", None)
+    assert last is not None
+    assert last["doc_type"] == "arztbrief"
+    assert last["templates"], "retrieval detail must be attached"
+    assert all(check["ok"] for check in last["checks"])
+    assert letter.error == ""
+
+
+def test_generate_letter_triage_overrides_generic_kind(db):
+    user, patient, _ = _seed(db)
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="sonstiges",
+        dictation="Bitte nur die Zusammenfassung des Verlaufs: Der Patient wurde im Sep. 2026 operativ versorgt.",
+        letterhead={},
+    )
+    assert letter.kind == "zusammenfassung"
+    assert letter.last_check["doc_type"] == "zusammenfassung"
+
+
+def test_generate_letter_combined_order_produces_two_documents(db):
+    user, patient, _ = _seed(db)
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation="Bitte OP-Bericht + Zusammenfassung aus diesem Diktat: bei dem Patienten erfolgte eine Cholezystektomie.",
+        letterhead={},
+    )
+    assert letter.status == "done"
+    assert letter.kind == "operationsbericht"
+    assert letter.last_check["doc_types"] == ["operationsbericht", "zusammenfassung"]
+    assert len(letter.last_check["checks"]) == 2
+
+
+def test_generate_letter_attaches_findings_when_hard_rules_fail(db):
+    user, patient, _ = _seed(db)
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation="Patientin mit Cholezystitis und Oberbauchschmerzen. Sonographie: Cholelithiasis. Labor: CRP 87.",
+        letterhead={},
+    )
+    # The letter is still delivered, but the hard findings are attached for the UI.
+    assert letter.status == "done"
+    assert letter.last_check["hard_count"] > 0
+    assert "Regelprüfung" in letter.error
+    assert letter.last_check["retried"] is True
+
+    audit = db.query(AuditEvent).filter_by(event="letter.generated", target_id=letter.id).one()
+    assert audit.meta_json["hard_count"] > 0
+    assert audit.meta_json["templates"]
+    assert isinstance(audit.meta_json["findings"], list)
+
+
+def test_generate_letter_retrieval_never_returns_scrub_pending(db, monkeypatch):
+    from briefato.brain import retrieval as brain_retrieval
+
+    user, patient, _ = _seed(db)
+    spy = _SpyProvider()
+    monkeypatch.setattr(gen_mod, "get_provider", lambda settings: spy)
+
+    letter = gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation="Gallensteine mit Kolik bei Cholezystolithiasis, laparoskopische Cholezystektomie geplant.",
+        letterhead={},
+    )
+    used = {entry["file"] for entry in letter.last_check["templates"]}
+    assert used  # retrieval found something
+    assert not (used & brain_retrieval.SCRUB_PENDING)
+
+
+def test_generate_letter_prompt_is_built_from_the_brain(db, monkeypatch):
+    user, patient, _ = _seed(db)
+    spy = _SpyProvider()
+    monkeypatch.setattr(gen_mod, "get_provider", lambda settings: spy)
+
+    gen_mod.generate_letter(
+        db,
+        user=user,
+        patient=patient,
+        kind="arztbrief",
+        dictation=_COMPLIANT_DICTATION,
+        letterhead={"practice_name": "Praxis Dr. Weber"},
+    )
+    captured = f"{spy.system}\n{spy.user}"
+    assert "R1:" in captured and "R67:" in captured
+    assert "AP-01:" in captured
+    assert "PLAYBOOK DOKUMENTTYP" in captured
+    assert "Diagnosen:" in captured
+    # and no raw patient identifier from the sample patient
+    assert "Müller" not in captured and "02.03.1974" not in captured

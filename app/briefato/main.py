@@ -15,8 +15,20 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .config import get_settings
 from .db import init_db
-from .routes import account, admin, auth, billing, letters, patients, portal, public
+from .routes import (
+    account,
+    admin,
+    admin_vorlagen,
+    auth,
+    billing,
+    letters,
+    methode,
+    patients,
+    portal,
+    public,
+)
 from .routes.deps import render
+from .routes.library_models import ensure_library_tables
 from .security import CSRF_COOKIE, NotAuthenticated, new_csrf_token
 
 logger = logging.getLogger("briefato")
@@ -78,6 +90,7 @@ def _apply_security_headers(response: Response, request: Request) -> None:
 def create_app() -> FastAPI:
     settings = get_settings()
     init_db()
+    ensure_library_tables()
 
     app = FastAPI(
         title="Briefato",
@@ -115,6 +128,11 @@ def create_app() -> FastAPI:
     app.include_router(account.router)
     app.include_router(billing.router)
     app.include_router(billing.webhook_router)
+    # Method pages + template library (portal).
+    app.include_router(methode.router)
+    # Admin review must be registered BEFORE the sqladmin mount at /admin so the exact path
+    # /admin/vorlagen-vorschlaege is matched here instead of by the generic sub-application.
+    app.include_router(admin_vorlagen.router)
 
     # ------------------------------------------------------------------ exception handlers
     @app.exception_handler(NotAuthenticated)

@@ -24,11 +24,21 @@ from __future__ import annotations
 PROMPT_VERSION = "de-1"
 
 KIND_LABELS: dict[str, str] = {
+    # legacy frozen kinds (kept for the portal dropdown / DOCX export)
     "arztbrief": "Arztbrief",
     "attest": "Attest",
     "befund": "Befund",
     "ueberweisung": "Überweisung",
     "sonstiges": "Schreiben",
+    # real document types from the brain (brain/dokumenttypen/*)
+    "zusammenfassung": "Zusammenfassung",
+    "operationsbericht": "OP-Bericht",
+    "ambulant": "Ambulanter Brief",
+    "entlassbrief": "Entlassbrief",
+    "pflegebericht": "Pflegebericht-Integration",
+    "entlassmedikationsplan": "Entlassmedikationsplan",
+    "ablehnungsbogen": "Ablehnungsbogen",
+    "weiterbildung-kv-nachweise": "Weiterbildungs-/KV-Nachweis",
 }
 
 # Canonical section order per document type (see README.md sources).

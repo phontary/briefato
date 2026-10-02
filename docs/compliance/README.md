@@ -1,6 +1,7 @@
 # Briefato — Compliance-Paket (DSGVO / Recht / Threat Model)
 
 Owner: Mohamed Sabry. Erstellt von WORKSTREAM-COMPLIANCE am 2026-10-02.
+Erweitert von WORKSTREAM-COMPLIANCE-2 am 2026-10-02 (Referenzbibliothek Musterbriefe, Template-Hygiene, Plain-Text-Ausgabe).
 Scope: nur `docs/compliance/**`. Dieses Verzeichnis ist **Dokumentation, kein Code**.
 
 > **KEIN RECHTSRAT.** Kein Dokument in diesem Verzeichnis ist Rechtsberatung. Alle Texte sind
@@ -39,7 +40,9 @@ Rollenverteilung (die zentrale Prüffrage des gesamten Pakets):
 | `07-legal-texts-briefing.md` | Briefing für Anwalt/Inhaber zu Impressum, Datenschutz, AGB, Widerruf | Entwurf — muss bestätigt werden |
 | `08-mdr-boundary.md` | MDR-/KI-VO-Abgrenzung + „Do not do“-Produktregeln | Entwurf — muss bestätigt werden |
 | `09-provider-dpa-briefing.md` | Anforderungen an den Modell-Provider, Optionsvergleich | Entwurf — muss bestätigt werden |
-| `scripts/selfcheck.py` | Selbsttest (Existenz, keine Platzhalter, URLs mit Abrufdatum, offene Punkte) | verifiziert (läuft) |
+| `10-brain-library.md` | Referenzbibliothek Musterbriefe (Verarbeitungstätigkeit, Rollen, Anonymisierungsstandard, Versionierung) | Entwurf — muss bestätigt werden |
+| `11-template-hygiene-checklist.md` | Abarbeitbare Checkliste: Patientenspuren, Lizenzprosa, Duplikate | Entwurf — muss bestätigt werden |
+| `scripts/selfcheck.py` | Selbsttest (Existenz, keine Platzhalter, URLs mit Abrufdatum, neue Dateien mit Abrufdatum, offene Punkte) | verifiziert (läuft) |
 
 ## 3. Statuslegende
 
@@ -66,6 +69,9 @@ Rollenverteilung (die zentrale Prüffrage des gesamten Pakets):
 | M10 | **DSB-Benennung** – ob ein Datenschutzbeauftragter zu benennen ist (§ 38 BDSG / Art. 37 DSGVO) | Kernaktivität ist umfangreiche Verarbeitung besonderer Daten | `01` |
 | M11 | **Sub-Processor-Verträge abschließen** (Hosting, Backup-Ziel, E-Mail-Versand) | Art. 28 Abs. 4 DSGVO | `02` |
 | M12 | **Backup-Restore-Test + Verschlüsselung off-host** durchführen und protokollieren | Art. 32 Abs. 1 lit. c DSGVO | `03`, `04` |
+| M13 | **Anonymisierungs-Gate implementieren** für die Musterbrief-Bibliothek (kein `scrub_pending` ins Retrieval) | 3 Templates tragen Patientenspuren; heute nur manueller Scrub | `10`, `11` |
+| M14 | **Inhaltslizenz-Prüfprozess** (Paraphrase/Freigabe) für die 4 lizenzierten Templates | UrhG; Fremdprosa darf nicht ausgeliefert werden | `10`, `11` |
+| M15 | **Quellarchiv versionieren + sichern** (`/workspace/schreibdienst/musterbriefe/`) | Single Point of Failure: kein Git, kein Backup | `10`, `06` (D5) |
 
 ## 5. Quellenverzeichnis (Kurzform)
 
@@ -82,6 +88,7 @@ Vollständige Einzelnachweise stehen in den jeweiligen Dokumenten. Kanonische Fu
 - § 19 UStG — https://www.gesetze-im-internet.de/ustg_1980/__19.html (abgerufen 2026-10-02).
 - § 6 PAngV — https://www.gesetze-im-internet.de/pangv_2022/__6.html (abgerufen 2026-10-02).
 - § 25 TDDDG — https://www.gesetze-im-internet.de/ttdsg/__25.html (abgerufen 2026-10-02).
+- UrhG § 2 (Sprachwerke), § 15 (Verwertungsrechte), § 44b (Text und Data Mining), § 51 (Zitate) — https://www.gesetze-im-internet.de/urhg/__2.html , https://www.gesetze-im-internet.de/urhg/__15.html , https://www.gesetze-im-internet.de/urhg/__44b.html , https://www.gesetze-im-internet.de/urhg/__51.html (abgerufen 2026-10-02).
 - DSK Orientierungshilfe TOM für KI-Systeme (Juni 2025) — https://www.datenschutzkonferenz-online.de/media/oh/DSK-OH_KI-Systeme.pdf (abgerufen 2026-10-02).
 - DSK Orientierungshilfe für Anbieter:innen digitaler Dienste (Nov. 2024) — https://www.datenschutzkonferenz-online.de/media/oh/OH_Digitale_Dienste.pdf (abgerufen 2026-10-02).
 - DSK Kurzpapier Nr. 13 „Auftragsverarbeitung“ (in Überarbeitung) — https://www.datenschutzkonferenz-online.de/media/kp/dsk_kpnr_13.pdf (abgerufen 2026-10-02).
@@ -94,11 +101,13 @@ cd /workspace/briefato && python3 docs/compliance/scripts/selfcheck.py
 ```
 
 Der Self-Check prüft:
-1. **Existenz**: alle erwarteten Dateien vorhanden und nicht leer.
+1. **Existenz**: alle erwarteten Dateien (inkl. `10-brain-library.md`, `11-template-hygiene-checklist.md`)
+   vorhanden und nicht leer.
 2. **Platzhalter**: keine Markierungen `TO`+`DO` oder `lo`+`rem` in den Markdown-Dateien.
 3. **Quellen-Integrität**: jede zitierte `http(s)://`-URL steht in einer Zeile bzw. einem
    Aufzählungspunkt mit einem Abrufdatum (`abgerufen YYYY-MM-DD`) — sonst Fehler.
-4. **Offene Punkte**: druckt die Checkliste der `muss bestätigt werden`/`offen`-Einträge.
+4. **Abrufdatum der neuen Dateien**: `10-*` und `11-*` müssen Abrufdaten zitieren (Mindestanzahl je Datei).
+5. **Offene Punkte**: druckt die Checkliste der `muss bestätigt werden`/`offen`-Einträge.
 
 Exit-Code 0 = alle harten Checks grün; Exit-Code 1 = mindestens ein Fehler.
 

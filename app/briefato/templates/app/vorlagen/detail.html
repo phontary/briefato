@@ -1,0 +1,87 @@
+{% extends "app_base.html" %}
+{% block title %}{{ entry.title }} — Vorlage — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>{{ entry.title }}</h1>
+  <p class="muted">
+    <a href="/app/vorlagen">Vorlagen</a> ·
+    Fachgruppe: {{ entry.group }} ·
+    {{ entry.chars }} Zeichen
+  </p>
+</div>
+
+<div class="meta-list mt-2">
+  {% if internal %}<span class="badge badge-warn">nur intern – Referenz</span>{% endif %}
+  {% if entry.licence_risk == 'low' %}<span class="badge badge-ok">Lizenz: unkritisch</span>{% endif %}
+  {% if entry.has_quellen %}<span class="badge badge-accent">mit Quellen</span>{% endif %}
+</div>
+
+<section class="card mt-4">
+  <div class="card-body">
+    <dl class="dl">
+      <dt>Stichwörter</dt>
+      <dd>{{ entry.indication_keywords | join(' · ') or '—' }}</dd>
+      <dt>Sektionen vorhanden</dt>
+      <dd>{{ entry.sections_present | join(' · ') or '—' }}</dd>
+      <dt>Sektionen fehlen</dt>
+      <dd>{{ entry.sections_missing | join(' · ') or 'keine' }}</dd>
+      <dt>Original-Überschriften</dt>
+      <dd>{{ entry.headings_raw | join(' · ') or '—' }}</dd>
+    </dl>
+  </div>
+</section>
+
+{% if internal %}
+<div class="alert alert-warn mt-4" role="status">
+  <div><span class="alert-title">Nur intern – Referenz.</span> Für diese Vorlage steht die
+    Lizenzprüfung aus. Sie ist als Struktur-Referenz gekennzeichnet und nicht für die
+    wörtliche Übernahme vorgesehen.</div>
+</div>
+{% endif %}
+
+<section class="card mt-6" aria-labelledby="body-title">
+  <div class="card-header"><h2 id="body-title">Vorlagentext</h2></div>
+  <div class="card-body">
+    {% if body_available %}
+    <div class="reference-text">{{ body_html | safe }}</div>
+    {% else %}
+    <p class="muted">Der Volltext ist in dieser Umgebung nicht eingebunden. Die Metadaten und die
+      Sektionsstruktur stehen oben.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="card mt-6" id="vorschlag" aria-labelledby="proposal-title">
+  <div class="card-header"><h2 id="proposal-title">Änderung oder neue Vorlage vorschlagen</h2></div>
+  <div class="card-body">
+    <p class="muted">Vorschläge werden von der Administration geprüft. Der Quellbestand wird dabei
+      nicht unmittelbar geändert.</p>
+    <form method="post" action="/app/vorlagen/vorschlag">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="source_template" value="{{ entry.file }}">
+      <div class="field-grid">
+        <div class="field field-full">
+          <label for="diagnosis">Diagnose / Indikation <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id="diagnosis" name="diagnosis" type="text" required maxlength="200"
+                 autocomplete="off" value="{{ entry.title }}">
+        </div>
+        <div class="field field-full">
+          <label for="sections">Vorgeschlagene Sektionen</label>
+          <input class="input" id="sections" name="sections" type="text" maxlength="2000"
+                 value="{{ entry.sections_present | join(', ') }}">
+        </div>
+        <div class="field field-full">
+          <label for="note">Anmerkung</label>
+          <textarea class="textarea" id="note" name="note" rows="3" maxlength="2000"
+                    placeholder="Was soll ergänzt oder geändert werden?"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Vorschlag senden</button>
+        <a class="btn btn-secondary" href="/app/vorlagen">Zurück</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

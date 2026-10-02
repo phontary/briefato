@@ -1,0 +1,93 @@
+{% extends "app_base.html" %}
+{% block title %}Vorlagen — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>Vorlagen</h1>
+  <p class="muted">Referenzbibliothek der Musterbriefe. Die Vorlagen liefern die Struktur
+    (Sektionen) für die Erzeugung; sie ersetzen nicht die Prüfung durch die Ärztin oder den Arzt.</p>
+</div>
+
+<div class="meta-list mt-2">
+  <span>Bibliothek: <strong>{{ total }}</strong> Vorlagen</span>
+  {% if locked_count %}<span>Gesperrt: <strong>{{ locked_count }}</strong></span>{% endif %}
+  <a href="/app/vorlagen/vorschlaege">Meine Vorschläge</a>
+</div>
+
+{% if not archive_available %}
+<div class="alert alert-info mt-4" role="status">
+  <div><span class="alert-title">Volltext nicht verfügbar.</span> Das Quellarchiv ist in dieser
+    Umgebung nicht eingebunden. Katalog und Suche funktionieren weiter.</div>
+</div>
+{% endif %}
+
+<form class="row mt-4" method="get" action="/app/vorlagen" role="search">
+  <label class="visually-hidden" for="q">Vorlagen durchsuchen</label>
+  <input class="input" id="q" name="q" type="search" value="{{ q }}" autocomplete="off"
+         placeholder="Indikation, Stichwort oder Fachgruppe…">
+  <button class="btn btn-secondary" type="submit">Suchen</button>
+  {% if q %}<a class="btn btn-ghost" href="/app/vorlagen">Zurücksetzen</a>{% endif %}
+</form>
+
+{% if entries %}
+{% for group, items in entries | groupby('group') %}
+<section class="card mt-6" aria-labelledby="g-{{ loop.index }}">
+  <div class="card-header"><h2 id="g-{{ loop.index }}">{{ group }} <span class="muted">({{ items | length }})</span></h2></div>
+  <div class="card-body">
+    <ul class="library-list">
+      {% for entry in items %}
+      <li class="library-item">
+        {% if entry.locked %}
+        <span class="library-title">{{ entry.title }}</span>
+        <span class="badge badge-warn">gesperrt (Prüfung ausstehend)</span>
+        {% else %}
+        <a class="library-title" href="/app/vorlagen/{{ entry.file }}">{{ entry.title }}</a>
+        {% if entry.internal %}<span class="badge badge-warn">nur intern – Referenz</span>{% endif %}
+        {% endif %}
+        <span class="muted library-meta">{{ entry.indication_keywords[:6] | join(' · ') }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endfor %}
+{% else %}
+<div class="mt-6">
+  <div class="empty">
+    <h3>Keine Vorlage gefunden</h3>
+    <p>Für „{{ q }}“ gibt es keine passende Vorlage. Sie können eine neue Vorlage vorschlagen.</p>
+  </div>
+</div>
+{% endif %}
+
+<section class="card mt-6" id="vorschlag" aria-labelledby="proposal-title">
+  <div class="card-header"><h2 id="proposal-title">Vorlage vorschlagen</h2></div>
+  <div class="card-body">
+    <p class="muted">Fehlt eine Vorlage für eine Diagnose, schlagen Sie sie hier vor. Der Vorschlag
+      wird von der Administration geprüft; er ändert die Bibliothek nicht unmittelbar.</p>
+    <form method="post" action="/app/vorlagen/vorschlag">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="source_template" value="{{ q }}">
+      <div class="field-grid">
+        <div class="field field-full">
+          <label for="diagnosis">Diagnose / Indikation <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id="diagnosis" name="diagnosis" type="text" required maxlength="200"
+                 autocomplete="off" value="{{ q }}">
+        </div>
+        <div class="field field-full">
+          <label for="sections">Vorgeschlagene Sektionen</label>
+          <input class="input" id="sections" name="sections" type="text" maxlength="2000"
+                 placeholder="Klinik, Diagnostik, Therapie, Nachsorge">
+        </div>
+        <div class="field field-full">
+          <label for="note">Anmerkung</label>
+          <textarea class="textarea" id="note" name="note" rows="3" maxlength="2000"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Vorschlag senden</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

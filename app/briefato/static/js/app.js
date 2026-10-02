@@ -64,6 +64,60 @@
     });
   }
 
+  /* Copy-to-clipboard: [data-copy-target="#id"] copies the target's value/text. */
+  function copyText(value) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(value);
+    }
+    return new Promise(function (resolve, reject) {
+      try {
+        var area = document.createElement("textarea");
+        area.value = value;
+        area.setAttribute("readonly", "");
+        document.body.appendChild(area);
+        area.select();
+        var ok = document.execCommand("copy");
+        document.body.removeChild(area);
+        if (ok) {
+          resolve();
+        } else {
+          reject(new Error("execCommand copy failed"));
+        }
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  function setFeedback(el, ok, text) {
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove("is-ok", "is-error");
+    el.classList.add(ok ? "is-ok" : "is-error");
+    window.setTimeout(function () {
+      el.textContent = "";
+      el.classList.remove("is-ok", "is-error");
+    }, 5000);
+  }
+
+  function initCopy() {
+    document.addEventListener("click", function (event) {
+      var btn = event.target.closest("[data-copy-target]");
+      if (!btn) return;
+      var target = document.querySelector(btn.getAttribute("data-copy-target"));
+      if (!target) return;
+      var value = target.value !== undefined ? target.value : (target.textContent || "");
+      var feedback = document.querySelector("[data-copy-feedback]");
+      copyText(value)
+        .then(function () {
+          setFeedback(feedback, true, "Text kopiert. Sie können ihn jetzt ins KIS einfügen.");
+        })
+        .catch(function () {
+          setFeedback(feedback, false, "Kopieren nicht möglich. Bitte markieren Sie den Text und kopieren Sie mit Strg + C.");
+        });
+    });
+  }
+
   /* Server-rendered toasts use 200 OK; failed HTMX requests keep the page usable. */
   function initHtmxErrors() {
     document.addEventListener("htmx:responseError", function (event) {
@@ -79,6 +133,7 @@
     initCtrlEnter();
     initConfirms();
     initToasts();
+    initCopy();
     initHtmxErrors();
   });
 })();

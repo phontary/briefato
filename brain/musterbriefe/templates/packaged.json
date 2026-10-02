@@ -1,0 +1,763 @@
+{
+ "packaged": 149,
+ "locked": [
+  "Acne-inversa.md",
+  "Cholezystolithiasis.md",
+  "Struma_nodosa_Hyperthyreose.md"
+ ],
+ "missing_in_source": [],
+ "licence_review": [
+  "Coxarthrose_Exsikkose_Sturz.md",
+  "Pangastritis.md",
+  "Papillaere_Pankreatitis.md",
+  "Proktitis.md"
+ ],
+ "source": "/workspace/schreibdienst/musterbriefe",
+ "templates": [
+  {
+   "file": "AC-Gelenk-Verletzung_Schulter.md",
+   "sha256": "12fc02dd30656b7bdd001cb8ecf40afad4662d3b1aadfe9800715778ed9ca6f0",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Abdominales_Lymphom.md",
+   "sha256": "59d7cb5bd2396b475c0864a634ddf74105853cda7e184138a8c91a6b4b4db2d1",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Abrissfraktur-Basis-MFK-V.md",
+   "sha256": "955a03fcf72b28bfba5a0263dc7cc68022f577815ae6545bc0b278f7ad3b1cc3",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Abszess.md",
+   "sha256": "0bbb1ed02463958004d0b07bf479717868e6939c5b87a74d96ce3e350350c8f6",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Adipositas.md",
+   "sha256": "37c9648d428f5af30cec6c7fbab7e4dc4abedb5746bf6b13081d609e51144022",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Adipositas_permagna.md",
+   "sha256": "afb274ac71ed3f96784500c51b5f4cabfa56f68313c13303684cf71d60c02d20",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Akut_auf_chronisches_Subduralhaematom.md",
+   "sha256": "0f2d62a000bf5d645450f076865d1eac98ee1536e1370933c1d364e34d7a7125",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Akute_Colitis.md",
+   "sha256": "e4bcbb1b7f4940627a8240ad80a459caec81de60098b9b257c3b2bac6345e837",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Akute_Divertikulitis.md",
+   "sha256": "22c1847d5e6872885ca03c8da5308fc2a6b1316c32172d1dedfd30606a592124",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Akute_Gastritis.md",
+   "sha256": "dddf02334d11eff63dad90d2fac09b22ac6fea43b38187d4d2d3f26f16af60f8",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Akute_Obstipation.md",
+   "sha256": "84a041bc2fa9c54d06dd9f7030db0ee66708e31e5a3a28b5e2f7ccc27b5fcf63",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Akuter_Harnverhalt.md",
+   "sha256": "12cc3d497685a36791e0a57be52ce01526754d708cc415995effbf247c3257f8",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Alkoholintoxikation.md",
+   "sha256": "dc25259e04162204e37ad5a42c7e85729a25d1ea5e7657f98170968abcee2328",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Analfistel_Rektumfistel.md",
+   "sha256": "9a742d15f2757dc623c77c83dffa20e0383a23087e4003c4b6dbcba66a85f077",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Analvenenthrombose.md",
+   "sha256": "75e849d4553790fb7247192fbb2d88503fe58eb653b45f5e05f3c67ce16e49a0",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Anastomositis_nach_Hemikolektomie.md",
+   "sha256": "59ec6bbc7e4afb6b07662841a0d734f9003d4fa9668ae9f138f9221f57ec3020",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Angststoerung.md",
+   "sha256": "e11269591425c1b8869657b565528b7de11ff4e5198176a027b097663eeaf461",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Apoplex_Hemiparese.md",
+   "sha256": "4da66fd5c556c5577f9d082757aa43538d0b1d6f522b8d721373ae70cce69d81",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Appendizitis_epiploica.md",
+   "sha256": "941789e26740d650ac65cdecccc18a06939fd303e8208854de26a09fe5a371df",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Arterielle_Hypertonie.md",
+   "sha256": "fc93ea929acbbdb2df66d5c817d264f374ac287d956dc069f66f49ff08029c72",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Atherom.md",
+   "sha256": "cd0f2c86f8f4c424b3019b87e11aa6aac75d1453ee70058abb96db594d09b57c",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Axiale_Hiatushernie.md",
+   "sha256": "8ece7166a8ad5102950d0a7b31862e42668502ab041962cf52cd2c9f0a4783da",
+   "licence_risk": "low"
+  },
+  {
+   "file": "BWS-Schmerzsyndrom_Nervenirritation.md",
+   "sha256": "02207c1115786920242de6bfda1075bdc7cd8b8c81a46ad3584336d0f806751b",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Baker_Zyste.md",
+   "sha256": "a31ca44cfb6fa0cbec0f598ce7dedac0a2f2547b67b7b63c6d88603062988870",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Biliaere_Pankreatitis.md",
+   "sha256": "9db5a717361db3e70a9a54dab66deb86c5f759bf82b527104b350208b3bc3f07",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Bissverletzung.md",
+   "sha256": "1989ad9133411df73f8d5e77075c4ecb1874d8c0dcc5ba10ac39879dc5407a8a",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Borderline-Persoenlichkeitsstoerung_Suizidalitaet.md",
+   "sha256": "b7968c2e288dcc7092fdb03b5b91787814e99018e9516ccf3bd52051d0c31497",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Brustwandtumor.md",
+   "sha256": "399c4d0925fda0742960ebc70e36a113fc25823e9f73a424f8834fdd5102cb65",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Bursitis_olecrani.md",
+   "sha256": "379627c278d336b80a8be808c28953fd56ba0220c9d9820e24d70461b59f4ee4",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Bursitis_praepatellaris.md",
+   "sha256": "633dd9068472b1250f11baa26d7a6a4271d84a994ef75830b95231eae4f3a224",
+   "licence_risk": "low"
+  },
+  {
+   "file": "C-Gastritis_bei_Gallereflux.md",
+   "sha256": "896df71078ab0ff9681c0d0e90d15e4140f7a5b74012a6ee61a4c33451fc1d8e",
+   "licence_risk": "low"
+  },
+  {
+   "file": "COPD.md",
+   "sha256": "9d00a78406727067f0f681740a3ea8a89dbc3f15bf8dbbad8170fec6827fb4e7",
+   "licence_risk": "low"
+  },
+  {
+   "file": "CVI_Stauungsdermatitis_Unterschenkel.md",
+   "sha256": "e9d376e45f181462d5282e9a8a1d338fd7ca2046dc40870c55c3fa60c24e974a",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Choledocholithiasis.md",
+   "sha256": "4c9d7d72cb78c0b949bf6ef90ff9303ba5b4adf5c8d470b848de52dadc2dce7a",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Chronisch_entzuendliche_Colonveraenderungen_sigmoidal.md",
+   "sha256": "2ae0b6690dd2e6413e5a4ad6b54471b0ecb87134f10e69b34e0c2ab24026cd79",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Chronische_Herzinsuffizienz_kardiale_Dekompensation.md",
+   "sha256": "667e23ccc601a838ac8227cce69343c40825e265ae5dd9bd8f16bf2028e890e3",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Chronische_Niereninsuffizienz_CKD3.md",
+   "sha256": "b54089dbcf995e5aa7e75132eff68c5ee94dc612832dc9b88dcf36e60540005e",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Chronische_Niereninsuffizienz_dialysepflichtig.md",
+   "sha256": "fc8c6ce6e27ad799b89ce6d11811982b9386fe6748f59ff4b2677663b034fc28",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Commotio_cerebri.md",
+   "sha256": "7f1746c030b402ed9357b5c669e397c59c770298f6f84bf250feb2c5dbff7ccf",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Coxarthrose_Exsikkose_Sturz.md",
+   "sha256": "d72189ac9ecff737181f18fc92bce2fc0969b515da1ab1a745d4c481f4e643dd",
+   "licence_risk": "review"
+  },
+  {
+   "file": "Daumenfraktur.md",
+   "sha256": "27b35a64752bdcb90e75ab779b383876600d042a0c1e0870dee8ff980a072d79",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Dekubitus.md",
+   "sha256": "9341a62fd1132edd3a94d0a570bd0cd875ab1960a0338b54e9e31220978c6c9c",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Demerskatheter_Dysfunktion_Wechsel.md",
+   "sha256": "96b81d831e174e35373d81e009514af55e5028053602a4c3ed39cf7e10d10450",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Diabetes_mellitus_Typ1.md",
+   "sha256": "6e654e48987520099b481de44255d4c4859b95a33ab9a4d3cf7dc9166055adc1",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Diabetes_mellitus_Typ2.md",
+   "sha256": "1d9a2f0e2c8f613c5efdb54023d848fb907cb2b2c2e0d7ab7120e1815ba6d249",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Diabetisches_Fusssyndrom.md",
+   "sha256": "1d5096aa27d6a5664fe233ce3ea0181b411c4d29d30dbf9ea72df2ee0a96be80",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Dialyseshunt_Nachblutung_Revision.md",
+   "sha256": "cd373132aad866cc96d113161a2f2d54b64f6c5e8c40d7b7e252b0bc9727b7ef",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Distorsion_Daumen_Grundgelenk.md",
+   "sha256": "21cdde784c57ce0ff7400d8586cd6d91d95cb55c8583465c65573b1db2a52765",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Distorsion_Sprunggelenk.md",
+   "sha256": "c0791260b426f68c7ff77b7ce7574bbc6e54a26747b09b398e784523cceae363",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Dorsale_Spondylodese_LWS.md",
+   "sha256": "86f804f1cd57b0c2f7fc15a341be9b160397fa5471574192728ed93128eeed76",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Drei-Gefaess_KHK.md",
+   "sha256": "cfafe35090710510333cfc71947e1088cb28283f0d1d316531c73e429e1258c1",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Duenndarminvagination.md",
+   "sha256": "c91c1e2f19865e5cf1713b3ffd6f54e7e9bf84e6b7a094967171dd7adc8d2022",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Duennndarmileus_Bridenileus.md",
+   "sha256": "855fc650126ba48abc725d6bd21e584f0a59074ffe8aa1afd9d7ea8e18895bc9",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Duodenaltumor.md",
+   "sha256": "c060a712629fea60fd80e2f3296815a7a696036370892b94f52988898263c402",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Erysipel.md",
+   "sha256": "0df75e749d571f78c01ecccc5f377e85bdf04a3a303ba4e9396a0deea93787a9",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Erysipel_Wundrose.md",
+   "sha256": "c135251a41cd18d28202bc3904bc02ab30c65149dfea4807be95aef990833aa4",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Fasziitis_plantaris.md",
+   "sha256": "5a717e41895ccc835f7b8e0851fd623f622dd7b7ac901efe3abc4c1ae90c2b80",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Fingerendgliedamputation.md",
+   "sha256": "fddd8d7d1791bdcb4c677fcc2fd3713eeaa3f9ddf2fb3c99a8ee77048bc3597e",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Fremdkoerperverdacht_Nadelspitze_nach_iv_Drogenkonsum.md",
+   "sha256": "1a3209dfed8e02bac6639c2662af77308853bf195fc8b6573f21046b45dad30d",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Frontobasisfraktur_Spannungspneumozephalus.md",
+   "sha256": "bcc4d27a58c5cbe97769fb848cf611a9b530de3a05923c7f52d80e1152f9e2f4",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Gallenblasenpolypen_Konkremente_Verdacht.md",
+   "sha256": "a96e9f7e16ca7e3aca77397b6bc40c39fafef1e22754a8016f3acc417fec1793",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Gangraenose_Cholezystitis_CHE.md",
+   "sha256": "8a622f34c44c90b78a7abce219913dc17b158c695d3cc6b05e2ca54219ff05d6",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Gastroparese.md",
+   "sha256": "a9d20a518bec9c58826db5e0082ffedbebbf94d60a6bd2831af6f1dcb6547afd",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Gichtarthritis.md",
+   "sha256": "d94485cd3c00e24faaa64768d440a7b1881ac74b14e3bce04e616bb064c5bae3",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Glutealfistel_Glutealabszess.md",
+   "sha256": "af9e3c99131e7007c02a9f0dbc17283fae5d454a24c80c67fc9bec3e64332411",
+   "licence_risk": "low"
+  },
+  {
+   "file": "HWS-Distorsion_Schleudertrauma.md",
+   "sha256": "e387d0c2c1e47b50926911982f9aa54c2df49839f98c5eec54d80e7ef86ae707",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Harnwegsinfekt.md",
+   "sha256": "54229322bb34e8cfe83b1c4f4c6fc60f3ee93f535af98eb907dc33d5af18bb7d",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Hepatomegalie_mit_zystoiden_Leberaesionen.md",
+   "sha256": "223f528653391fde0f1d630ae46a8ab309bc31665212293df8477a47bf32532b",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Herzinsuffizienz.md",
+   "sha256": "6cee36c9013ec56f2bd3ac51080ff984aed6b356352ee96f5a39e10f83d9d4e2",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Humerusfraktur.md",
+   "sha256": "a1c367128431daed07933ef469dda2417ab8024764626d34df38c0b448fa5eff",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Hämorrhoiden.md",
+   "sha256": "d4694d291e6604356d2f132b490ed5e2eb25f285f8e4bb831c7ed56d5c4c22ab",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Iatrogene_Zoekumperforation.md",
+   "sha256": "1a9b68baeade161587d285a9f2688db508807207d9d33de4292d021f6cd71591",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Insektenstich.md",
+   "sha256": "553b6843a4dffa122e4f21ca00f31a99c74df8ca73bf5e90d5746618387166eb",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Klavikulafraktur_lateral_disloziert.md",
+   "sha256": "5481924963659bd8ca04678823295610a8a2bc0fd96c565daae1e864096871b6",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Kniedistorsion.md",
+   "sha256": "15ae1111a331264550f533da2f639a4909a8cfe7782f4be3cdb5713a7bfb0236",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Knieendoprothese_Implantation_Pangonarthrose.md",
+   "sha256": "690b7f3074328228db06b12726ae9468b28924633aa1769e9620bb4cc60b32e2",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Knieendoprothese_Periprothetischer_Infekt.md",
+   "sha256": "92421ead6129d5b021f78d461cfac30c48805d5b7243b1ed98fdce45f92d1c82",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Kontusion_Grosszehe.md",
+   "sha256": "35ea397560107f260e80b5e0fddc092dff7b7f773ecc9055aa2670d557b365c7",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Kontusion_Grundgelenk_Kleinfinger.md",
+   "sha256": "2f923781edb5751bdaaf205ab745ee77c362c2c2ea99a89ee09cfc9b225c3dc7",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Kontusion_Grundgelenk_Ringfinger.md",
+   "sha256": "3e43b08602e4607f9d49f32516dc763aaae7dd3209da8000c6b14f16a7e70b42",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Kontusion_Handruecken.md",
+   "sha256": "45a39661a373f405f4f7882af9848f9c130f765959694faf787623c1e776976f",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Kontusion_Kleinzehe.md",
+   "sha256": "68b793db9aae35695274ec2738b6d8dcef9a620c74d5378de3d5ba47b79f6359",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Kontusion_Mittelzehe.md",
+   "sha256": "5e1eab0dd132a196d691d7a2432d9666a018f4a8e16ce5c59c9c3e20b069d456",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Leberhämangiom.md",
+   "sha256": "3809cf1c49fdd0d999df3076c8601d4ed010bf3a97956e3f5f864c6fd2e7f245",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Leberzirrhose_Aszites_infektioese_Aszitis.md",
+   "sha256": "937d5476850f41be8a3ca0108a47f4e9d16e6b82fbfb8b2fb6a34ceb25698ab9",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Leistenhernie_Inguinalhernie_Lichtenstein.md",
+   "sha256": "2268c1c386281939c166a3213cababb9a9d05e89dcce115c5c37cb61d362cfae",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Leistenhernie_Inguinalhernie_TAPP.md",
+   "sha256": "438f94423e5c82753ffdbf132507d97114bb3f67ef9cb1270ac7e115df874681",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Lipom.md",
+   "sha256": "d6227475f833c3bb2fdac7688268d12421d8db1e56a77e32bb56b600ca8584cf",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Lumboischialgie_Bandscheibenvorfall.md",
+   "sha256": "166ea0566be5bafe2dec5b6efcd362cf4043036f90bc31a5da7487d2613ec878",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Lungenembolie.md",
+   "sha256": "06720537674f81b7f48049cd131133d2889116358023795a60d326925daba450",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Makrozytäre_hypochrome_Anaemie.md",
+   "sha256": "76089710264aa58f8fa2f9a133be217086a90c0a519d97245b8f6f5a26458970",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Mesenteritis.md",
+   "sha256": "5be23ede2f6b27540e184e396797e518a619b37023914ced3b0e0c736c51f4dd",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Metallentfernung_Aussenknoechel.md",
+   "sha256": "cddf5f5ed484b32f6d223283d73c55336bbb2c59648718854898afdb247c6fac",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Metatarsalefraktur_Basis_MFK_II.md",
+   "sha256": "938efd727fd9757ab371531ab04d00bccc8defc8f4457a38aba4822d1bb202c3",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Morbus_Crohn.md",
+   "sha256": "e8cd6e9369341ee75786b9bd579833a5d6f593b182b3a65231c43d46721d2c21",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Muskelverspannung_Muskelzerrung_paravertebral.md",
+   "sha256": "0c3f656b8423598e80dfc8d0b1db675dad73a293abfe4a77e4c7a5e20f820bee",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Nabelhernie.md",
+   "sha256": "70a1532cfe55aa0d15ba7a14a97bf5081c0c6de2f2bfbf2926c85463b32038d3",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Nadelstichverletzung.md",
+   "sha256": "3a6b331e7069aab586bfba7e8f576be53735e3467f98738feacf1f8db666eed5",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Nagelverletzung_Subunguales_Haematom.md",
+   "sha256": "963aa8325f3cbc99aaff06c91e63f91903585f34ab2d1e0d6b93fb760b85040e",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Narbenhernie_epigastrische_IPOM.md",
+   "sha256": "78c68754e1da9c5d4dfd0aea16ac1060a1ee7972aee39aaa50235289d50c68a2",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Narbenhernien_epigastrisch.md",
+   "sha256": "cd2d899576e69ce9a7a0acf0e30b4757fe332147d9490909263a6a49897e6aa2",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Nasenbeinfraktur.md",
+   "sha256": "e7f2a8ddf6b08770ec4c7de765062d7c82f4af9a3b760b480beb48fe40ad10d3",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Nierenkolik_bei_Harnstauungsniere_mit_Harnleiterschiene.md",
+   "sha256": "797d88fb36917be74d2206956d0e74ed55c5bf89b0765cca10aed18b7785ef71",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Osteomyelitis_Zehenstrahlamputation.md",
+   "sha256": "c0d6d80843fa23a7e0cc324733311d9a56c1877f6c5847aad2026b1d70bd71fc",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Osteoporotische_Wirbelkoerperfraktur.md",
+   "sha256": "098a38ca7d9231ecee68f45ecafb5bf707063a84b485e6178f05f3302f5a0b6f",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Panaritium.md",
+   "sha256": "052ea935bddb36e453156175dccc1294cf69a53bc2c3a7f1843a48af06a8c862",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Pangastritis.md",
+   "sha256": "464ce7855cf801c57687706da0f1b82c6a08388c296a762013ab3e301a4c134a",
+   "licence_risk": "review"
+  },
+  {
+   "file": "Papillaere_Pankreatitis.md",
+   "sha256": "7c3e1a60def9a184c9daa7456d2c1bcc9817c68537560c02624b76c1bda43f3b",
+   "licence_risk": "review"
+  },
+  {
+   "file": "Paralytischer_Ileus.md",
+   "sha256": "9e6b0ab17ff65973439d9208f0a33ce9833e3084f892b292e0b32b744751b351",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Patellafraktur.md",
+   "sha256": "2edefe5342f50baf977dabaa277b3f93451139eb3f24fc67f435f8de33369ed2",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Phlegmone.md",
+   "sha256": "c9f2890abf26d710220928007a9602df020dfd4bae9390489ff809ca364f6509",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Pneumonie.md",
+   "sha256": "e072559663695868d122568a665aef96a2f31cff0dc42e00ce4af22686555758",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Portexplantation.md",
+   "sha256": "be2dfc6aff7f085221f7020319fad4d915c8a2d6c7ca26efbd9fd391a561dccf",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Posttraumatische_Gonarthrose.md",
+   "sha256": "a38f13b6155f79c31465e2973452f996cfa3e75cc4bce87ec66786d6fe055e14",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Prellung.md",
+   "sha256": "92e88c4c59cbc3185359a89b125103bbf6b1cc5eb9a001c71b19d0d68bb12561",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Proktalgie.md",
+   "sha256": "ae69aee41283a1a0cd77580acb3519c7e0fe24ea13a390ce702f74993aa9963e",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Proktitis.md",
+   "sha256": "b079b8b7c0a3d66fbf1e1df22eade5a9b77370497364c4601a86d0c8d17316dc",
+   "licence_risk": "review"
+  },
+  {
+   "file": "Radiuskoepfchenfraktur_Mason_I.md",
+   "sha256": "8126893c8b76753e69297f9f0c18db56d4b43e87175c4447617e7bdd7d6bf045",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Rektumkarzinom.md",
+   "sha256": "86144e200be498ba2f97c5e073f7e90dec24b8b77e4cf494d4805266a442c58c",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Rektusdiastase.md",
+   "sha256": "d2d126e1deadb60896403b658142cccbc0f44d9c729b50288c5e1471a08b2750",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Rippenserienfraktur.md",
+   "sha256": "f965738f16ff7263a676a0a10e21ff9d90a0ec964b7047dca1f5380aaa4590c0",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Rupturierte_Ovarialzyste.md",
+   "sha256": "a9015f992faaa5481f8cfb72c99ec2bd363a26056b4e159c0b0b21f65d04389c",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schaedelhirntrauma.md",
+   "sha256": "61ab4155ffb44face7675a2ff06651b98e36167ed405f43a3b2d542b9a812448",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schenkelhalsfraktur.md",
+   "sha256": "9a0f662fc1b751720c8fe9c0c4c02eb9df04938939cb2c5bf772d7f9b99e56fd",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schenkelhernie_Femoralhernie.md",
+   "sha256": "b79eb101a29de92d5d71a5d7676512a4319836fa220e120c3f64ca0eb9d87bec",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schlafapnoe_Syndrom.md",
+   "sha256": "5de7e89c84c1c518e75c4c5483cdc7d2104b819d71948293943e620eceb1221b",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schnittwunde.md",
+   "sha256": "97df77cd03366c440415267d72aab120cfde0eedc21d5e66727d472b1e06dae4",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schuerfwunden_Abschuerfungen.md",
+   "sha256": "84393cee49b93d5351c091099d51b450d98eedd8a23b8b7315dcf9014d33ec88",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schulterluxation.md",
+   "sha256": "38cdd4fc0c6d9aebbe8b855bf18d7c9863cc208204971107776511ca1a142277",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schulterprellung.md",
+   "sha256": "8439b06c71d47ed3bf83a144d5ef6d8543c9165e7a4155cfca0897ea3287b576",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Schwellung_Handruecken_nach_Braunuele.md",
+   "sha256": "d884f55ac64b44d84db5f81739b66cc2f9ac64a346f1b4ed2547e9083de340f0",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Stichverletzung.md",
+   "sha256": "e77dc429468c1474af22a3ef8f1175344821bf5b6d8c5ebf8137cd92db071e54",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Suizidalitaet.md",
+   "sha256": "916dce088a902c646e9098fa9e7c8193f0a53e613202f4fecfc1d8accf202b4b",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Tibiakopffraktur.md",
+   "sha256": "e0e161671e5d4f0d352e220ae4638adaf548b2f8d1ed6f070723610b33712be2",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Tiefe_Beinvenenthrombose_TVT.md",
+   "sha256": "6128d1486111b1df591c182035bda3e20e4c8212c6511461b7ffaefd0f10ea83",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Urolithiasis.md",
+   "sha256": "9052127eb04f1173aecf292a7f44dd4ec0771df31ea34b0f2003c070dbd1ab0f",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Uterusmyom.md",
+   "sha256": "5be2be5dd3d0d850a444c36127e9205847b748f9a70f4da0a5f81df083143676",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Varikose.md",
+   "sha256": "b38a3e2b2aee1c3f5b3e02caff56a5d7b1a47f9e2ba4fb69c0faae1f8c415925",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Verbrennung_2_Grades.md",
+   "sha256": "72609630c4a659a6ae39c8ef06cc342baceb4bce5182a580a3c011e16a320f1f",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Vorhofflimmern_permanent.md",
+   "sha256": "bf2b10fd89fa814de18c525fafa62bb03bd90f5109262db78404b2e0454057e2",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Weber_C_Fraktur.md",
+   "sha256": "47cfdbe095f6a8902c5c272cc4f50c413850ce193f2f0282c9da6c17f7e333bc",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Weichteilabloesung_Oberarm_Decollement.md",
+   "sha256": "974aa433a162384a8c79bec9df0930e8c544f552141ee63b045d0b16de665997",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Wirbelkörperhämangiom.md",
+   "sha256": "891485173e712244d3ccc283e86d501902e2ce8a33a78ab9a421c3a4965f5e94",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Zeckenstich.md",
+   "sha256": "14dedc7501d5969668b6d0c68575d57257b6eb36013ee9068dc71eeae8624d7a",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Zehenfraktur.md",
+   "sha256": "40aeff483509233379f5aeb6dabf10e07ffc22f6fc003cc38a0e4489725c33fd",
+   "licence_risk": "low"
+  },
+  {
+   "file": "laparoskopische-appendektomie.md",
+   "sha256": "7ee0b200b2ff6e8993a8d33774dd03cc957f092f512d930abe928560069bef86",
+   "licence_risk": "low"
+  },
+  {
+   "file": "pAVK.md",
+   "sha256": "1b63e486a9a6a169fac836073e9541a1ba66196e38d62117b31fbbd903c4a235",
+   "licence_risk": "low"
+  },
+  {
+   "file": "pAVK_Mediasklerose.md",
+   "sha256": "dd521bcecc70126ddc497ac5cce7c85d74ef451fd61692582bd59f435d8c08d9",
+   "licence_risk": "low"
+  },
+  {
+   "file": "Ösophagusvarizen.md",
+   "sha256": "88237dec269dd2c1615900bed8acf9e28a2ac7da62009ed08c59e5af8a7e6b61",
+   "licence_risk": "low"
+  }
+ ]
+}

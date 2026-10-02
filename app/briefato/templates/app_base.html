@@ -41,6 +41,18 @@
         </a>
       </li>
       <li>
+        <a class="nav-link" href="/app/vorlagen" {% if active == 'vorlagen' %}aria-current="page"{% endif %}>
+          <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5h12M4 10h12M4 14.5h8"/></svg>
+          Vorlagen
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" href="/app/methode" {% if active == 'methode' %}aria-current="page"{% endif %}>
+          <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2.5 12.6 7.5 18 8.2l-4 3.9 1 5.4-5-2.7-5 2.7 1-5.4-4-3.9 5.4-.7z"/></svg>
+          Methode
+        </a>
+      </li>
+      <li>
         <a class="nav-link" href="/app/suche" {% if active == 'suche' %}aria-current="page"{% endif %}>
           <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="5.5"/><path d="m13.5 13.5 3 3"/></svg>
           Suche

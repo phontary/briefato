@@ -7,7 +7,7 @@
   {% endif %}
   {% if generated %}
   <div class="alert alert-ok" role="status">
-    <div><span class="alert-title">Brief erzeugt.</span> Prüfen Sie den Text und geben Sie ihn anschließend frei.</div>
+    <div><span class="alert-title">Text erzeugt.</span> Prüfen Sie den Text, kopieren Sie ihn ins KIS oder geben Sie ihn frei.</div>
   </div>
   {% endif %}
 
@@ -15,6 +15,7 @@
     <div class="meta-list">
       <span>Status: <span class="badge {{ 'badge-ok' if locked else 'badge-accent' }}">{{ LETTER_STATUS_LABELS.get(letter.status, letter.status) }}</span></span>
       <span>Art: <strong>{{ LETTER_KIND_LABELS.get(letter.kind, letter.kind) }}</strong></span>
+      <span>Dokumenttyp: <strong>{{ detection.label }}</strong>{% if detection.explicit %} (gewählt){% else %} (erkannt){% endif %}</span>
       {% if letter.model %}<span>Modell: <strong>{{ letter.model }}</strong></span>{% endif %}
       {% if letter.tokens_out %}<span>Tokens: <strong>{{ letter.tokens_in }} / {{ letter.tokens_out }}</strong></span>{% endif %}
       {% if letter.approved_at %}<span>Freigegeben: <strong>{{ letter.approved_at | fmt_datetime }}</strong></span>{% endif %}
@@ -25,11 +26,17 @@
       <form method="post" action="/app/briefe/{{ letter.id }}/freigeben">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <button type="submit" class="btn btn-primary"
-                data-confirm="Brief endgültig freigeben? Danach ist der Text gesperrt.">Freigeben</button>
+                data-confirm="Text endgültig freigeben? Danach ist der Text gesperrt.">Freigeben</button>
       </form>
       {% endif %}
       {% if content %}
-      <a class="btn btn-secondary" href="/app/briefe/{{ letter.id }}/export.docx">DOCX herunterladen</a>
+      <details class="menu">
+        <summary class="btn btn-secondary btn-sm">Weitere Optionen</summary>
+        <div class="menu-panel">
+          <a href="/app/briefe/{{ letter.id }}/export.docx">DOCX mit Briefkopf herunterladen (optional)</a>
+          <p class="hint">Hauptausgabe ist der reine Text. Das DOCX ist eine optionale Sekundärausgabe mit Briefkopf.</p>
+        </div>
+      </details>
       {% endif %}
       <form method="post" action="/app/briefe/{{ letter.id }}/loeschen">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -57,14 +64,31 @@
                       aria-describedby="dict-hint">{{ dictation }}</textarea>
             <p id="dict-hint" class="hint">Mit Strg + Enter erzeugen.</p>
           </div>
+          <div class="field">
+            <label for="doc_type">Dokumenttyp</label>
+            <select class="select" id="doc_type" name="doc_type" aria-describedby="type-hint">
+              <option value="auto"{% if selected_type == 'auto' %} selected{% endif %}>Automatisch erkennen</option>
+              {% for type in doc_types %}
+              <option value="{{ type.key }}"{% if selected_type == type.key %} selected{% endif %}>{{ type.label }}</option>
+              {% endfor %}
+            </select>
+            <p id="type-hint" class="hint">
+              {% if dictation %}
+                {% if detection.explicit %}Von Ihnen gewählt: <strong>{{ detection.label }}</strong>.{% else %}Automatisch erkannt: <strong>{{ detection.label }}</strong> — {{ detection.reason }}{% endif %}
+              {% else %}Der Typ wird nach der Eingabe des Diktats bestimmt.{% endif %}
+            </p>
+          </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">
-              {{ 'Text neu erzeugen' if content else 'Brief erzeugen' }}
+              {{ 'Text neu erzeugen' if content else 'Text erzeugen' }}
             </button>
             <span id="gen-indicator" class="htmx-indicator muted">
               <span class="spinner" aria-hidden="true"></span> Wird erzeugt…
             </span>
           </div>
+          {% if custom_rules %}
+          <p class="hint mt-2">Ihre eigenen Regeln (Methode → Meine Regeln) werden ergänzt.</p>
+          {% endif %}
         </form>
         {% endif %}
       </div>
@@ -73,24 +97,73 @@
     <section class="card">
       <div class="card-header"><h2>Erzeugter Text</h2></div>
       <div class="card-body">
-        {% if content and locked %}
-        <div class="letter-paper">{{ content }}</div>
-        {% elif content %}
-        <form method="post" action="/app/briefe/{{ letter.id }}/speichern">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-          <div class="field">
-            <label class="visually-hidden" for="content">Brieftext</label>
-            <textarea class="textarea" id="content" name="content" rows="18">{{ content }}</textarea>
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-secondary">Änderungen speichern</button>
-          </div>
-        </form>
+        {% if content %}
+        <div class="copy-row">
+          <button type="button" class="btn btn-primary" data-copy-target="#text-result">Text kopieren</button>
+          <span class="copy-feedback muted" data-copy-feedback role="status" aria-live="polite"></span>
+        </div>
+        <div class="field mt-2">
+          <pre class="result-pane" id="text-result" tabindex="0" aria-label="Erzeugter Text, reiner Text zum Kopieren">{{ content }}</pre>
+        </div>
+
+        {% if rule_check %}
+        <section class="rule-check {{ 'is-clean' if rule_check.clean else 'is-warn' }}" aria-labelledby="rc-title">
+          <h3 id="rc-title" class="rule-check-title">Regel-Check</h3>
+          {% if rule_check.clean %}
+          <p class="rule-ok">Regeln geprüft (R1–R{{ rule_check.rules_total }})</p>
+          {% else %}
+          <p class="rule-warn-intro">Nicht bestanden — {{ rule_check.findings | length }} Hinweis{% if rule_check.findings | length != 1 %}e{% endif %}:</p>
+          <ul class="rule-findings">
+            {% for finding in rule_check.findings %}
+            <li><span class="rule-id">{{ finding.rule }}</span> {{ finding.message }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <p class="hint">
+            {% if rule_check.source == 'methode' %}Prüfung durch die Methode (R1–R{{ rule_check.rules_total }}).
+            {% else %}Portal-seitige Vorprüfung; maßgeblich ist der Regel-Check der Methode.{% endif %}
+          </p>
+        </section>
+        {% endif %}
+
+        <section class="templates-used" aria-labelledby="vt-title">
+          <h3 id="vt-title" class="rule-check-title">Verwendete Vorlagen</h3>
+          {% if used_templates %}
+          <ul class="used-list">
+            {% for template in used_templates %}
+            <li>
+              <a href="/app/vorlagen/{{ template.file }}">{{ template.title }}</a>
+              <span class="muted">Treffer {{ template.score }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="muted">Keine Vorlage gefunden.</p>
+          <a class="btn btn-secondary btn-sm mt-2" href="/app/vorlagen#vorschlag">Vorlage vorschlagen</a>
+          {% endif %}
+        </section>
+
+        {% if not locked %}
+        <details class="mt-6">
+          <summary class="btn btn-ghost btn-sm">Text bearbeiten</summary>
+          <form method="post" action="/app/briefe/{{ letter.id }}/speichern" class="mt-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <div class="field">
+              <label class="visually-hidden" for="content">Brieftext</label>
+              <textarea class="textarea" id="content" name="content" rows="18">{{ content }}</textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-secondary">Änderungen speichern</button>
+            </div>
+          </form>
+        </details>
+        {% endif %}
         {% else %}
         <div class="letter-paper is-empty">
-          <p>Noch kein Text. Diktieren Sie links und wählen Sie „Brief erzeugen“.</p>
+          <p>Noch kein Text. Diktieren Sie links und wählen Sie „Text erzeugen“.</p>
         </div>
         {% endif %}
+
         {% if letter.error %}
         <p class="error-text mt-4">Letzter Fehler: {{ letter.error }}</p>
         {% endif %}

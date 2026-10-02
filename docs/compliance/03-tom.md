@@ -68,7 +68,25 @@ Umsetzung ausstehend · **fehlt** = noch nicht begonnen.
 KI-VO Art. 4: https://artificialintelligenceact.eu/article/4/ (abgerufen 2026-10-02);
 KI-VO Zeitachse: https://artificialintelligenceact.eu/implementation-timeline/ (abgerufen 2026-10-02).
 
-## 6. Ehrliche Zusammenfassung: was fehlt
+## 6. Referenzbibliothek Musterbriefe (Bibliotheks-TOM T31–T35)
+
+Die Musterbrief-Bibliothek (`10-brain-library.md`) ist ein eigenes Asset mit eigenen Integritäts- und
+Zugriffskontrollen. Der Produkt-Abzug enthält **nur Metadaten** (`manifest.json`, `index.md`), keinen
+Template-Volltext — der Volltext liegt im Quellarchiv.
+
+| # | Maßnahme | Status | Beleg / Code-Artefakt | Restrisiko / offen |
+|---|---|---|---|---|
+| T31 | **Zugriffsbeschränkung Bibliothek** — nur Produkt-Abzug (Metadaten) ist Teil des Repos/Deployments; Quellarchiv bleibt privat | teilweise | `brain/musterbriefe/` ist Git-Inhalt; Quellarchiv `/workspace/schreibdienst/` ist kein Repo | **fehlt:** dokumentierte, technisch erzwungene Zugriffs-/Rollenregel für das Quellarchiv |
+| T32 | **Integrität des Abzugs** — Rebuild deterministisch aus der Quelle, `generated`-Zeitstempel | teilweise | `build_library.py`, `manifest.json` (`source`, `generated`) | **fehlt:** `sha256`/`library_version` je Template → Rebuild-Drift nicht messbar |
+| T33 | **Anonymisierungs-Gate** (kein Template mit Patientenspur ins Retrieval) | **fehlt** | heute nur manueller Scrub + Pipeline-Ausschluss (`11` A) | **Blocker (M13)** — es gibt **kein automatisiertes Gate** |
+| T34 | **Inhaltslizenz-Prüfprozess** (keine lizenzierte Fremdprosa ausliefern) | **fehlt** | `licence-review.md` (4 markierte Dateien) | **Blocker (M14)** — es gibt **keinen formalen Paraphrase-/Freigabeprozess** |
+| T35 | **Verfügbarkeit/Backup des Quellarchivs** | **fehlt** | kein Git, kein Backup des Quellarchivs | **Single Point of Failure** (siehe `06` D5; M15) |
+
+> **Ehrlich:** T33 und T34 sind nicht „geplant im Sinne einer Spezifikation“, sondern schlicht
+> **nicht vorhanden**. Solange sie fehlen, darf die Bibliothek nicht als produktiver Bestandteil
+> für zahlende Kunden gelten (siehe `10` § 8).
+
+## 7. Ehrliche Zusammenfassung: was fehlt
 
 **Vor jeder Verarbeitung echter Patientendaten zwingend:**
 1. Pseudonymisierung **implementiert und getestet** (T5) — derzeit nur Vertrag.
@@ -76,10 +94,13 @@ KI-VO Zeitachse: https://artificialintelligenceact.eu/implementation-timeline/ (
 3. Rate-Limits/Login-Throttling (T20).
 4. Verschlüsseltes Off-host-Backup + **durchgeführter Restore-Test** (T16, M12).
 5. AVV-Kette geschlossen (T9, Sub-Prozessoren).
+6. Bibliothek-Gate: **Anonymisierungs-Gate (T33)** und **Inhaltslizenz-Prüfprozess (T34)** implementiert
+   — vor Aufnahme der Musterbriefe in die produktive Generierung.
 
 **Für die Beta empfohlen:**
-6. MFA für Konten und Admin (derzeit **fehlt**).
-7. Key-Rotation für `BRIEFATO_FIELD_KEY` (derzeit **keine**).
-8. Unabhängiger Pen-Test (T23).
-9. Security-Header verifizieren (T21) und Swap-Problem lösen (T18).
-10. IP-Kürzung in Logs/Audit (T11) und AI-Literacy-Nachweis (T30).
+7. MFA für Konten und Admin (derzeit **fehlt**).
+8. Key-Rotation für `BRIEFATO_FIELD_KEY` (derzeit **keine**).
+9. Unabhängiger Pen-Test (T23).
+10. Security-Header verifizieren (T21) und Swap-Problem lösen (T18).
+11. IP-Kürzung in Logs/Audit (T11) und AI-Literacy-Nachweis (T30).
+12. Quellarchiv versionieren und off-host sichern (T35, M15).

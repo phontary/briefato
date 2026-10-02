@@ -1,0 +1,85 @@
+{% extends "app_base.html" %}
+{% block title %}Vorlagen-Vorschläge — Administration — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>Vorlagen-Vorschläge</h1>
+  <p class="muted">Vorschläge von Mitgliedern. Das Annehmen ändert nur den Status und wird
+    protokolliert; die Bibliothek wird hier nicht verändert.</p>
+</div>
+
+<div class="meta-list mt-2">
+  <a href="/admin/vorlagen-vorschlaege">Alle ({{ counts.values() | sum }})</a>
+  <a href="/admin/vorlagen-vorschlaege?status=pending">Offen ({{ counts.pending }})</a>
+  <a href="/admin/vorlagen-vorschlaege?status=approved">Angenommen ({{ counts.approved }})</a>
+  <a href="/admin/vorlagen-vorschlaege?status=rejected">Abgelehnt ({{ counts.rejected }})</a>
+</div>
+
+{% if proposals %}
+<section class="card mt-6">
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Diagnose</th>
+          <th scope="col">Mitglied</th>
+          <th scope="col">Sektionen</th>
+          <th scope="col">Status</th>
+          <th scope="col">Eingereicht</th>
+          <th scope="col">Entscheidung</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for proposal in proposals %}
+        <tr>
+          <td>
+            {{ proposal.diagnosis }}
+            {% if proposal.note %}<p class="hint">{{ proposal.note }}</p>{% endif %}
+            {% if (proposal.proposed_sections or {}).get('source_template') %}
+            <p class="hint">Bezug: {{ (proposal.proposed_sections or {}).get('source_template') }}</p>
+            {% endif %}
+          </td>
+          <td class="muted">{{ authors.get(proposal.user_id, '—') }}</td>
+          <td>{{ (proposal.proposed_sections or {}).get('sections', []) | join(', ') or '—' }}</td>
+          <td>
+            <span class="badge {{ 'badge-ok' if proposal.status == 'approved' else ('badge-warn' if proposal.status == 'rejected' else 'badge-accent') }}">
+              {{ status_labels.get(proposal.status, proposal.status) }}
+            </span>
+            {% if proposal.review_note %}<p class="hint">{{ proposal.review_note }}</p>{% endif %}
+          </td>
+          <td class="muted">{{ proposal.created_at | fmt_datetime }}</td>
+          <td>
+            {% if proposal.status == 'pending' %}
+            <form method="post" action="/admin/vorlagen-vorschlaege/{{ proposal.id }}/genehmigen" class="row">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <label class="visually-hidden" for="ok-{{ proposal.id }}">Anmerkung</label>
+              <input class="input" id="ok-{{ proposal.id }}" name="review_note" type="text"
+                     placeholder="Anmerkung (optional)" maxlength="2000">
+              <button type="submit" class="btn btn-primary btn-sm">Annehmen</button>
+            </form>
+            <form method="post" action="/admin/vorlagen-vorschlaege/{{ proposal.id }}/ablehnen" class="row mt-2">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <label class="visually-hidden" for="no-{{ proposal.id }}">Anmerkung</label>
+              <input class="input" id="no-{{ proposal.id }}" name="review_note" type="text"
+                     placeholder="Anmerkung (optional)" maxlength="2000">
+              <button type="submit" class="btn btn-secondary btn-sm">Ablehnen</button>
+            </form>
+            {% else %}
+            <span class="muted">Entschieden am {{ proposal.reviewed_at | fmt_datetime }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% else %}
+<div class="mt-6">
+  <div class="empty">
+    <h3>Keine Vorschläge</h3>
+    <p>Für diesen Filter liegen keine Vorschläge vor.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
