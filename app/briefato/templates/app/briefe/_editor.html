@@ -164,7 +164,9 @@
         </div>
         {% endif %}
 
-        {% if letter.error %}
+        {% if letter.error and not letter.error.startswith('Regelprüfung') %}
+        {# A rule-check summary is not a generation error — the amber Regel-Check panel above
+           already lists the concrete findings; only real failures are shown as errors. #}
         <p class="error-text mt-4">Letzter Fehler: {{ letter.error }}</p>
         {% endif %}
       </div>
