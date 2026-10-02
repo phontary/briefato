@@ -31,7 +31,10 @@ shows the whole discussion again.
 
 from __future__ import annotations
 
+import re
+
 from fastapi import APIRouter, Request
+from markupsafe import Markup, escape
 from sqlalchemy import select
 
 from ..brain import triage as brain_triage
@@ -210,21 +213,43 @@ def _add_message(db, thread: ChatThread, user, *, role: str, kind: str, content:
     return message
 
 
+_PLACEHOLDER_RE = re.compile(r"(?<![\w{])XXX(?![\w}])")
+
+
+def _mark_placeholders(text: str) -> tuple[Markup, int]:
+    """Mark the method's open placeholders (``XXX`` = value unknown) in the delivered text.
+
+    Returns safe HTML plus the number of placeholders, so the portal can highlight what the member
+    still has to fill in (the method: "Platzhalter XXX setzen statt zu raten").
+    """
+    count = len(_PLACEHOLDER_RE.findall(text or ""))
+    if not count:
+        return Markup(escape(text or "")), 0
+    html = _PLACEHOLDER_RE.sub(
+        '<mark class="ph-open" title="Offener Platzhalter – bitte ergänzen">XXX</mark>',
+        str(escape(text or "")),
+    )
+    return Markup(html), count
+
+
 def _serialise_messages(thread: ChatThread | None) -> list[dict]:
     if thread is None:
         return []
     out: list[dict] = []
     for message in thread.messages:
-        out.append(
-            {
-                "id": message.id,
-                "role": message.role,
-                "kind": message.kind,
-                "content": decrypt_field(message.content_enc),
-                "meta": dict(message.meta_json or {}),
-                "created_at": message.created_at,
-            }
-        )
+        item = {
+            "id": message.id,
+            "role": message.role,
+            "kind": message.kind,
+            "content": decrypt_field(message.content_enc),
+            "meta": dict(message.meta_json or {}),
+            "created_at": message.created_at,
+        }
+        if message.kind == "letter" and item["content"]:
+            # The method sets XXX wherever a value is unknown ("Platzhalter XXX setzen statt zu
+            # raten"). Show the member what still has to be filled in instead of hiding it.
+            item["content_html"], item["placeholders"] = _mark_placeholders(item["content"])
+        out.append(item)
     return out
 
 

@@ -364,3 +364,22 @@ def test_wizard_entry_still_available(client):
     response = client.get("/app/neu")
     assert response.status_code == 200
     assert "Was möchten Sie schreiben?" in response.text
+
+
+def test_open_placeholders_are_marked_and_counted():
+    """The method writes XXX where a value is unknown – the portal must make it visible."""
+    from briefato.routes.chat import _mark_placeholders
+
+    html, count = _mark_placeholders("Die Operation erfolgte am XXX in Intubationsnarkose.")
+    assert count == 1
+    assert '<mark class="ph-open"' in str(html)
+    assert "XXX" in str(html)
+
+    html, count = _mark_placeholders("Die Operation erfolgte am 23.09.2026.")
+    assert count == 0
+    assert "XXX" not in str(html)
+
+    # letter text stays escaped, and XXX inside a word is not treated as a placeholder
+    html, count = _mark_placeholders("<script>alert(1)</script> sowie XXXY")
+    assert count == 0
+    assert "<script>" not in str(html)

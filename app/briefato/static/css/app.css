@@ -1599,6 +1599,15 @@ table.table {
   min-height: 46vh;
   justify-content: center;
 }
+/* focus mode: only the writing area is on screen — the case history and aside step back so the
+   member can concentrate on the dictation (Escape or blur brings them back). */
+.is-chat-focus .chat-thread {
+  display: none;
+}
+.is-chat-focus .chat-stage {
+  min-height: 52vh;
+  justify-content: center;
+}
 
 .chat-messages {
   list-style: none;
@@ -1843,9 +1852,22 @@ table.table {
 .is-chat-focus .chat-aside,
 .is-chat-focus .shell-nav,
 .is-chat-focus .topbar,
+.is-chat-focus footer[role="contentinfo"],
 .is-chat-focus .breadcrumbs {
   opacity: 0;
   visibility: hidden;
+}
+/* open placeholders of the method (XXX = unknown value) – visible so the member fills them in */
+.chat-letter-text mark.ph-open {
+  background: #fdf0c8;
+  border-bottom: 1px solid #e2b53b;
+  border-radius: 3px;
+  padding: 0 3px;
+  font-weight: 600;
+  color: inherit;
+}
+.chat-ph-chip {
+  margin-left: var(--sp-2);
 }
 .is-chat-focus .chat-cap {
   opacity: 0;

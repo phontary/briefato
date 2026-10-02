@@ -222,6 +222,15 @@
         focusOff();
         if (input) input.blur();
       });
+      /* Chrome scrolls the textarea to the caret when the page itself scrolls, which cuts off the
+         first line (the placeholder was clipped). Keep the writing area at the top. */
+      if (input) {
+        input.addEventListener("focus", function () {
+          requestAnimationFrame(function () {
+            input.scrollTop = 0;
+          });
+        });
+      }
     }
 
     /* The rotating capability line: ~2.5 s, pauses as soon as the member types, and stays

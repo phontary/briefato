@@ -21,7 +21,7 @@
         </details>
       </div>
       <pre class="result-pane chat-letter-text" id="chat-letter-{{ m.meta.letter_id }}" tabindex="0"
-           aria-label="Erzeugter Text, reiner Text zum Kopieren">{{ m.content }}</pre>
+           aria-label="Erzeugter Text, reiner Text zum Kopieren">{{ m.content_html if m.content_html is defined and m.content_html else m.content }}</pre>
       <p class="chat-rule-line {{ 'is-warn' if m.meta.hard_count else 'is-clean' }}">
         {% if m.meta.hard_count %}
           Regel-Check: {{ m.meta.hard_count }} harte, {{ m.meta.soft_count }} weiche Hinweise
@@ -31,6 +31,9 @@
           Regel-Check: Regeln geprüft (R1–R67), keine Hinweise
         {% endif %}
         {% if m.meta.retried %}· nachgebessert{% endif %}
+        {% if m.placeholders is defined and m.placeholders %}
+          <span class="chip chip-warn chat-ph-chip">{{ m.placeholders }} {{ 'offener Platzhalter' if m.placeholders == 1 else 'offene Platzhalter' }} (XXX) – bitte ergänzen</span>
+        {% endif %}
       </p>
       {% if m.meta.referenz_notes %}
       <section class="enrichments" aria-labelledby="ref-{{ m.id }}">
