@@ -132,6 +132,20 @@ FILL = """
 print("filled:", ev(FILL.replace("ANAMNESE", json.dumps(ANAMNESE)).replace("KU", json.dumps(KU))))
 
 # sources: add until we have >=6, then continue to the summary
+# sources: fill whatever the sources step offers (single dictation box and/or labelled sources)
+MULTI_SOURCE = (
+    "Anamnese: seit zwei Tagen zunehmende linksseitige Unterbauchschmerzen, kein Fieber, "
+    "kein Erbrechen. Aufnahme zur weiteren Diagnostik und Schmerztherapie stationaer.\n"
+    "KU: Abd. weich, DS li. UB, keine ABW, DG regelrecht, pDMS intakt.\n"
+    "Labor: CRP 42 mg/l, Leukozyten 12,3/nl, Krea 0,9 mg/dl.\n"
+    "Sonographie: wandverdickte Sigma-Schlinge, kein freier Flussigkeit, keine Abszessbildung.\n"
+    "CT Abdomen: V.a. akute Divertikulitis links, keine Perforation, keine freie Luft.\n"
+    "Roentgen Thorax: keine Infiltrate.\n"
+    "Visiten: unter AB-Therapie Rueckgang der Beschwerden, Kostaufbau ab Tag 2 problemlos.\n"
+    "OP-Bericht: keine Operation im Aufenthalt.\n"
+    "Entlassung: beschwerdefrei, Entlassung am 08.10.2026, Kontrolle beim Hausarzt, "
+    "Koloskopie in 6 Wochen empfohlen."
+)
 for i, (label, text) in enumerate(SOURCES):
     ok = ev("""(() => {
       const sel = Array.from(document.querySelectorAll('form select')).find(s => /quelle|source|label/i.test(s.name||''));
@@ -157,6 +171,13 @@ for n in range(6):
     if "ergebnis" in (ev("location.href") or ""):
         break
     ev(FILL.replace("ANAMNESE", json.dumps(ANAMNESE)).replace("KU", json.dumps(KU)))
+    # on the sources step, paste a labelled multi-source KIS text so the engine fan-outs
+    ev("""(() => {const t = Array.from(document.querySelectorAll('form textarea'))
+      .find(x => !x.value);
+      if (!t) return 'no empty textarea';
+      t.focus(); t.value = %s; t.dispatchEvent(new Event('input',{bubbles:true})); return 'pasted';})()"""
+       % json.dumps(MULTI_SOURCE))
+    time.sleep(1.5)
 
 time.sleep(3)
 shot("w03-ergebnis")
