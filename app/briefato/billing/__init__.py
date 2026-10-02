@@ -1,46 +1,61 @@
-"""Billing (Stripe-hosted flows only).
+"""Billing — Stripe-hosted flows only (architecture decision D6).
 
-OWNER: WORKSTREAM-BILLING. This package file is a STUB so the portal can import the frozen
-interface before the real implementation lands — replace it entirely.
+OWNER: WORKSTREAM-BILLING.
 
-Frozen signatures (docs/02-spec-interfaces.md §6):
+Frozen API (docs/02-spec-interfaces.md §6)::
+
     create_checkout_url(db, user, plan_code, success_url, cancel_url) -> str
     create_portal_url(db, user, return_url) -> str
     handle_webhook(db, payload: bytes, sig_header: str) -> dict
     quota_state(db, user) -> dict
+
+Plus the helper :func:`ensure_subscription` used lazily at registration.
+
+No card data ever touches this process: Checkout and the Customer Portal are Stripe-hosted.
+The letter counter is incremented by the pipeline (WORKSTREAM-PIPELINE) on a successful
+generation; nothing in this package increments ``Subscription.letters_used``.
 """
 
 from __future__ import annotations
 
-STUB = True
+from .errors import BillingError, ConfigurationError, PlanError
+from .plans import (
+    PLAN_CODES,
+    is_paid_plan,
+    normalize_plan,
+    plan_code_for_price_id,
+    plan_price_id,
+    plan_quota,
+)
+from .stripe_service import create_checkout_url, create_portal_url, ensure_customer
+from .subscriptions import (
+    apply_plan,
+    ensure_subscription,
+    find_by_customer_id,
+    get_subscription,
+    quota_state,
+)
+from .webhooks import KNOWN_EVENTS, STATUS_MAP, handle_webhook
 
-
-def create_checkout_url(db, user, plan_code: str, success_url: str, cancel_url: str) -> str:  # pragma: no cover
-    raise NotImplementedError("billing stub: WORKSTREAM-BILLING has not landed yet")
-
-
-def create_portal_url(db, user, return_url: str) -> str:  # pragma: no cover
-    raise NotImplementedError("billing stub: WORKSTREAM-BILLING has not landed yet")
-
-
-def handle_webhook(db, payload: bytes, sig_header: str) -> dict:  # pragma: no cover
-    raise NotImplementedError("billing stub: WORKSTREAM-BILLING has not landed yet")
-
-
-def quota_state(db, user) -> dict:  # pragma: no cover
-    sub = getattr(user, "subscription", None)
-    from ..config import PLAN_CATALOG, get_settings
-
-    settings = get_settings()
-    plan = getattr(sub, "plan_code", "free") or "free"
-    quota = getattr(sub, "letters_quota", None) or PLAN_CATALOG.get(plan, {}).get(
-        "letters", settings.quota_default_letters
-    )
-    used = getattr(sub, "letters_used", 0) or 0
-    return {
-        "plan": plan,
-        "quota": int(quota),
-        "used": int(used),
-        "remaining": max(int(quota) - int(used), 0),
-        "period_end": None,
-    }
+__all__ = [
+    "BillingError",
+    "ConfigurationError",
+    "KNOWN_EVENTS",
+    "PLAN_CODES",
+    "PlanError",
+    "STATUS_MAP",
+    "apply_plan",
+    "create_checkout_url",
+    "create_portal_url",
+    "ensure_customer",
+    "ensure_subscription",
+    "find_by_customer_id",
+    "get_subscription",
+    "handle_webhook",
+    "is_paid_plan",
+    "normalize_plan",
+    "plan_code_for_price_id",
+    "plan_price_id",
+    "plan_quota",
+    "quota_state",
+]
