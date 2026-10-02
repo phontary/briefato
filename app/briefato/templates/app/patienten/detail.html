@@ -1,0 +1,90 @@
+{% extends "app_base.html" %}
+{% block title %}{{ patient.display_name }} — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header row-between">
+  <div>
+    <h1>{{ patient.display_name }}</h1>
+    <p class="muted">
+      {% if patient.external_ref %}Nr. {{ patient.external_ref }} · {% endif %}
+      {% if patient.archived_at %}<span class="badge">archiviert</span>{% else %}aktiv{% endif %}
+    </p>
+  </div>
+  <div class="row">
+    <a class="btn btn-primary" href="/app/briefe/neu?patient_id={{ patient.id }}">Brief schreiben</a>
+    <a class="btn btn-secondary" href="/app/patienten/{{ patient.id }}/bearbeiten">Bearbeiten</a>
+    {% if not patient.archived_at %}
+    <form method="post" action="/app/patienten/{{ patient.id }}/archivieren">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="btn btn-ghost"
+              data-confirm="Patient „{{ patient.display_name }}“ wirklich archivieren?">Archivieren</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+<div class="grid grid-2">
+  <section class="card">
+    <div class="card-header"><h2>Stammdaten</h2></div>
+    <div class="card-body">
+      <dl class="dl">
+        <dt>Geburtsdatum</dt><dd>{{ patient.birth_date | fmt_date }}</dd>
+        <dt>Geschlecht</dt><dd>{{ {'w': 'weiblich', 'm': 'männlich', 'd': 'divers'}.get(patient.sex, '—') }}</dd>
+        <dt>Kostenträger</dt><dd>{{ patient.insurance or '—' }}</dd>
+        <dt>Versichertennummer</dt><dd>{{ patient.insurance_number or '—' }}</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-header"><h2>Kontakt</h2></div>
+    <div class="card-body">
+      <dl class="dl">
+        <dt>Adresse</dt>
+        <dd>{% if patient.street %}{{ patient.street }}<br>{% endif %}{{ patient.zip }} {{ patient.city }}{% if not patient.street and not patient.city %}—{% endif %}</dd>
+        <dt>Telefon</dt><dd>{{ patient.phone or '—' }}</dd>
+        <dt>E-Mail</dt><dd>{{ patient.email or '—' }}</dd>
+        <dt>Zuweisung</dt><dd>{{ patient.referring_doctor or '—' }}</dd>
+      </dl>
+    </div>
+  </section>
+</div>
+
+{% if notes %}
+<section class="card mt-6">
+  <div class="card-header"><h2>Interne Notizen</h2></div>
+  <div class="card-body"><p class="letter-paper">{{ notes }}</p></div>
+</section>
+{% endif %}
+
+<section class="card mt-6">
+  <div class="card-header">
+    <h2>Briefhistorie</h2>
+    <a class="btn btn-primary btn-sm" href="/app/briefe/neu?patient_id={{ patient.id }}">Neuer Brief</a>
+  </div>
+  {% if letters %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr><th scope="col">Titel</th><th scope="col">Art</th><th scope="col">Status</th><th scope="col">Angelegt</th></tr>
+      </thead>
+      <tbody>
+        {% for letter in letters %}
+        <tr>
+          <td><a href="/app/briefe/{{ letter.id }}">{{ letter.title or 'Ohne Titel' }}</a></td>
+          <td>{{ LETTER_KIND_LABELS.get(letter.kind, letter.kind) }}</td>
+          <td><span class="badge {{ 'badge-ok' if letter.status == 'approved' else ('badge-warn' if letter.status == 'failed' else 'badge-accent') }}">{{ LETTER_STATUS_LABELS.get(letter.status, letter.status) }}</span></td>
+          <td class="muted">{{ letter.created_at | fmt_date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="card-body">
+    <p class="muted">Für diesen Patienten wurde noch kein Brief angelegt.</p>
+    <a class="btn btn-primary mt-4" href="/app/briefe/neu?patient_id={{ patient.id }}">Ersten Brief schreiben</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

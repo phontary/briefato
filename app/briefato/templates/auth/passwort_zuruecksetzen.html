@@ -1,0 +1,48 @@
+{% extends "auth/_base.html" %}
+{% block title %}Neues Passwort — Briefato{% endblock %}
+
+{% block auth_heading %}
+<h1>Neues Passwort vergeben</h1>
+<p class="muted">Dieser Schritt funktioniert nur mit einem gültigen Link aus der Zurücksetzen-E-Mail.</p>
+{% endblock %}
+
+{% block auth_content %}
+{% if not token %}
+<div class="alert alert-warn" role="status">
+  <div>
+    <span class="alert-title">Kein gültiger Link.</span>
+    Der automatische E-Mail-Versand ist noch nicht aktiviert. Fordern Sie unter
+    <a href="/passwort-vergessen">Passwort vergessen</a> eine Anfrage an und wenden Sie sich
+    an den Support, um Ihr Passwort zurückzusetzen.
+  </div>
+</div>
+{% else %}
+<form method="post" action="/passwort-zuruecksetzen" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <input type="hidden" name="token" value="{{ token }}">
+
+  {% if error %}
+  <div class="alert alert-error" role="alert"><div>{{ error }}</div></div>
+  {% endif %}
+
+  <div class="field">
+    <label for="email">E-Mail-Adresse</label>
+    <input class="input" id="email" name="email" type="email" required autocomplete="username"
+           value="{{ email or '' }}" autofocus>
+  </div>
+  <div class="field">
+    <label for="password">Neues Passwort</label>
+    <input class="input" id="password" name="password" type="password" required
+           autocomplete="new-password" aria-describedby="pw-hint">
+    <p id="pw-hint" class="hint">Mindestens 8 Zeichen.</p>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary btn-block">Passwort speichern</button>
+  </div>
+</form>
+{% endif %}
+
+<div class="auth-foot">
+  <p class="muted"><a href="/anmelden">Zurück zur Anmeldung</a></p>
+</div>
+{% endblock %}

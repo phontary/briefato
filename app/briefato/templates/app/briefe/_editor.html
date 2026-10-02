@@ -1,0 +1,100 @@
+{% set locked = letter.status == 'approved' %}
+<div id="brief-editor">
+  {% if error %}
+  <div class="alert alert-error" role="alert">
+    <div><span class="alert-title">Der Brief konnte nicht erzeugt werden.</span> {{ error }}</div>
+  </div>
+  {% endif %}
+  {% if generated %}
+  <div class="alert alert-ok" role="status">
+    <div><span class="alert-title">Brief erzeugt.</span> Prüfen Sie den Text und geben Sie ihn anschließend frei.</div>
+  </div>
+  {% endif %}
+
+  <div class="row-between mt-4">
+    <div class="meta-list">
+      <span>Status: <span class="badge {{ 'badge-ok' if locked else 'badge-accent' }}">{{ LETTER_STATUS_LABELS.get(letter.status, letter.status) }}</span></span>
+      <span>Art: <strong>{{ LETTER_KIND_LABELS.get(letter.kind, letter.kind) }}</strong></span>
+      {% if letter.model %}<span>Modell: <strong>{{ letter.model }}</strong></span>{% endif %}
+      {% if letter.tokens_out %}<span>Tokens: <strong>{{ letter.tokens_in }} / {{ letter.tokens_out }}</strong></span>{% endif %}
+      {% if letter.approved_at %}<span>Freigegeben: <strong>{{ letter.approved_at | fmt_datetime }}</strong></span>{% endif %}
+      {% if quota %}<span>Kontingent: <strong>{{ quota.remaining }} von {{ quota.quota }}</strong></span>{% endif %}
+    </div>
+    <div class="row">
+      {% if content and not locked %}
+      <form method="post" action="/app/briefe/{{ letter.id }}/freigeben">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn btn-primary"
+                data-confirm="Brief endgültig freigeben? Danach ist der Text gesperrt.">Freigeben</button>
+      </form>
+      {% endif %}
+      {% if content %}
+      <a class="btn btn-secondary" href="/app/briefe/{{ letter.id }}/export.docx">DOCX herunterladen</a>
+      {% endif %}
+      <form method="post" action="/app/briefe/{{ letter.id }}/loeschen">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn btn-ghost"
+                data-confirm="Diesen Brief endgültig löschen?">Löschen</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="editor-split mt-6">
+    <section class="card">
+      <div class="card-header"><h2>Diktat</h2></div>
+      <div class="card-body">
+        {% if locked %}
+        <div class="letter-paper">{{ dictation or '—' }}</div>
+        <p class="hint mt-2">Freigegebene Briefe sind gesperrt. Das Diktat kann nicht mehr geändert werden.</p>
+        {% else %}
+        <form method="post" action="/app/briefe/{{ letter.id }}/erzeugen" data-ctrl-enter
+              hx-post="/app/briefe/{{ letter.id }}/erzeugen"
+              hx-target="#brief-editor" hx-swap="outerHTML" hx-indicator="#gen-indicator">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <div class="field">
+            <label class="visually-hidden" for="dictation">Diktat</label>
+            <textarea class="textarea dictation" id="dictation" name="dictation" required
+                      aria-describedby="dict-hint">{{ dictation }}</textarea>
+            <p id="dict-hint" class="hint">Mit Strg + Enter erzeugen.</p>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              {{ 'Text neu erzeugen' if content else 'Brief erzeugen' }}
+            </button>
+            <span id="gen-indicator" class="htmx-indicator muted">
+              <span class="spinner" aria-hidden="true"></span> Wird erzeugt…
+            </span>
+          </div>
+        </form>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header"><h2>Erzeugter Text</h2></div>
+      <div class="card-body">
+        {% if content and locked %}
+        <div class="letter-paper">{{ content }}</div>
+        {% elif content %}
+        <form method="post" action="/app/briefe/{{ letter.id }}/speichern">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <div class="field">
+            <label class="visually-hidden" for="content">Brieftext</label>
+            <textarea class="textarea" id="content" name="content" rows="18">{{ content }}</textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-secondary">Änderungen speichern</button>
+          </div>
+        </form>
+        {% else %}
+        <div class="letter-paper is-empty">
+          <p>Noch kein Text. Diktieren Sie links und wählen Sie „Brief erzeugen“.</p>
+        </div>
+        {% endif %}
+        {% if letter.error %}
+        <p class="error-text mt-4">Letzter Fehler: {{ letter.error }}</p>
+        {% endif %}
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Zugriff verweigert — Briefato{% endblock %}
+{% block header %}{% include "partials/public_header.html" %}{% endblock %}
+{% block content %}
+<section class="container error-page">
+  <p class="error-code">403</p>
+  <h1>Zugriff verweigert</h1>
+  <p class="muted">Diese Aktion ist nicht erlaubt. Bitte laden Sie die Seite neu und versuchen Sie es erneut.</p>
+  <p class="mt-6"><a class="btn btn-primary" href="/app">Zur Übersicht</a></p>
+</section>
+{% endblock %}

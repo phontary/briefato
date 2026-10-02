@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% from "partials/breadcrumbs.html" import render as breadcrumbs %}
+
+{% block header %}
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a class="brand" href="/app">
+      <span class="brand-mark" aria-hidden="true">B</span>
+      <span>Briefato</span>
+    </a>
+    <span class="spacer"></span>
+    <span class="muted" data-account>{{ current_user.email if current_user else "" }}</span>
+    <form method="post" action="/abmelden" class="row">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="btn btn-secondary btn-sm">Abmelden</button>
+    </form>
+  </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="shell">
+  <nav class="shell-nav" aria-label="Portal-Navigation">
+    <ul class="nav-list">
+      <li>
+        <a class="nav-link" href="/app" {% if active == 'dashboard' %}aria-current="page"{% endif %}>
+          <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9.5 10 3l7 6.5V17a1 1 0 0 1-1 1h-4v-5H8v5H4a1 1 0 0 1-1-1z"/></svg>
+          Übersicht
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" href="/app/patienten" {% if active == 'patienten' %}aria-current="page"{% endif %}>
+          <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="6.5" r="3"/><path d="M3.5 17c0-3.3 2.9-5.5 6.5-5.5s6.5 2.2 6.5 5.5"/></svg>
+          Patienten
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" href="/app/briefe" {% if active == 'briefe' %}aria-current="page"{% endif %}>
+          <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 2.5h7l3 3V17a.5.5 0 0 1-.5.5h-9A.5.5 0 0 1 4.5 17V3a.5.5 0 0 1 .5-.5z"/><path d="M7.5 9h5M7.5 12h5"/></svg>
+          Briefe
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" href="/app/suche" {% if active == 'suche' %}aria-current="page"{% endif %}>
+          <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="5.5"/><path d="m13.5 13.5 3 3"/></svg>
+          Suche
+        </a>
+      </li>
+    </ul>
+    <div class="nav-section">
+      <ul class="nav-list">
+        <li>
+          <a class="nav-link" href="/app/konto" {% if active == 'konto' %}aria-current="page"{% endif %}>
+            <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7.5"/><circle cx="10" cy="8" r="2.5"/><path d="M5.5 15.5c1-2 2.6-3 4.5-3s3.5 1 4.5 3"/></svg>
+            Konto
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="/app/abrechnung" {% if active == 'abrechnung' %}aria-current="page"{% endif %}>
+            <svg class="nav-ico" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="15" height="10" rx="1.5"/><path d="M2.5 8.5h15"/></svg>
+            Abrechnung
+          </a>
+        </li>
+        {% if current_user and current_user.is_admin %}
+        <li>
+          <a class="nav-link" href="/admin">Administration</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <div class="shell-main">
+    {{ breadcrumbs(crumbs or []) }}
+    {% block app_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

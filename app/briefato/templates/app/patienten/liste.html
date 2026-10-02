@@ -1,0 +1,68 @@
+{% extends "app_base.html" %}
+{% block title %}Patienten — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header row-between">
+  <div>
+    <h1>Patienten</h1>
+    <p class="muted">Patientenakten mit Kontaktdaten und Briefhistorie.</p>
+  </div>
+  <a class="btn btn-primary" href="/app/patienten/neu">Patient anlegen</a>
+</div>
+
+<form class="row mt-4" method="get" action="/app/patienten" role="search">
+  <label class="visually-hidden" for="q">Patienten durchsuchen</label>
+  <input class="input" id="q" name="q" type="search" value="{{ q or '' }}"
+         placeholder="Name, Versicherungsnummer, Ort…" autocomplete="off">
+  <button class="btn btn-secondary" type="submit">Suchen</button>
+  {% if q %}<a class="btn btn-ghost" href="/app/patienten">Zurücksetzen</a>{% endif %}
+</form>
+
+{% if patients %}
+<section class="card mt-6">
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Geburtsdatum</th>
+          <th scope="col">Ort</th>
+          <th scope="col">Versicherung</th>
+          <th scope="col">Briefe</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for patient in patients %}
+        <tr>
+          <td>
+            <a href="/app/patienten/{{ patient.id }}">{{ patient.display_name }}</a>
+            {% if patient.archived_at %}<span class="badge">archiviert</span>{% endif %}
+          </td>
+          <td class="muted">{{ patient.birth_date | fmt_date }}</td>
+          <td class="muted">{{ patient.zip }} {{ patient.city }}</td>
+          <td class="muted">{{ patient.insurance or '—' }}</td>
+          <td class="num">{{ patient.letters | length }}</td>
+          <td class="num"><a href="/app/patienten/{{ patient.id }}/bearbeiten">Bearbeiten</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% else %}
+<div class="mt-6">
+  <div class="empty">
+    <h3>{% if q %}Keine Treffer{% else %}Noch keine Patienten{% endif %}</h3>
+    {% if q %}
+    <p>Für „{{ q }}“ wurde kein Patient gefunden. Prüfen Sie die Schreibweise oder legen Sie den
+      Patienten neu an.</p>
+    <a class="btn btn-secondary" href="/app/patienten">Alle Patienten</a>
+    {% else %}
+    <p>Legen Sie den ersten Patienten an, um Briefe mit Patientendaten vorzubereiten.</p>
+    <a class="btn btn-primary" href="/app/patienten/neu">Patient anlegen</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

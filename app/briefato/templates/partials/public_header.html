@@ -1,0 +1,18 @@
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true">B</span>
+      <span>Briefato</span>
+    </a>
+    <span class="spacer"></span>
+    <nav aria-label="Hauptnavigation" class="row">
+      <a class="btn btn-ghost" href="/preise">Preise</a>
+      {% if current_user %}
+      <a class="btn btn-primary" href="/app">Zum Portal</a>
+      {% else %}
+      <a class="btn btn-ghost" href="/anmelden">Anmelden</a>
+      <a class="btn btn-primary" href="/registrieren">Registrieren</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,29 @@
+{% extends "app_base.html" %}
+{% block title %}Abrechnung — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>Abrechnung</h1>
+  <p class="muted">Pläne und Zahlungen werden über den Zahlungsanbieter abgewickelt.</p>
+</div>
+
+<div class="alert alert-warn" role="alert">
+  <div>
+    <span class="alert-title">Abrechnung ist noch nicht verfügbar.</span>
+    {{ error or 'Die Anbindung an den Zahlungsanbieter ist in dieser Umgebung nicht aktiviert.' }}
+  </div>
+</div>
+
+<section class="card mt-6">
+  <div class="card-header"><h2>Aktueller Plan</h2></div>
+  <div class="card-body">
+    <dl class="dl">
+      <dt>Plan</dt><dd>{{ PLAN_CATALOG.get(quota.plan, {}).get('label', quota.plan) }}</dd>
+      <dt>Kontingent</dt><dd>{{ quota.used }} von {{ quota.quota }} Briefen genutzt</dd>
+      <dt>Verbleibend</dt><dd>{{ quota.remaining }}</dd>
+    </dl>
+    <p class="muted mt-4">Bis zur Freischaltung nutzen Sie das kostenlose Kontingent Ihres Kontos.</p>
+    <a class="btn btn-secondary mt-4" href="/app/konto">Zurück zum Konto</a>
+  </div>
+</section>
+{% endblock %}

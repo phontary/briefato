@@ -1,0 +1,130 @@
+{% extends "app_base.html" %}
+{% block title %}{{ heading }} — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>{{ heading }}</h1>
+  <p class="muted">Nur Felder mit <span class="req" aria-hidden="true">*</span> sind Pflichtfelder.
+    Alle Angaben bleiben in Ihrem Konto.</p>
+</div>
+
+{% if error %}
+<div class="alert alert-error" role="alert"><div><span class="alert-title">Speichern nicht möglich.</span> {{ error }}</div></div>
+{% endif %}
+
+<form class="card" method="post" action="{{ action }}" novalidate>
+  <div class="card-body">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <fieldset>
+      <legend>Person</legend>
+      <div class="field-grid">
+        <div class="field">
+          <label for="last_name">Nachname <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id="last_name" name="last_name" type="text" required autocomplete="off"
+                 value="{{ form.last_name or '' }}"{% if errors.get('last_name') %} aria-invalid="true" aria-describedby="err-last_name"{% endif %}>
+          {% if errors.get('last_name') %}<p id="err-last_name" class="error-text">{{ errors['last_name'] }}</p>{% endif %}
+        </div>
+        <div class="field">
+          <label for="first_name">Vorname <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id="first_name" name="first_name" type="text" required autocomplete="off"
+                 value="{{ form.first_name or '' }}"{% if errors.get('first_name') %} aria-invalid="true" aria-describedby="err-first_name"{% endif %}>
+          {% if errors.get('first_name') %}<p id="err-first_name" class="error-text">{{ errors['first_name'] }}</p>{% endif %}
+        </div>
+        <div class="field">
+          <label for="birth_date">Geburtsdatum</label>
+          <input class="input" id="birth_date" name="birth_date" type="date" value="{{ form.birth_date or '' }}">
+        </div>
+        <div class="field">
+          <label for="sex">Geschlecht</label>
+          <select class="select" id="sex" name="sex">
+            <option value=""{% if not form.sex %} selected{% endif %}>Keine Angabe</option>
+            <option value="w"{% if form.sex == 'w' %} selected{% endif %}>weiblich</option>
+            <option value="m"{% if form.sex == 'm' %} selected{% endif %}>männlich</option>
+            <option value="d"{% if form.sex == 'd' %} selected{% endif %}>divers</option>
+          </select>
+        </div>
+        <div class="field field-full">
+          <label for="external_ref">Ihre Patientennummer</label>
+          <input class="input" id="external_ref" name="external_ref" type="text" autocomplete="off"
+                 value="{{ form.external_ref or '' }}">
+          <p class="hint">Frei wählbar, z. B. die Nummer aus Ihrer Praxisverwaltung.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <hr class="divider">
+
+    <fieldset>
+      <legend>Versicherung</legend>
+      <div class="field-grid">
+        <div class="field">
+          <label for="insurance">Kostenträger</label>
+          <input class="input" id="insurance" name="insurance" type="text" autocomplete="off"
+                 value="{{ form.insurance or '' }}">
+        </div>
+        <div class="field">
+          <label for="insurance_number">Versichertennummer</label>
+          <input class="input" id="insurance_number" name="insurance_number" type="text" autocomplete="off"
+                 value="{{ form.insurance_number or '' }}">
+        </div>
+      </div>
+    </fieldset>
+
+    <hr class="divider">
+
+    <fieldset>
+      <legend>Kontakt</legend>
+      <div class="field-grid">
+        <div class="field field-full">
+          <label for="street">Straße und Hausnummer</label>
+          <input class="input" id="street" name="street" type="text" autocomplete="off" value="{{ form.street or '' }}">
+        </div>
+        <div class="field">
+          <label for="zip">Postleitzahl</label>
+          <input class="input" id="zip" name="zip" type="text" autocomplete="off" value="{{ form.zip or '' }}">
+        </div>
+        <div class="field">
+          <label for="city">Ort</label>
+          <input class="input" id="city" name="city" type="text" autocomplete="off" value="{{ form.city or '' }}">
+        </div>
+        <div class="field">
+          <label for="phone">Telefon</label>
+          <input class="input" id="phone" name="phone" type="tel" autocomplete="off" value="{{ form.phone or '' }}">
+        </div>
+        <div class="field">
+          <label for="email">E-Mail</label>
+          <input class="input" id="email" name="email" type="email" autocomplete="off" value="{{ form.email or '' }}">
+        </div>
+        <div class="field field-full">
+          <label for="referring_doctor">Zuweisende Ärztin / zuweisender Arzt</label>
+          <input class="input" id="referring_doctor" name="referring_doctor" type="text" autocomplete="off"
+                 value="{{ form.referring_doctor or '' }}">
+        </div>
+      </div>
+    </fieldset>
+
+    <hr class="divider">
+
+    <fieldset>
+      <legend>Notizen</legend>
+      <div class="field">
+        <label for="notes">Interne Notizen</label>
+        <textarea class="textarea" id="notes" name="notes" rows="5"
+                  aria-describedby="notes-hint">{{ form.notes or '' }}</textarea>
+        <p id="notes-hint" class="hint">Wird verschlüsselt gespeichert und nie an das Sprachmodell
+          übermittelt.</p>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="card-footer row">
+    <button type="submit" class="btn btn-primary">Speichern</button>
+    {% if patient %}
+    <a class="btn btn-secondary" href="/app/patienten/{{ patient.id }}">Abbrechen</a>
+    {% else %}
+    <a class="btn btn-secondary" href="/app/patienten">Abbrechen</a>
+    {% endif %}
+  </div>
+</form>
+{% endblock %}

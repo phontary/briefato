@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Fehler — Briefato{% endblock %}
+{% block header %}{% include "partials/public_header.html" %}{% endblock %}
+{% block content %}
+<section class="container error-page">
+  <p class="error-code">500</p>
+  <h1>Es ist ein Fehler aufgetreten</h1>
+  <p class="muted">Der Vorgang konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut;
+    bleibt der Fehler bestehen, wenden Sie sich an den Support.</p>
+  <p class="mt-6"><a class="btn btn-primary" href="/app">Zur Übersicht</a></p>
+</section>
+{% endblock %}

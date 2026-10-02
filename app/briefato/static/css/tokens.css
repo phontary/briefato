@@ -1,0 +1,173 @@
+/* Briefato design tokens — one accent (clinic teal), neutral ramp, type/spacing scales.
+   No framework. Light is the default; dark mode follows the OS and can be forced
+   with [data-theme="dark"] / [data-theme="light"] on <html>. */
+
+:root {
+  color-scheme: light;
+
+  /* ---- neutral ramp (cool grey) ---- */
+  --c-0: #ffffff;
+  --c-25: #fbfcfd;
+  --c-50: #f6f8fa;
+  --c-100: #eef1f5;
+  --c-200: #e0e5eb;
+  --c-300: #c8d0d9;
+  --c-400: #9aa5b1;
+  --c-500: #6b7683;
+  --c-600: #4c5560;
+  --c-700: #353c45;
+  --c-800: #23282e;
+  --c-900: #14181c;
+  --c-950: #0b0e11;
+
+  /* ---- accent ramp (single accent: teal) ---- */
+  --a-50: #edfaf6;
+  --a-100: #d3f2ea;
+  --a-200: #a9e4d6;
+  --a-300: #72cdbb;
+  --a-400: #3fb09c;
+  --a-500: #1d9483;
+  --a-600: #0f7a6c;
+  --a-700: #0d6259;
+  --a-800: #0e4f48;
+  --a-900: #0d413c;
+
+  /* ---- feedback (used only for status, never decoration) ---- */
+  --ok-600: #1a7f4b;
+  --ok-50: #eaf7ef;
+  --warn-700: #8a5a09;
+  --warn-50: #fdf4e3;
+  --danger-600: #b3261e;
+  --danger-700: #911f19;
+  --danger-50: #fdecea;
+
+  /* ---- semantic surfaces ---- */
+  --bg: var(--c-50);
+  --surface: var(--c-0);
+  --surface-2: var(--c-25);
+  --surface-sunken: var(--c-100);
+  --text: var(--c-800);
+  --text-strong: var(--c-900);
+  --muted: var(--c-500);
+  --muted-strong: var(--c-600);
+  --border: var(--c-200);
+  --border-strong: var(--c-300);
+  --primary: var(--a-600);
+  --primary-hover: var(--a-700);
+  --primary-active: var(--a-800);
+  --primary-soft: var(--a-50);
+  --primary-soft-border: var(--a-200);
+  --on-primary: #ffffff;
+  --focus: #0b63ce;
+
+  /* ---- type ---- */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.375rem;
+  --fs-2xl: 1.75rem;
+  --fs-3xl: 2.25rem;
+  --lh-tight: 1.2;
+  --lh-base: 1.55;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---- spacing scale ---- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+
+  /* ---- radii ---- */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-full: 999px;
+
+  /* ---- shadows ---- */
+  --sh-xs: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --sh-sm: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --sh-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
+  --sh-lg: 0 12px 32px rgba(16, 24, 40, 0.12), 0 4px 8px rgba(16, 24, 40, 0.05);
+
+  --ring: 0 0 0 3px rgba(11, 99, 206, 0.28);
+
+  /* ---- layout ---- */
+  --container: 68rem;
+  --nav-w: 15rem;
+  --header-h: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: var(--c-950);
+    --surface: #12171c;
+    --surface-2: #171d23;
+    --surface-sunken: #0e1216;
+    --text: #dbe2e9;
+    --text-strong: #f2f6f9;
+    --muted: #94a1ae;
+    --muted-strong: #aab6c2;
+    --border: #26303a;
+    --border-strong: #36424e;
+    --primary: var(--a-400);
+    --primary-hover: var(--a-300);
+    --primary-active: var(--a-200);
+    --primary-soft: #10241f;
+    --primary-soft-border: #1d4138;
+    --on-primary: #06211c;
+    --ok-50: #10241a;
+    --warn-50: #2a2110;
+    --danger-50: #2a1512;
+    --focus: #7fb2ff;
+    --ring: 0 0 0 3px rgba(127, 178, 255, 0.35);
+    --sh-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --sh-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+    --sh-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --sh-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: var(--c-950);
+  --surface: #12171c;
+  --surface-2: #171d23;
+  --surface-sunken: #0e1216;
+  --text: #dbe2e9;
+  --text-strong: #f2f6f9;
+  --muted: #94a1ae;
+  --muted-strong: #aab6c2;
+  --border: #26303a;
+  --border-strong: #36424e;
+  --primary: var(--a-400);
+  --primary-hover: var(--a-300);
+  --primary-active: var(--a-200);
+  --primary-soft: #10241f;
+  --primary-soft-border: #1d4138;
+  --on-primary: #06211c;
+  --ok-50: #10241a;
+  --warn-50: #2a2110;
+  --danger-50: #2a1512;
+  --focus: #7fb2ff;
+  --ring: 0 0 0 3px rgba(127, 178, 255, 0.35);
+  --sh-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sh-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --sh-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --sh-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+}

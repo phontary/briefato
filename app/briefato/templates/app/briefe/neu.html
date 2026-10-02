@@ -1,0 +1,75 @@
+{% extends "app_base.html" %}
+{% block title %}Neuer Brief — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>Neuer Brief</h1>
+  <p class="muted">Wählen Sie Patient und Briefart, diktieren Sie den Inhalt. Den Text prüfen Sie,
+    bevor Sie ihn freigeben.</p>
+</div>
+
+{% if not patients %}
+<div class="alert alert-info" role="status">
+  <div>
+    <span class="alert-title">Noch kein Patient angelegt.</span>
+    Legen Sie zuerst einen Patienten an — Briefe werden immer einem Patienten zugeordnet.
+    <a href="/app/patienten/neu">Patient anlegen</a>
+  </div>
+</div>
+{% endif %}
+
+{% if error %}
+<div class="alert alert-error" role="alert"><div><span class="alert-title">Entwurf nicht angelegt.</span> {{ error }}</div></div>
+{% endif %}
+
+<form class="card" method="post" action="/app/briefe/neu" novalidate data-ctrl-enter>
+  <div class="card-body">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="field-grid">
+      <div class="field field-full">
+        <label for="title">Titel / Betreff <span class="req" aria-hidden="true">*</span></label>
+        <input class="input" id="title" name="title" type="text" required autocomplete="off"
+               value="{{ form.title or '' }}"{% if errors.get('title') %} aria-invalid="true" aria-describedby="err-title"{% endif %}>
+        {% if errors.get('title') %}<p id="err-title" class="error-text">{{ errors['title'] }}</p>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="patient_id">Patient <span class="req" aria-hidden="true">*</span></label>
+        <select class="select" id="patient_id" name="patient_id" required
+                {% if errors.get('patient_id') %}aria-invalid="true" aria-describedby="err-patient_id"{% endif %}>
+          <option value="">Bitte wählen…</option>
+          {% for patient in patients %}
+          <option value="{{ patient.id }}"{% if form.patient_id == patient.id %} selected{% endif %}>{{ patient.display_name }}</option>
+          {% endfor %}
+        </select>
+        {% if errors.get('patient_id') %}<p id="err-patient_id" class="error-text">{{ errors['patient_id'] }}</p>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="kind">Briefart</label>
+        <select class="select" id="kind" name="kind">
+          {% for value, label in LETTER_KIND_LABELS.items() %}
+          <option value="{{ value }}"{% if form.kind == value %} selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="dictation">Diktat <span class="req" aria-hidden="true">*</span></label>
+      <textarea class="textarea dictation" id="dictation" name="dictation" required
+                aria-describedby="dictation-hint"
+                {% if errors.get('dictation') %}aria-invalid="true"{% endif %}>{{ form.dictation or '' }}</textarea>
+      <p id="dictation-hint" class="hint">Stichpunkte oder Fließtext. Patientennamen werden vor der
+        Verarbeitung durch Platzhalter ersetzt und danach wieder eingesetzt. Mit Strg + Enter speichern.</p>
+      {% if errors.get('dictation') %}<p class="error-text">{{ errors['dictation'] }}</p>{% endif %}
+    </div>
+  </div>
+
+  <div class="card-footer row">
+    <button type="submit" class="btn btn-primary">Entwurf anlegen</button>
+    <a class="btn btn-secondary" href="/app/briefe">Abbrechen</a>
+  </div>
+</form>
+{% endblock %}

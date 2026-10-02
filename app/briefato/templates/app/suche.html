@@ -1,0 +1,69 @@
+{% extends "app_base.html" %}
+{% block title %}Suche — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>Suche</h1>
+  <p class="muted">Durchsucht Ihre Patienten und Briefinhalte. Es werden ausschließlich Ihre eigenen
+    Daten durchsucht.</p>
+</div>
+
+<form class="row" method="get" action="/app/suche" role="search">
+  <label class="visually-hidden" for="q">Suchbegriff</label>
+  <input class="input" id="q" name="q" type="search" value="{{ q or '' }}" autofocus
+         placeholder="Name, Titel oder Textstelle…" autocomplete="off">
+  <button class="btn btn-primary" type="submit">Suchen</button>
+</form>
+
+{% if q %}
+  <p class="muted mt-4">{{ total }} Treffer für „{{ q }}“.</p>
+
+  <section class="card mt-4">
+    <div class="card-header"><h2>Patienten</h2><span class="badge">{{ results.patients | length }}</span></div>
+    {% if results.patients %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th scope="col">Name</th><th scope="col">Geburtsdatum</th><th scope="col">Ort</th></tr></thead>
+        <tbody>
+          {% for patient in results.patients %}
+          <tr>
+            <td><a href="/app/patienten/{{ patient.id }}">{{ patient.display_name }}</a></td>
+            <td class="muted">{{ patient.birth_date | fmt_date }}</td>
+            <td class="muted">{{ patient.zip }} {{ patient.city }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}<div class="card-body"><p class="muted">Keine Patienten gefunden.</p></div>{% endif %}
+  </section>
+
+  <section class="card mt-6">
+    <div class="card-header"><h2>Briefe</h2><span class="badge">{{ results.letters | length }}</span></div>
+    {% if results.letters %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th scope="col">Titel</th><th scope="col">Patient</th><th scope="col">Status</th><th scope="col">Treffer</th></tr></thead>
+        <tbody>
+          {% for letter in results.letters %}
+          <tr>
+            <td><a href="/app/briefe/{{ letter.id }}">{{ letter.title or 'Ohne Titel' }}</a></td>
+            <td>{{ letter.patient.display_name if letter.patient else '—' }}</td>
+            <td><span class="badge">{{ LETTER_STATUS_LABELS.get(letter.status, letter.status) }}</span></td>
+            <td class="muted">{{ letter.match_hint }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}<div class="card-body"><p class="muted">Keine Briefe gefunden.</p></div>{% endif %}
+  </section>
+{% else %}
+<div class="mt-6">
+  <div class="empty">
+    <h3>Suchbegriff eingeben</h3>
+    <p>Die Suche findet Patienten nach Name, Nummer und Ort sowie Briefe nach Titel und Textinhalt.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

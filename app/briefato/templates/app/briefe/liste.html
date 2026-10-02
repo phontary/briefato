@@ -1,0 +1,69 @@
+{% extends "app_base.html" %}
+{% block title %}Briefe — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header row-between">
+  <div>
+    <h1>Briefe</h1>
+    <p class="muted">Diktate, erzeugte Briefe und freigegebene Dokumente.</p>
+  </div>
+  <a class="btn btn-primary" href="/app/briefe/neu">Neuen Brief schreiben</a>
+</div>
+
+<form class="row mt-4" method="get" action="/app/briefe" role="search">
+  <label class="visually-hidden" for="q">Briefe durchsuchen</label>
+  <input class="input" id="q" name="q" type="search" value="{{ q or '' }}" placeholder="Titel durchsuchen…" autocomplete="off">
+  <label class="visually-hidden" for="status">Status</label>
+  <select class="select" id="status" name="status">
+    <option value="">Alle Status</option>
+    {% for key, label in LETTER_STATUS_LABELS.items() %}
+    <option value="{{ key }}"{% if status == key %} selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-secondary" type="submit">Filtern</button>
+  {% if q or status %}<a class="btn btn-ghost" href="/app/briefe">Zurücksetzen</a>{% endif %}
+</form>
+
+{% if letters %}
+<section class="card mt-6">
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Titel</th>
+          <th scope="col">Patient</th>
+          <th scope="col">Art</th>
+          <th scope="col">Status</th>
+          <th scope="col">Angelegt</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for letter in letters %}
+        <tr>
+          <td><a href="/app/briefe/{{ letter.id }}">{{ letter.title or 'Ohne Titel' }}</a></td>
+          <td>{{ letter.patient.display_name if letter.patient else '—' }}</td>
+          <td>{{ LETTER_KIND_LABELS.get(letter.kind, letter.kind) }}</td>
+          <td><span class="badge {{ 'badge-ok' if letter.status == 'approved' else ('badge-warn' if letter.status == 'failed' else 'badge-accent') }}">{{ LETTER_STATUS_LABELS.get(letter.status, letter.status) }}</span></td>
+          <td class="muted">{{ letter.created_at | fmt_datetime }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% else %}
+<div class="mt-6">
+  <div class="empty">
+    <h3>{% if q or status %}Keine Treffer{% else %}Noch kein Brief{% endif %}</h3>
+    {% if q or status %}
+    <p>Mit diesen Filtern wurde kein Brief gefunden.</p>
+    <a class="btn btn-secondary" href="/app/briefe">Alle Briefe</a>
+    {% else %}
+    <p>Diktieren Sie einen Brief und lassen Sie ihn auf Ihrem Briefkopf formatieren. Sie prüfen und
+      geben erst danach frei.</p>
+    <a class="btn btn-primary" href="/app/briefe/neu">Ersten Brief schreiben</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

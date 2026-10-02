@@ -1,0 +1,43 @@
+{% extends "auth/_base.html" %}
+{% block title %}Anmelden — Briefato{% endblock %}
+
+{% block auth_heading %}
+<h1>Anmelden</h1>
+<p class="muted">Willkommen zurück. Bitte melden Sie sich mit Ihrer E-Mail-Adresse an.</p>
+{% endblock %}
+
+{% block auth_content %}
+<form method="post" action="/anmelden" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <input type="hidden" name="next" value="{{ next_url or '' }}">
+
+  {% if error %}
+  <div class="alert alert-error" role="alert">
+    <div><span class="alert-title">Anmeldung nicht möglich.</span> {{ error }}</div>
+  </div>
+  {% endif %}
+
+  <div class="field">
+    <label for="email">E-Mail-Adresse</label>
+    <input class="input" id="email" name="email" type="email" required autocomplete="username"
+           value="{{ email or '' }}" {% if error %}aria-invalid="true" aria-describedby="login-error"{% endif %}
+           autofocus>
+  </div>
+
+  <div class="field">
+    <label for="password">Passwort</label>
+    <input class="input" id="password" name="password" type="password" required
+           autocomplete="current-password" {% if error %}aria-invalid="true" aria-describedby="login-error"{% endif %}>
+  </div>
+  {% if error %}<p id="login-error" class="error-text">{{ error }}</p>{% endif %}
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
+  </div>
+</form>
+
+<div class="auth-foot stack-sm">
+  <p><a href="/passwort-vergessen">Passwort vergessen?</a></p>
+  <p class="muted">Noch kein Konto? <a href="/registrieren">Registrieren</a></p>
+</div>
+{% endblock %}

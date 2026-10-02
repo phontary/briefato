@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block header %}{% include "partials/public_header.html" %}{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    {% block auth_heading %}{% endblock %}
+    {% block auth_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

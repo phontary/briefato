@@ -1,0 +1,55 @@
+{% extends "auth/_base.html" %}
+{% block title %}Registrieren — Briefato{% endblock %}
+
+{% block auth_heading %}
+<h1>Konto anlegen</h1>
+<p class="muted">Für Praxen und Praxisteams. Nach der Registrierung starten Sie mit 10 Briefen im Monat.</p>
+{% endblock %}
+
+{% block auth_content %}
+<form method="post" action="/registrieren" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+  {% if error %}
+  <div class="alert alert-error" role="alert">
+    <div><span class="alert-title">Bitte prüfen Sie Ihre Angaben.</span> {{ error }}</div>
+  </div>
+  {% endif %}
+
+  <div class="field">
+    <label for="full_name">Vollständiger Name <span class="req" aria-hidden="true">*</span></label>
+    <input class="input" id="full_name" name="full_name" type="text" required autocomplete="name"
+           value="{{ form.full_name or '' }}"{% if errors.get('full_name') %} aria-invalid="true" aria-describedby="err-full_name"{% endif %}>
+    {% if errors.get('full_name') %}<p id="err-full_name" class="error-text">{{ errors['full_name'] }}</p>{% endif %}
+  </div>
+
+  <div class="field">
+    <label for="practice_name">Praxisname</label>
+    <input class="input" id="practice_name" name="practice_name" type="text" value="{{ form.practice_name or '' }}">
+  </div>
+
+  <div class="field">
+    <label for="email">E-Mail-Adresse <span class="req" aria-hidden="true">*</span></label>
+    <input class="input" id="email" name="email" type="email" required autocomplete="username"
+           value="{{ form.email or '' }}"{% if errors.get('email') %} aria-invalid="true" aria-describedby="err-email"{% endif %}>
+    {% if errors.get('email') %}<p id="err-email" class="error-text">{{ errors['email'] }}</p>{% endif %}
+  </div>
+
+  <div class="field">
+    <label for="password">Passwort <span class="req" aria-hidden="true">*</span></label>
+    <input class="input" id="password" name="password" type="password" required autocomplete="new-password"
+           aria-describedby="pw-hint{% if errors.get('password') %} err-password{% endif %}"
+           {% if errors.get('password') %}aria-invalid="true"{% endif %}>
+    <p id="pw-hint" class="hint">Mindestens 8 Zeichen.</p>
+    {% if errors.get('password') %}<p id="err-password" class="error-text">{{ errors['password'] }}</p>{% endif %}
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary btn-block">Konto anlegen</button>
+  </div>
+</form>
+
+<div class="auth-foot">
+  <p class="muted">Bereits registriert? <a href="/anmelden">Anmelden</a></p>
+</div>
+{% endblock %}

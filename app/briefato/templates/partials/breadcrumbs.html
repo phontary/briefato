@@ -1,0 +1,15 @@
+{% macro render(crumbs) %}
+{% if crumbs %}
+<nav aria-label="Brotkrümelnavigation">
+  <ol class="breadcrumbs">
+    {% for label, href in crumbs %}
+      {% if href and not loop.last %}
+      <li><a href="{{ href }}">{{ label }}</a></li>
+      {% else %}
+      <li aria-current="page">{{ label }}</li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+</nav>
+{% endif %}
+{% endmacro %}

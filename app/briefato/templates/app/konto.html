@@ -1,0 +1,149 @@
+{% extends "app_base.html" %}
+{% block title %}Konto — Briefato{% endblock %}
+
+{% block app_content %}
+<div class="page-header">
+  <h1>Konto</h1>
+  <p class="muted">Persönliche Angaben, Praxisdaten und Briefkopf. Diese Daten erscheinen auf
+    erzeugten Dokumenten.</p>
+</div>
+
+<div class="grid grid-2">
+  <section class="card">
+    <div class="card-header"><h2>Persönliche Angaben</h2></div>
+    <div class="card-body">
+      <form method="post" action="/app/konto/profil" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% if errors.profil %}<div class="alert alert-error" role="alert"><div>{{ errors.profil }}</div></div>{% endif %}
+        <div class="field">
+          <label for="full_name">Vollständiger Name</label>
+          <input class="input" id="full_name" name="full_name" type="text" value="{{ form.full_name or '' }}" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="phone">Telefon</label>
+          <input class="input" id="phone" name="phone" type="tel" value="{{ form.phone or '' }}" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="account_email">E-Mail-Adresse</label>
+          <input class="input" id="account_email" type="email" value="{{ current_user.email }}" disabled
+                 aria-describedby="email-hint">
+          <p id="email-hint" class="hint">Die Anmelde-Adresse kann derzeit nicht im Portal geändert werden.</p>
+        </div>
+        <div class="form-actions"><button type="submit" class="btn btn-primary">Speichern</button></div>
+      </form>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-header"><h2>Praxisdaten</h2></div>
+    <div class="card-body">
+      <form method="post" action="/app/konto/praxis" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% if errors.praxis %}<div class="alert alert-error" role="alert"><div>{{ errors.praxis }}</div></div>{% endif %}
+        <div class="field">
+          <label for="practice_name">Praxisname</label>
+          <input class="input" id="practice_name" name="practice_name" type="text" value="{{ form.practice_name or '' }}">
+        </div>
+        <div class="field">
+          <label for="street">Straße und Hausnummer</label>
+          <input class="input" id="street" name="street" type="text" value="{{ form.street or '' }}">
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="zip">Postleitzahl</label>
+            <input class="input" id="zip" name="zip" type="text" value="{{ form.zip or '' }}">
+          </div>
+          <div class="field">
+            <label for="city">Ort</label>
+            <input class="input" id="city" name="city" type="text" value="{{ form.city or '' }}">
+          </div>
+          <div class="field">
+            <label for="country">Land (ISO, 2 Zeichen)</label>
+            <input class="input" id="country" name="country" type="text" maxlength="2" value="{{ form.country or 'DE' }}">
+          </div>
+          <div class="field">
+            <label for="tax_id">Steuernummer / USt-IdNr.</label>
+            <input class="input" id="tax_id" name="tax_id" type="text" value="{{ form.tax_id or '' }}">
+          </div>
+        </div>
+        <div class="form-actions"><button type="submit" class="btn btn-primary">Speichern</button></div>
+      </form>
+    </div>
+  </section>
+</div>
+
+<section class="card mt-6">
+  <div class="card-header"><h2>Briefkopf</h2></div>
+  <div class="card-body">
+    <p class="muted">Diese Angaben stehen im Kopf jedes erzeugten Dokuments.</p>
+    <form method="post" action="/app/konto/briefkopf" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      {% if errors.briefkopf %}<div class="alert alert-error" role="alert"><div>{{ errors.briefkopf }}</div></div>{% endif %}
+      <div class="field-grid">
+        <div class="field field-full">
+          <label for="lh_name">Name im Briefkopf</label>
+          <input class="input" id="lh_name" name="lh_name" type="text" value="{{ letterhead.name or '' }}"
+                 placeholder="Praxis Dr. med. Anna Beispiel">
+        </div>
+        <div class="field field-full">
+          <label for="lh_subtitle">Zusatzzeile</label>
+          <input class="input" id="lh_subtitle" name="lh_subtitle" type="text" value="{{ letterhead.subtitle or '' }}"
+                 placeholder="Fachärztin für Allgemeinmedizin">
+        </div>
+        <div class="field field-full">
+          <label for="lh_address">Adresse</label>
+          <input class="input" id="lh_address" name="lh_address" type="text" value="{{ letterhead.address or '' }}"
+                 placeholder="Beispielstraße 1, 12345 Musterstadt">
+        </div>
+        <div class="field field-full">
+          <label for="lh_contact">Kontakt</label>
+          <input class="input" id="lh_contact" name="lh_contact" type="text" value="{{ letterhead.contact or '' }}"
+                 placeholder="Tel. 0123 456789 · praxis@example.de">
+        </div>
+        <div class="field field-full">
+          <label for="lh_footer">Fußzeile</label>
+          <input class="input" id="lh_footer" name="lh_footer" type="text" value="{{ letterhead.footer or '' }}"
+                 placeholder="Sprechzeiten nach Vereinbarung">
+        </div>
+      </div>
+      <div class="form-actions"><button type="submit" class="btn btn-primary">Briefkopf speichern</button></div>
+    </form>
+  </div>
+</section>
+
+<section class="card mt-6">
+  <div class="card-header"><h2>Plan und Kontingent</h2><a class="btn btn-secondary btn-sm" href="/app/abrechnung">Plan ändern</a></div>
+  <div class="card-body">
+    <dl class="dl">
+      <dt>Plan</dt><dd>{{ PLAN_CATALOG.get(quota.plan, {}).get('label', quota.plan) }}</dd>
+      <dt>Kontingent</dt><dd>{{ quota.used }} von {{ quota.quota }} Briefen genutzt</dd>
+      <dt>Verbleibend</dt><dd>{{ quota.remaining }}</dd>
+      {% if quota.period_end %}<dt>Läuft bis</dt><dd>{{ quota.period_end }}</dd>{% endif %}
+    </dl>
+    <div class="row mt-4">
+      <a class="btn btn-secondary" href="/app/konto/export">Meine Daten exportieren (JSON)</a>
+    </div>
+  </div>
+</section>
+
+<section class="card mt-6">
+  <div class="card-header"><h2>Konto löschen</h2></div>
+  <div class="card-body">
+    <p class="muted">Die Löschung wird vorgemerkt und das Konto mit allen Daten deaktiviert. Bitte
+      sichern Sie vorher Ihren Datenexport.</p>
+    <form method="post" action="/app/konto/loeschen">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="field">
+        <label class="checkbox" for="confirm_delete">
+          <input type="checkbox" id="confirm_delete" name="confirm" value="ja" required>
+          <span>Ich möchte mein Konto und alle zugehörigen Daten löschen lassen.</span>
+        </label>
+      </div>
+      <button type="submit" class="btn btn-danger"
+              data-confirm="Konto wirklich zur Löschung vormerken? Sie werden danach abgemeldet.">
+        Löschung vormerken
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}

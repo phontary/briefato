@@ -1,0 +1,36 @@
+{% extends "auth/_base.html" %}
+{% block title %}Passwort vergessen — Briefato{% endblock %}
+
+{% block auth_heading %}
+<h1>Passwort vergessen</h1>
+<p class="muted">Geben Sie die E-Mail-Adresse Ihres Kontos an.</p>
+{% endblock %}
+
+{% block auth_content %}
+{% if sent %}
+<div class="alert alert-info" role="status">
+  <div>
+    <span class="alert-title">Anfrage erhalten.</span>
+    Wenn ein Konto mit dieser Adresse existiert, wurde der Vorgang vorgemerkt. Der automatische
+    E-Mail-Versand ist in dieser Version noch nicht aktiviert — in diesem Fall wenden Sie sich
+    bitte an den Support.
+  </div>
+</div>
+{% else %}
+<form method="post" action="/passwort-vergessen" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <div class="field">
+    <label for="email">E-Mail-Adresse</label>
+    <input class="input" id="email" name="email" type="email" required autocomplete="username"
+           value="{{ email or '' }}" autofocus>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary btn-block">Anfrage senden</button>
+  </div>
+</form>
+{% endif %}
+
+<div class="auth-foot">
+  <p class="muted"><a href="/anmelden">Zurück zur Anmeldung</a></p>
+</div>
+{% endblock %}

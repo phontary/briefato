@@ -1,0 +1,7 @@
+{% if flash %}
+<div class="toast toast-{{ flash.kind if flash.kind in ('ok', 'error', 'info') else 'info' }}"
+     role="status" data-toast data-toast-timeout="7000">
+  <span>{{ flash.text }}</span>
+  <button type="button" class="toast-close" data-toast-close aria-label="Hinweis schließen">&times;</button>
+</div>
+{% endif %}
