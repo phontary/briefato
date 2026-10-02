@@ -1,22 +1,46 @@
 # Briefato — Portainer stack (staging on phontary).
 # Deploy path: rsync repo -> /mnt/fast/docker/briefato on the host, then create/update the stack
-# through the Portainer API (see skill: devops/portainer). Do NOT `docker compose up` by hand.
+# through the Portainer API (`deploy/deploy-staging.sh`). Do NOT `docker compose up` by hand.
+#
+# Config comes from Portainer stack environment variables (the API `env` array), NOT from an
+# `env_file:` — Portainer validates env-file paths inside its own container, where /mnt/fast is
+# not mounted, and stack creation fails with "env file ... not found".
 services:
   briefato:
-    build:
-      context: /mnt/fast/docker/briefato
-      dockerfile: app/Dockerfile
+    # Built on the host by deploy/deploy-staging.sh (Portainer's compose cannot see /mnt/fast as a
+    # build context). The image is local, so never try to pull it.
     image: briefato:latest
+    pull_policy: never
     container_name: briefato
     restart: unless-stopped
-    env_file:
-      - /mnt/fast/docker/briefato/deploy/stack.env
     environment:
       BRIEFATO_DATA_DIR: /data
+      BRIEFATO_ENV: ${BRIEFATO_ENV}
+      BRIEFATO_BASE_URL: ${BRIEFATO_BASE_URL}
+      BRIEFATO_SECRET_KEY: ${BRIEFATO_SECRET_KEY}
+      BRIEFATO_FIELD_KEY: ${BRIEFATO_FIELD_KEY}
+      BRIEFATO_UI_LANG: ${BRIEFATO_UI_LANG}
+      BRIEFATO_ADMIN_EMAIL: ${BRIEFATO_ADMIN_EMAIL}
+      BRIEFATO_QUOTA_DEFAULT_LETTERS: ${BRIEFATO_QUOTA_DEFAULT_LETTERS}
+      BRIEFATO_LLM_MOCK: ${BRIEFATO_LLM_MOCK}
+      BRIEFATO_LLM_BASE_URL: ${BRIEFATO_LLM_BASE_URL}
+      BRIEFATO_LLM_API_KEY: ${BRIEFATO_LLM_API_KEY}
+      BRIEFATO_LLM_MODEL: ${BRIEFATO_LLM_MODEL}
+      BRIEFATO_LLM_TIMEOUT_S: ${BRIEFATO_LLM_TIMEOUT_S}
+      BRIEFATO_LLM_COST_IN_PER_1K: ${BRIEFATO_LLM_COST_IN_PER_1K}
+      BRIEFATO_LLM_COST_OUT_PER_1K: ${BRIEFATO_LLM_COST_OUT_PER_1K}
+      BRIEFATO_STRIPE_SECRET_KEY: ${BRIEFATO_STRIPE_SECRET_KEY}
+      BRIEFATO_STRIPE_PUBLISHABLE_KEY: ${BRIEFATO_STRIPE_PUBLISHABLE_KEY}
+      BRIEFATO_STRIPE_WEBHOOK_SECRET: ${BRIEFATO_STRIPE_WEBHOOK_SECRET}
+      BRIEFATO_STRIPE_PRICE_STARTER: ${BRIEFATO_STRIPE_PRICE_STARTER}
+      BRIEFATO_STRIPE_PRICE_PRAXIS: ${BRIEFATO_STRIPE_PRICE_PRAXIS}
+      BRIEFATO_STRIPE_PRICE_KLINIK: ${BRIEFATO_STRIPE_PRICE_KLINIK}
     volumes:
       - /mnt/fast/docker/briefato/data:/data
     ports:
       - "127.0.0.1:8085:8080"   # loopback only; Caddy (host network) proxies to it
+    networks:
+      - shared                    # lets the Chromium container render/verify the staging UI
     mem_limit: 512m
     memswap_limit: 512m         # disable container swap (host swap is under pressure)
     security_opt:
@@ -26,3 +50,8 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+networks:
+  shared:
+    external: true
+    name: hermes-webui-bundled_default

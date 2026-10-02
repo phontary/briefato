@@ -94,25 +94,41 @@ def _merge_fields(letter: Letter, source) -> None:
     letter.status = "done" if status in ("generating", "queued") else status
 
 
-def _fold_pipeline_letters(db, user, draft: Letter, since, source) -> None:
+def _letter_ids(db, user) -> set[str]:
+    return set(db.scalars(select(Letter.id).where(Letter.user_id == user.id)).all())
+
+
+def _fold_pipeline_letters(db, user, draft: Letter, before_ids: set[str], source) -> None:
     """The frozen pipeline creates and returns its *own* Letter row. The portal keeps the
     draft the member opened as the canonical record: copy the result onto it, re-point any
-    Generation rows and remove the transient duplicate so no ghost letters accumulate."""
-    strays = db.scalars(
-        select(Letter).where(
-            Letter.user_id == user.id,
-            Letter.id != draft.id,
-            Letter.created_at >= since,
-        )
-    ).all()
-    if source is None and len(strays) == 1:
-        source = strays[0]
-    _merge_fields(draft, source)
-    for stray in strays:
-        for generation in db.scalars(select(Generation).where(Generation.letter_id == stray.id)):
-            generation.letter_id = draft.id
-        db.flush()
-        db.delete(stray)
+    Generation rows and remove the transient duplicate so no ghost letters accumulate.
+
+    The pipeline row is identified by **id difference** against the ids that existed before the
+    call — never by a time window, which would also swallow a letter the member created in a
+    second tab while the model was running.
+    """
+    new_ids = _letter_ids(db, user) - before_ids - {draft.id}
+    source_id = getattr(source, "id", None)
+
+    # 1. the returned object is the authoritative result — always merge it onto the draft
+    if source is not None:
+        _merge_fields(draft, source)
+    elif len(new_ids) == 1:
+        fallback = db.get(Letter, next(iter(new_ids)))
+        if fallback is not None and fallback.user_id == user.id:
+            _merge_fields(draft, fallback)
+
+    # 2. remove the pipeline's own row, but ONLY if the pipeline really created it during this
+    #    call (id difference) — never touch any other letter the member may have created meanwhile
+    if source_id is None or source_id not in new_ids:
+        return
+    stray = db.get(Letter, source_id)
+    if stray is None or stray.user_id != user.id:
+        return
+    for generation in db.scalars(select(Generation).where(Generation.letter_id == stray.id)):
+        generation.letter_id = draft.id
+    db.flush()
+    db.delete(stray)
 
 
 def _slug(value: str) -> str:
@@ -274,7 +290,7 @@ async def erzeugen(request: Request, db: DB, user: CurrentUser, letter_id: str):
     db.commit()
 
     patient = letter.patient
-    since = utcnow()
+    before_ids = _letter_ids(db, user)
     error = None
     generated = False
     result = None
@@ -301,7 +317,7 @@ async def erzeugen(request: Request, db: DB, user: CurrentUser, letter_id: str):
         letter.error = ""
     # The pipeline keeps its own accounting (quota + audit); the portal only folds the
     # resulting letter row (or the failed one) back onto the member's draft.
-    _fold_pipeline_letters(db, user, letter, since, result if error is None else None)
+    _fold_pipeline_letters(db, user, letter, before_ids, result)
     if error is not None and letter.status != "failed":
         letter.status = "failed"
         letter.error = error

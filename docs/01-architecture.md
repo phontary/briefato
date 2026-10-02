@@ -51,8 +51,15 @@ exports.
 
 - Host: N305 `phontary` (192.168.178.100), Docker 29.6.1 + Portainer.
 - Repo on host: `/mnt/fast/docker/briefato` (mirror of `/workspace/briefato`, minus `.venv`).
-- One container `briefato`, host port **8085**, data volume `/mnt/fast/docker/briefato/data`.
-- Reverse proxy: existing Caddy stack — `briefato.sabry.io` → `192.168.178.100:8085`.
+- **Live staging (2026-10-02):** Portainer stack **69** `briefato`, image built on the host
+  (`briefato:latest`), host port **8085** (loopback), data at `/mnt/fast/docker/briefato/data`
+  (uid 10001), served at `https://briefato.sabry.io` through the existing Caddy (stack 54).
+  Deploy is one script: `deploy/sync-to-host.sh` → `deploy/deploy-staging.sh`; the Caddy site block
+  is added by `deploy/caddy-add-site.sh` (validates the candidate Caddyfile before patching the
+  stack-54 heredoc).
+- Config reaches the container through **Portainer stack env vars** (the API `env` array) — an
+  `env_file:` cannot be used, because Portainer resolves those paths inside its own container where
+  `/mnt/fast` does not exist.
 - Capacity baseline measured 2026-10-01: RAM 31.8 GB (15.9 GB available), **swap 7268/8191 MB used**,
   load 4.93, 48 containers. The portal is small (~250 MB), but the swap pressure is a pre-existing
   problem that must be fixed before any public beta (tracked as S5 blocker).

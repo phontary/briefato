@@ -107,8 +107,14 @@ def _error_message(exc: BaseException) -> str:
     return message
 
 
-def _assert_prompt_is_pseudonymised(pseudonymizer: Pseudonymizer, prompt: str, settings: Any) -> None:
+def _assert_prompt_is_pseudonymised(
+    pseudonymizer: Pseudonymizer, prompt: str, settings: Any, *, ignore: str = ""
+) -> None:
     """Enforce D4 in code: no raw identifier may appear in the outgoing prompt.
+
+    Values that are also part of the practice's own letterhead (e.g. a practice named
+    'Praxis Dr. Anna Beispiel' with a patient called Anna) are legitimately present in the
+    prompt and are therefore excluded from the check.
 
     Guarded to non-production environments so an unforeseen false positive can never
     take down a live request; in dev/staging it fails loudly (AssertionError).
@@ -116,10 +122,11 @@ def _assert_prompt_is_pseudonymised(pseudonymizer: Pseudonymizer, prompt: str, s
     if getattr(settings, "env", "dev") == "prod":
         return
     haystack = prompt.lower()
+    ignore = (ignore or "").lower()
     leaked = [
         value
         for value in pseudonymizer.sensitive_values(_STRONG_IDENTIFIER_TOKENS)
-        if len(value) >= 3 and value in haystack
+        if len(value) >= 3 and value in haystack and value not in ignore
     ]
     if leaked:
         # Never echo the leaked values themselves.
@@ -228,7 +235,12 @@ def generate_letter(
         user_prompt_text = user_prompt(
             kind, masked_dictation, masked_context, effective_letterhead, extra=extra or ""
         )
-        _assert_prompt_is_pseudonymised(pseudonymizer, f"{system}\n{user_prompt_text}", settings)
+        _assert_prompt_is_pseudonymised(
+            pseudonymizer,
+            f"{system}\n{user_prompt_text}",
+            settings,
+            ignore=" ".join(str(value) for value in effective_letterhead.values()),
+        )
 
         provider = get_provider(settings)
         result = provider.generate(system, user_prompt_text)
