@@ -24,6 +24,8 @@ timestamp: 2026-07-01T09:36:23Z
 ## Bildgebung
 **Sono-Abdomen:** Einseitige Nierenstauung re. (Grad 1–2), Harnblase o.B., keine sichtbaren Konkremente, keine Tamponade, ggf. zystische Veränderung an der betroffenen Niere.
 
+Winzige Konkremente von ca. 2 mm im distalen Ureter kurz vor dem Ureterostium können bereits eine Harnstauung Grad 1–2 verursachen, die betroffene Niere kann sich etwas verplumpt darstellen. Bei multiplen Phlebolithen im kleinen Becken ist die sichere Differenzierung zwischen distalem Harnleiterkonkrement und Phlebolithen im CT nicht immer möglich. Ein sonografisch vermutetes großes Blasenkonkrement kann sich in der CT als nicht bestätigt erweisen. Bei großen Konkrementen in der Harnblase als führendem Befund siehe Musterbrief Harnblasenkonkrement.
+
 **CT Abdomen/Becken nativ:** Prävesikales Konkrement (Größe variabel, z. B. 2x2mm), Harnstau re. bis nach prävesikal, ggf. Nebenbefund Nephrolithiasis re. (DD Gefäßkalk).
 
 ## KU-Befunde

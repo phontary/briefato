@@ -25,6 +25,8 @@ CT Abdomen/Becken: Supraumbilikale Hernie mit geringer Imbibierung des Fettgeweb
 - Postoperativ: Stützmieder/Bauchgurt für mehrere Wochen, Verbandkontrollen, Kostaufbau, Mobilisation
 - Schmerztherapie nach Bedarf (NSAR/Metamizol/Opioide), meist gut beherrschbar. Vorübergehend stärkere Bauchschmerzen bei zu fest sitzendem Mieder → Mieder lockern, Bedarfsmedikation anpassen
 Analgesie bei Bedarf, Bauchmieder für 1 Wo., Fäden ziehen am 11. postop. Tag durch HA, kein schweres Heben/Schieben/Ziehen für 2 Wo., WV bei Komplikationen.
+- Bei begleitender ausgeprägter Rektusdiastase Kombination aus Herniotomie mit Direktnaht der Bruchlücke und laparoskopischer IPOM-Plastik, Netzfixierung mit Haltefäden, Bauchwandmieder für 4–6 Wo., kein schweres Heben für 4–6 Wo.
+- Auch bei geplanter tageschirurgischer Durchführung ist eine postoperative stationäre Überwachung über Nacht bei ausgeprägter Schmerzsymptomatik und Miederversorgung möglich.
 
 ## Nachsorge
 - Kein Heben schwerer Lasten (>15–20 kg) für 3–6 Wochen

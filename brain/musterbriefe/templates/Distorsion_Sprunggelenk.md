@@ -32,6 +32,7 @@ Operativ:
 - Bei höhergradigen Bandrupturen (Grad III) oder erfolgloser konservativer Therapie
 
 - Voltaren-Salbenverband
+- Bei radiologisch ausgeschlossenem knöchernem Trauma und stabilem Bandapparat genügt die rein ambulante Behandlung mit Salbenverband, Kühlung, Schonung und Hochlagerung
 
 ## Nachsorge
 - MRT zur Bänderbeurteilung im Verlauf bei Instabilitätsverdacht

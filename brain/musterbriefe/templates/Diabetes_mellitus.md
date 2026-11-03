@@ -15,15 +15,18 @@ merged_from: [Diabetes_mellitus_Typ1.md, Diabetes_mellitus_Typ2.md]
 - Wundheilungsstörungen insbesondere am Fuß (DFS)
 - Häufig assoziiert mit art. Hypertonie und Adipositas
 - Langjähriger DM Typ II führt zu mikroangiopathischen Komplikationen: Polyneuropathie (Sensibilitätsverlust, erhöhtes DFS-Risiko), Nephropathie (bis zur dialysepflichtigen Niereninsuffizienz), Retinopathie/Optikusneuropathie (Sehverschlechterung)
+- Ein langjähriger, unzureichend eingestellter DM Typ 2 kann auch bei einem chirurgischen Eingriff ohne unmittelbaren Diabetesbezug der Begleitaufwand des stationären Aufenthalts sein; Hypoglykämierisiko bei langer Diabetesdauer und bei Spritzenangst erhöht
+- Bei manifester Diabeteserkrankung nach einem Gestationsdiabetes ist der Verlauf als langjährig anzusehen
 
 ## Diagnostik
 - Nüchtern-Blutzucker, HbA1c, oraler Glukosetoleranztest
 - BZ-Tagesprofil bei Therapieeinstellung
 - Erhöhte Hb-Werte möglich bei kombinierter Niereninsuffizienz (Epo-Mangel)
-- Kontrolle der Nierenretentionsparameter (Kreatinin, Harnstoff)
+- Kontrolle der Nierenretentionsparameter (Kreatinin, Harnstoff), GFR
 - Fußinspektion bei jedem Patientenkontakt (DFS-Screening)
 - Sensor zur kontinuierlichen Glukosemessung möglich
 - Ophthalmologisches Konsil bei V.a. Retinopathie/Optikusneuropathie
+- Bei stationärer Aufnahme BZ-Zielbereich festlegen (bei Komplikationen meist 140–180 mg/dl zu allen Tageszeiten)
 
 ## Therapie
 - Hypoglykämierisiko erhöht bei langer DM-Dauer, Niereninsuffizienz und Leberinsuffizienz
@@ -36,6 +39,8 @@ merged_from: [Diabetes_mellitus_Typ1.md, Diabetes_mellitus_Typ2.md]
 - Basis: Diät, Bewegung, Gewichtsreduktion
 - Medikamentös: Metformin, Sulfonylharnstoffe, SGLT-2-Inhibitoren, GLP-1-Agonisten, DPP-4-Inhibitoren, Insulin
 - Bei stationärem Aufenthalt: BZ-Kontrollen, ggf. Insulintherapie nach Schema
+- Perioperativ werden die oralen Antidiabetika pausiert und während der Pause Blutzuckerkorrekturen nach hausinternem Standard durchgeführt (z. B. mit Apidra 3x täglich); mit Wiederaufnahme der oralen Therapie in häuslicher Dosierung werden die Korrekturen beendet
+- Bei langjährig unzureichender Einstellung (HbA1c wiederholt über dem Zielwert) ist eine Therapieoptimierung sinnvoll, z. B. mit einem SGLT-2-Inhibitor; lehnt die Pat. eine Ernährungsumstellung oder weitere Injektionen ab, wird die Empfehlung an den weiterbehandelnden Diabetologen weitergegeben
 - Prophylaxe: Nephropathie-Screening, Augenarzt-Konsile, Fußpflege
 - Orale Antidiabetika bei eingeschränkter Nierenfunktion pausieren (Metformin, SGLT-2-Inhibitoren, Sulfonylharnstoffe bei GFR < 30 ml/min); Fortführung eines DPP-4-Inhibitors in angepasster Dosis möglich
 - Bei unzureichender Einstellung Umstellung auf eine intensivierte Insulintherapie (ICT) mit schrittweiser Steigerung des Basalinsulins und Anpassung des Mahlzeiteninsulins; BZ-Ziel bei geriatrischen Patienten mit Komplikationen meist 140–180 mg/dl

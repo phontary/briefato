@@ -3,25 +3,24 @@ type: Reference
 title: Schenkelhalsfraktur
 description: Musterbrief: Schenkelhalsfraktur
 tags: [Musterbrief, Schreibdienst]
-timestamp: 2026-07-01T09:36:23Z
+timestamp: 2026-10-31T00:00:00Z
 ---
 
 # Schenkelhalsfraktur
 
 ## Klinik
-- Sturz auf die betroffene Körperseite, ggf. mit Schwindel
+- Sturz aus anamnestisch bekannter Höhe (z. B. mehrere Stufen Treppe), Aufstehen nicht möglich, Vorstellung in der Notaufnahme selbstständig/assistiert (Tochter, Rettungsdienst)
 - Schmerzen Hüfte/Oberschenkelhals
-- Druckschmerzen (DS) am proximalen lateralen Oberschenkel
-- Klinisch ggf. keine Fehlstellung, Verkürzung oder Außenrotation (bei stauchungs-/impaktionsbedingten Frakturen)
-- pDMS intakt
-- Stabiles Becken
-- Knie frei beweglich
-- Druckschmerz inguinal sowie Schmerzen bei passiver Innen-/Außenrotation und axialer Stauchung
+- Druckschmerzen (DS) am proximalen lateralen Oberschenkel bzw. inguinal, Schmerzen bei passiver Innen-/Außenrotation und axialer Stauchung
+- Klinisch ggf. keine offene Hautverletzung, kein Prellungshämatom
+- Auffällige Außenrotation möglich (bei dislozierter Fraktur)
+- Keine Beinverkürzung oder Fehlstellung (bei stauchungs-/impaktionsbedingten Frakturen)
+- Becken stabil, pDMS intakt
 
-## Bildgebung
-- Radiomorphologisch V. a. gestauchte Schenkelhalsfraktur
-- CT zur weiteren Abklärung bei V. a. okkulte/stauchefraktur
+## Diagnostik
+- Radiomorphologisch: mediale Schenkelhalsfraktur (ggf. disloziert); CT bei V. a. okkulte/Stauchungsfraktur
 
 ## Therapie
 - Stationäre Aufnahme zur Schmerztherapie und weiteren Diagnostik
-- Je nach Frakturtyp und Dislokation: konservativ (bei stauchungsfrakturen ohne Dislokation) oder operativ (Osteosynthese/Hüft-TEP)
+- Bei dislozierter medialer Schenkelhalsfraktur: operative Versorgung, bei älteren Patienten i. d. R. Duokopfprothese (Hemiendoprothese)
+- Bei DOAK-Einnahme (z. B. Apixaban): Nüchternheit präoperativ beachten, OP-Termin entsprechend der Eliminations-/Pause-Planung

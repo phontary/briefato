@@ -24,6 +24,7 @@ timestamp: 2026-08-30T00:00:00Z
 - Ausreichende Flüssigkeitszufuhr
 - Kalkulierte Antibiotikatherapie, ggf. resistenzgerecht nach Antibiogramm
 - Symptomatische Therapie (Analgesie, ggf. Spasmolytikum)
+- Bei unkompliziertem, asymptomatischem Verlauf (Nitrit positiv, Nachweis von E. coli und Enterococcus spp.) ohne systemische Infektzeichen kann eine rein symptomatische Behandlung mit gesteigerter Flüssigkeitszufuhr ausreichen.
 
 ## Nachsorge
 - Klinische Verlaufskontrolle, ggf. Kontrolle der Urinkultur

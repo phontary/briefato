@@ -25,3 +25,4 @@ timestamp: 2026-07-14T00:00:00Z
 ## Nachsorge
 - Keine Routine-Verlaufskontrolle bei typischer Bildmorphologie
 - Bei atypischer Konfiguration: Verlaufssonographie nach 6 Monaten
+- Bei nur CT-morphologischem Verdacht auf ein kleines Hämangiom ohne typische Kontrastmittelkinetik: sonografische Verlaufskontrolle empfohlen

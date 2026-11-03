@@ -47,3 +47,5 @@ timestamp: 2026-07-01T09:36:23Z
 - Ggf. reizlose Sigmadivertikulose als Nebenbefund
 - Ggf. Z.n. Hüft-TEP bds. als Nebenbefund
 - Leberzysten li. Leberlappen als Nebenbefund
+- Subileus ohne Briden-/Adhäsionsursache: bei Verschluss der V. lienalis mit narbigen Pankreasschwanzveränderungen zeigt die CT einzelne gering distendierte Dünndarmschlingen mit Spiegelbildungen ohne Kalibersprung, oft zusammen mit Arteriosklerose und Steatosis hepatis
+- Bei Subileus ist die Abgrenzung zur mesenterialen Ischämie entscheidend (Laktaterhöhung als Aufhänger): regelrechte Kontrastierung der A. mesenterica und fehlende Darmwandischämie schließen sie aus, eine Perforation wird über fehlende freie intraabdominelle Luft und Flüssigkeit ausgeschlossen

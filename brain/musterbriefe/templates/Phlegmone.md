@@ -31,6 +31,7 @@ timestamp: 2026-08-22T00:00:00Z
 - Konsequente Schmerztherapie; bei fehlender Sensibilität ggf. keine Schmerzäußerung trotz schmerzhafter Prozeduren
 
 ## Nachsorge
+- Nach Inzision eines präpatellaren Abszesses bei Unterschenkelphlegmone täglich die Wundkontrolle und Verbandwechsel; stationäre AB-Therapie bis zur Besserung der Entzündungszeichen
 - Engmaschige Wundkontrollen und Wundversorgung (ggf. ambulante Pflege)
 - Bei Kompartmentsymptomatik bzw. Faszien-Kompressionssyndrom: Fasziotomie erwägen
 - Hausärztliche Mitbetreuung, bei Aufnahmeanlass Wiedervorstellung nach Plan

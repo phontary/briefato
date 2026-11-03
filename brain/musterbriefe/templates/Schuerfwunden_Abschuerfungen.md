@@ -6,6 +6,8 @@ Multiple oberflächliche Hautabschürfungen nach Sturz, typischerweise an exponi
 
 ## Diagnostik
 Röntgen des betroffenen Bereichs zum Ausschluss frischer knöcherner Verletzungen und Luxationen.
+- Nach Verkehrsunfall (z. B. PKW-Überschlag) typisches Verteilungsmuster an exponierten Stellen: Ellenbogen, beide Handgelenke und beide Sprunggelenke ventral
+- Bei Frauen im gebärfähigen Alter vor der Röntgendiagnostik Schwangerschaftsausschluss per Test; nach negativem Ergebnis ist die Bildgebung uneingeschränkt möglich
 
 ## Therapie
 Wunddesinfektion und steriler Verband (Pflasterverband). Ambulante Schmerztherapie bei Bedarf. Verbandwechsel nach einigen Tagen. Aufklärung über Wundinfektzeichen (Rötung, Schwellung, Überwärmung, Sekretion, Fieber).

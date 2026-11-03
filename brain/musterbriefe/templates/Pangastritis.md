@@ -19,6 +19,7 @@ Epigastrische DS, Übelkeit. Initial V.a. Gastritis als Differenzialdiagnose zur
 - Die chronische Gastritis verläuft häufig symptomfrei und wird oft zufällig bei einer Gastroskopie entdeckt.
 - Bei Symptomen sind diese uncharakteristisch: Aufstoßen, Blähungen und postprandiales Völlegefühl, ferner Dyspepsie, Oberbauchschmerzen sowie Übelkeit und Erbrechen; eine gastrointestinale Blutung ist möglich.
 - Die antrumprädominante Gastritis führt gehäuft zu Duodenalulzera; die Pangastritis geht insbesondere bei zusätzlicher Atrophie und intestinaler Metaplasie mit einem deutlich erhöhten Risiko für ein Magenulkus und ein Magenkarzinom einher.
+- Eine hämorrhagische Pangastritis kann sich als obere gastrointestinale Blutung mit Kaffeesatz-Erbrechen (bräunlich bis schwarz verfärbtem Erbrochenem) äußern, ohne dass endoskopisch ein Ulkus nachweisbar ist.
 
 ## Diagnostik
 Gastroskopie: leichtgradige, antrumbetonte Gastritis.
@@ -40,6 +41,7 @@ PPI-Therapie (Magenschutz). Bei begleitender Cholezystitis stationäre Aufnahme 
 - Die Säurehemmung ist ausreichend hoch zu dosieren; Therapietreue (Compliance) und Rauchstopp sind beeinflussbare Faktoren für den Behandlungserfolg.
 - Nach erfolgloser Erstlinientherapie sollte eine Resistenztestung erfolgen; die Zweitlinientherapie erfolgt resistenzadaptiert mit einer Tripeltherapie über 14 Tage.
 - Bei Typ-A-Gastritis (autoimmune Gastritis) ist die lebenslange parenterale Substitution von Cobalamin die entscheidende Maßnahme, da die Parietalzellen nicht regenerieren.
+- Bei hämorrhagischer Pangastritis ohne Ulkus wird initial ein hochdosierter PPI gegeben, ergänzend kann Mesalazin eingesetzt werden. Bei Dauermedikation mit Glucocorticoiden oder Acetylsalicylsäure ist eine dauerhafte PPI-Einnahme als Magenschutz indiziert.
 
 ## Nachsorge
 - Eine Überprüfung des Eradikationserfolges soll erfolgen: mindestens 4 Wochen nach Ende der Antibiotikatherapie und mindestens 2 Wochen nach Ende der PPI-Therapie.
@@ -49,6 +51,7 @@ PPI-Therapie (Magenschutz). Bei begleitender Cholezystitis stationäre Aufnahme 
 - Nach erfolgreicher Eradikation soll bei fortgeschrittenen präneoplastischen Veränderungen der Magenschleimhaut (OLGA 3/4 bzw. OLGIM 3/4) eine intervalldefinierte endoskopisch-bioptische Untersuchung angeboten werden; internationale Leitlinien empfehlen für die schwere atrophische Gastritis bzw. intestinale Metaplasie in Antrum und Korpus ein Intervall von (2-)3 Jahren.
 - Trotz erfolgreicher Eradikation kann sich bei Atrophie und intestinaler Metaplasie eine Progression zum Magenkarzinom entwickeln, sodass bei entsprechenden Veränderungen eine endoskopisch-bioptische Überwachung erforderlich bleibt.
 - Bei autoimmuner Gastritis (Typ A) sind regelmäßige Kontrollen wegen des erhöhten Risikos für Magenkarzinom und neuroendokrine Tumore erforderlich; ein Cobalaminmangel und seine Folgen werden über Blutbild und neurologische Untersuchung dokumentiert.
+- Nach einer hämorrhagischen Pangastritis ist eine ambulante gastroskopische Kontrolle nach 4 bis 6 Wochen sinnvoll. Zur Abklärung gehört eine laborchemische Anämiediagnostik (Eisen, Folsäure, Vitamin B12).
 
 ## Hinweis
 Häufig Zufallsbefund im Rahmen der Abklärung von Oberbauchschmerzen bei Cholezystolithiasis. Gastroskopische Abklärung zur DD empfohlen.
