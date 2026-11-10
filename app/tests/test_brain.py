@@ -604,3 +604,56 @@ def test_invention_check_is_deterministic_and_fast_on_two_pages():
     check(text, "arztbrief", _AMBULANT02_DICTATION)
     elapsed = time.perf_counter() - start
     assert elapsed < 0.1, f"R-INVENT too slow: {elapsed * 1000:.1f} ms on {len(text)} chars"
+
+
+# --------------------------------------------------------------------------- packaging
+
+
+def _load_pack_brain():
+    """Load tools/pack-brain.py (a dash in the name, so importlib by path)."""
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[2] / "tools" / "pack-brain.py"
+    spec = importlib.util.spec_from_file_location("pack_brain", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_packaged_files_match_the_archive():
+    """Every packaged template — plain and merged — equals what the packer would package now."""
+    import json
+    from pathlib import Path
+
+    pack_brain = _load_pack_brain()
+    source = Path(str(brain_loader.manifest().get("source")))
+    if not source.is_dir():  # pragma: no cover - archive not mounted
+        pytest.skip("source archive not available")
+    dest = brain_loader.brain_root() / "musterbriefe" / "templates"
+    manifest = json.loads((dest.parent / "manifest.json").read_text(encoding="utf-8"))
+    report = pack_brain.audit(manifest, source, dest)
+    assert report["drifts"] == [], f"packaged templates drifted from the archive: {report['drifts']}"
+    assert report["stale"] == [], f"stale packaged templates: {report['stale']}"
+
+
+def test_pack_check_reports_every_drift_and_not_just_the_first(tmp_path, monkeypatch):
+    """--check semantics name every drifted, stale and not-yet-packaged file before failing."""
+    pack_brain = _load_pack_brain()
+    monkeypatch.setattr(pack_brain.muster_merge, "groups", lambda: [])
+    src = tmp_path / "src"
+    dest = tmp_path / "dest"
+    src.mkdir()
+    dest.mkdir()
+    manifest = {"templates": [{"file": "A.md"}, {"file": "B.md"}, {"file": "C.md"}]}
+    (src / "A.md").write_bytes(b"archive A2")
+    (src / "B.md").write_bytes(b"archive B2")
+    (src / "C.md").write_bytes(b"archive C")
+    (src / "D.md").write_bytes(b"new in the archive, never packaged")
+    (dest / "A.md").write_bytes(b"packaged A1")
+    (dest / "B.md").write_bytes(b"packaged B1")
+    (dest / "stale.md").write_bytes(b"no longer expected")
+    report = pack_brain.audit(manifest, src, dest)
+    assert report["drifts"] == ["A.md", "B.md", "C.md"]
+    assert report["stale"] == ["stale.md"]
+    assert report["new"] == ["D.md"]

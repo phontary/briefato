@@ -24,7 +24,8 @@ Merge behaviour:
   ``indication_keywords`` and records ``merged_from``).
 
 Run:  .venv/bin/python tools/pack-brain.py [--check]
-      --check  verify the packaged copy matches what would be packaged (non-zero exit on drift)
+      --check  verify the packaged copy matches what would be packaged (non-zero exit on drift;
+               reports every drifted, stale, missing and not-yet-packaged file, not only the first)
 """
 
 from __future__ import annotations
@@ -54,6 +55,7 @@ LOCKED = {
 }
 
 _METADATA_FILES = {"packaged.json", "README-PACKAGING.md"}
+_SOURCE_META = {"index.md"}
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -79,14 +81,18 @@ def expected_bytes(entry: dict, src: Path) -> bytes:
     return (src / str(entry.get("file"))).read_bytes()
 
 
-def build(check_only: bool = False) -> int:
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    src = source_dir(manifest)
+def audit(manifest: dict, src: Path, dest: Path, write: bool = False) -> dict:
+    """Compare the packaged copy with what the archive would package now — every name, not the first.
 
+    Returns drifts (packaged bytes differ from what the archive yields), stale (packaged but no
+    longer expected), new (in the source but not yet packaged — a manifest gap, informational,
+    never a drift), missing (expected but absent from the source) and the packaged entries.
+    ``write=True`` writes the packaged bytes instead of comparing them.
+    """
     effective, merge_stats = muster_merge.apply_merges(manifest.get("templates") or [], src)
-
-    packaged: list[dict] = []
+    drifts: list[str] = []
     missing: list[str] = []
+    packaged: list[dict] = []
     for entry in effective:
         name = str(entry.get("file", ""))
         if not name or name in LOCKED:
@@ -97,13 +103,11 @@ def build(check_only: bool = False) -> int:
             missing.append(name)
             continue
         digest = sha256_bytes(data)
-        packed = DEST / name
-        if check_only:
-            if not packed.is_file() or sha256(packed) != digest:
-                print(f"DRIFT: {name}", file=sys.stderr)
-                return 1
-        else:
+        packed = dest / name
+        if write:
             packed.write_bytes(data)
+        elif not packed.is_file() or sha256(packed) != digest:
+            drifts.append(name)
         packaged.append(
             {
                 "file": name,
@@ -114,22 +118,57 @@ def build(check_only: bool = False) -> int:
             }
         )
 
+    expected_names = {p["file"] for p in packaged}
+    stale = sorted(
+        path.name
+        for path in dest.glob("*.md")
+        if path.name not in expected_names and path.name not in _METADATA_FILES
+    )
+    groups = muster_merge.groups()
+    handled = (
+        expected_names
+        | {s for g in groups for s in g.sources}
+        | set(LOCKED)
+        | _METADATA_FILES
+        | _SOURCE_META
+    )
+    manifest_names = {str(e.get("file", "")) for e in manifest.get("templates") or []}
+    new = sorted(p.name for p in src.glob("*.md") if p.name not in handled and p.name not in manifest_names)
+    return {
+        "effective": effective,
+        "merge_stats": merge_stats,
+        "packaged": packaged,
+        "drifts": drifts,
+        "stale": stale,
+        "missing": missing,
+        "new": new,
+    }
+
+
+def build(check_only: bool = False) -> int:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    src = source_dir(manifest)
+    report = audit(manifest, src, DEST, write=not check_only)
+
     if check_only:
-        expected_names = {p["file"] for p in packaged}
-        stale = sorted(
-            path.name
-            for path in DEST.glob("*.md")
-            if path.name not in expected_names and path.name not in _METADATA_FILES
-        )
-        if stale:
-            for name in stale:
-                print(f"STALE: {name}", file=sys.stderr)
+        for name in report["drifts"]:
+            print(f"DRIFT: {name}", file=sys.stderr)
+        for name in report["stale"]:
+            print(f"STALE: {name}", file=sys.stderr)
+        for name in report["missing"]:
+            print(f"MISSING: {name}", file=sys.stderr)
+        for name in report["new"]:
+            print(f"NEW: {name}", file=sys.stderr)
+        if report["drifts"] or report["stale"]:
             return 1
         print(
-            f"OK: {len(packaged)} packaged templates match ({merge_stats['merged_groups']} merged groups, "
+            f"OK: {len(report['packaged'])} packaged templates match ({report['merge_stats']['merged_groups']} merged groups, "
             f"{len(LOCKED)} locked)"
         )
         return 0
+
+    effective = report["effective"]
+    merge_stats = report["merge_stats"]
 
     # Persist the merge-applied manifest (the archive-derived manifest is the input).
     merged_count = sum(1 for entry in effective if entry.get("merged_from"))
@@ -145,7 +184,7 @@ def build(check_only: bool = False) -> int:
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     # Delete superseded / stale markdown in the packaged copy.
-    expected_names = {p["file"] for p in packaged}
+    expected_names = {p["file"] for p in report["packaged"]}
     removed: list[str] = []
     for path in sorted(DEST.glob("*.md")):
         if path.name not in expected_names and path.name not in _METADATA_FILES:
@@ -153,14 +192,14 @@ def build(check_only: bool = False) -> int:
             removed.append(path.name)
 
     stats = {
-        "packaged": len(packaged),
+        "packaged": len(report["packaged"]),
         "merged": merged_count,
         "locked": sorted(LOCKED),
         "removed_stale": removed,
-        "missing_in_source": sorted(missing),
-        "licence_review": sorted(p["file"] for p in packaged if p["licence_risk"] == "review"),
+        "missing_in_source": sorted(report["missing"]),
+        "licence_review": sorted(p["file"] for p in report["packaged"] if p["licence_risk"] == "review"),
         "source": str(src),
-        "templates": packaged,
+        "templates": report["packaged"],
     }
     (DEST / "packaged.json").write_text(
         json.dumps(stats, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
@@ -178,6 +217,8 @@ directory by hand: edit the source archive (or the brain update process) and re-
 - licence review (structure may be used, prose must be paraphrased before paying customers):
   {", ".join(stats['licence_review']) or "none"}
 - missing in source: {", ".join(stats['missing_in_source']) or "none"}
+- in the source but not yet packaged (manifest gap — a product decision, not drift):
+  {", ".join(report['new']) or "none"}
 
 Integrity: every file's sha256 is recorded in `packaged.json`; `tools/pack-brain.py --check`
 regenerates merged files and verifies the packaged copy against source + merge map.
@@ -186,7 +227,7 @@ regenerates merged files and verifies the packaged copy against source + merge m
     print(
         f"packaged {stats['packaged']} templates ({merged_count} merged, removed {len(removed)} stale), "
         f"locked {len(stats['locked'])}, licence-review {len(stats['licence_review'])}, "
-        f"missing {len(missing)}"
+        f"missing {len(report['missing'])}"
     )
     return 0
 
