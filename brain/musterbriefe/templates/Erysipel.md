@@ -13,6 +13,7 @@ Lokale Rötung, Überwärmung, Schwellung und Druckschmerzhaftigkeit der betroff
 Eintrittspforte sind häufig kleine Hautläsionen wie Rhagaden, Hautverletzungen oder Insekten- und Tierbisse.
 Bei DFS ist das plantare Ulkus die typische Eintrittspforte. Rezidive treten auch unter laufender Fußpflege und Kompressionstherapie auf, eine beginnende livide Verfärbung bei bekannter pAVK ist mitzuführen.
 Bei Diabetes mellitus kann eine Eintrittspforte vollständig fehlen, die Diagnose stützt sich dann auf die Klinik. Plötzlich einschießende brennende, stechende und juckende Schmerzen am Unterschenkel können das führende Symptom sein, bevor die Rötung deutlich wird.
+Ein Erysipel kann durch einen subkutanen Abszess kompliziert werden. Hinweisend sind umschriebene, zunehmende Schmerzen mit Schwellung und Fluktuation, ausbleibendes Ansprechen auf die kalkulierte i.v. AB-Therapie sowie eine liquide Raumforderung in der Bildgebung. Bei Unterschenkelerysipel liegt die Abszesshöhle typischerweise in der Weichteilschicht ventral der Tibia. Eine chronische Varikose und ein Z.n. Varizenstripping sind begünstigende Faktoren für rezidivierende Erysipole.
 Pat. wird mit Fieber, Schüttelfrost und umschriebener Rötung/Schwellung/DS/Überwärmung eines Beines (meist US) aufgenommen. Laborchemisch deutliche Entzündungszeichen (Leukozytose, CRP-Erhöhung). Häufig Z.n. Wundrose in der Vorgeschichte. Aufnahmebegründung: zur i.v. AB-Therapie und stationären Überwachung.
 
 ## Diagnostik
@@ -24,6 +25,7 @@ Pat. wird mit Fieber, Schüttelfrost und umschriebener Rötung/Schwellung/DS/Üb
 - Erregerdiagnostik nur bei ausgeprägten/systemischen Verläufen oder Therapieversagen
 - Sonographie/MRT der betroffenen Region zum Ausschluss eines Abszesses oder einer tieferen Beteiligung (Fettgewebsnekrose, Gelenkbeteiligung)
 - Bei Diabetes mellitus sind tastbare Fußpulse und ein ABI von 1,0 als Ausdruck der Mediasklerose falsch hoch möglich, eine pAVK lässt sich damit nicht sicher ausschließen
+- Persistieren Schmerzen und Entzündungszeichen unter laufender i.v. AB-Therapie, ist eine MRT der betroffenen Region indiziert. Eine liquide Raumforderung mit peripherer KM-Anreicherung und diffuser kutainer sowie subkutaner Flüssigkeitseinlagerung ist mit einem Abszess vereinbar, Osteomyelitis-typische Knochenveränderungen lassen sich im selben Untersuchungsgang abgrenzen
 - KU: umschriebene Rötung, Schwellung, DS, Überwärmung, pDMS i.d.R. o.B.
 - Labor: Leukos erhöht, CRP erhöht
 - Bei schwierigen Venenverhältnissen: ZVK-Anlage (V. jug. int., sonografisch gesteuert, EKG-kontrolliert)
@@ -39,6 +41,8 @@ Pat. wird mit Fieber, Schüttelfrost und umschriebener Rötung/Schwellung/DS/Üb
 - Eine begleitende Kompressionstherapie wird während der akuten Infektion pausiert und erst nach Rückgang der Entzündung wieder aufgenommen (Hautschutz, keine Kompression auf lädiertem Gewebe)
 - Bei Niereninsuffizienz AB-Dosis prüfen und Kalium kontrollieren, unter Piperacillin/Tazobactam Hyperkaliämie möglich
 - Orale Antidiabetika mit renaler Wirkung (SGLT2-Hemmer) werden bei hohen Infektparametern und Niereninsuffizienz pausiert
+- Bei nachgewiesenem Abszess ist die operative Spaltung mit Exzision der Raumforderung, Einsendung zur Histologie und Einlage einer Jodoformtamponade die Therapie der Wahl. Die kalkulierte i.v. AB-Therapie wird perioperativ fortgeführt, die Wunde heilt per secundam
+- Der Rötungsverlauf wird markiert und fotografisch dokumentiert, die Verbandwechsel erfolgen täglich mit Kontrolle von Wundgrund und Sekretion
 - I.v. AB-Therapie (leitliniengerecht)
 - Begleitende Analgesie
 - Bei Fieber >39°C: Antipyrese
@@ -51,6 +55,7 @@ Pat. wird mit Fieber, Schüttelfrost und umschriebener Rötung/Schwellung/DS/Üb
 - Ggf. orale Langzeitprophylaxe bei Rezidiven (Penicillin V)
 - Fußpflege bei DM/Neuropathie
 - Beratung zur Hautpflege und Verletzungsprophylaxe
+- Nach Abszessspaltung erfolgt die Wundversorgung mit Cutimed-Tamponade und regelmäßigen Verbandwechseln durch den HÄ bis zur sekundären Heilung. Der Histologiebefund der entnommenen Raumforderung wird nach Vorliegen nachgereicht, bei ausbleibender Heilung, erneuter Rötung oder Schwellung ist die Wiedervorstellung in der chirurgischen Sprechstunde erforderlich
 
 ## Risikofaktoren / Begleiterkrankungen
 - Trockener Alkoholismus

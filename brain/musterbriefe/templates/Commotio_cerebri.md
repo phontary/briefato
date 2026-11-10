@@ -8,6 +8,8 @@ Zustand nach stumpfem Schädel-Hirn-Trauma ohne Knochenverletzung. Klinisch best
 - Bei Sturzgeschehen Mitbeurteilung von Wirbelsäule, Thorax, Abdomen und Becken zum Ausschluss von Begleitverletzungen (kein DS und kein KS entlang der Wirbelsäule, Thorax frei, Abdomen weich, Becken stabil, pDMS an oberen und unteren Extremitäten intakt und seitengleich kräftig)
 - Häufige Stürze in der Vorgeschichte sind zu erfragen oder aus der Pflegedokumentation zu übernehmen; eine auswärtige ambulante Vorbehandlung nach früherem Sturz (z. B. Hautabschürfung am Ellbogen) wird als Vorgeschichte geführt
 - Posttraumatisches Erbrechen und Schwindel sowie ein Brillenhämatom nach Sturz auf den Hinterkopf sind unabhängig vom wachen neurologischen Befund Warnzeichen und begründen die stationäre Aufnahme zur CCT-Diagnostik und Überwachung; eine bereits in Abheilung befindliche Kopfplatzwunde aus einem früheren Sturz ändert die CCT-Indikation nicht
+- Auch eine deutliche Sprachstörung und eine Gleichgewichtsstörung nach dem Sturz sind Warnzeichen und werden neben der retrograden Amnesie im KU dokumentiert, auch wenn ein fokal-neurologisches Defizit fehlt und die Pupillen isocor sind
+- Hautabschürfungen an den Extremitäten sind typische Begleitverletzungen und werden nach dem Musterbrief der Schürfwunden mitgeführt
 
 ## Diagnostik
 CCT zum Ausschluss einer intrakraniellen Blutung. Bei unauffälligem CCT und fehlender neurologischer Symptomatik ist von einer Commotio cerebri ohne operative Konsequenz auszugehen.
@@ -17,8 +19,11 @@ CCT zum Ausschluss einer intrakraniellen Blutung. Bei unauffälligem CCT und feh
 
 ## Therapie
 Konservativ: Bettruhe, klinisch-neurologische Verlaufskontrollen (Commotio-Überwachung). Analgetika bei Bedarf. Wundversorgung von Kopfplatzwunden und Begleitverletzungen. Kleinere, oberflächliche Kopfplatzwunden werden nach Desinfektion mit Fibrinkleber oder Steri-Strips adaptiert und mit Pflaster verbunden. Bei sauberen Wundrändern und bereits sistierender Blutung ist keine Nahtversorgung erforderlich. Größere, klaffende Wunden werden nach Wundspülung und Desinfektion sowie Entfernung von Verschmutzungen und Fremdkörpern in örtlicher Betäubung unter sterilen Bedingungen mit nicht resorbierbarem Nahtmaterial (z. B. 4/0) adaptiert und mit PVP-haltiger Wundauflage und Pflaster abgedeckt, Fadenzug ab dem 10. Tag. Tetanus-Impfstatus prüfen und ggf. auffrischen.
+- Unter Thrombozytenaggregationshemmung (ASS) können Kopfplatzwunden arteriell stark bluten; sie werden chirurgisch versorgt und mit nicht resorbierbarem Nahtmaterial adaptiert (z. B. 5 Einzelknopfnähte), bis die Blutung steht
+- Bei ausgedehnter Blutung ist die Wundversorgung der erste Schritt vor der stationären Überwachung, da die Blutung sonst nicht zu beherrschen ist
 
 ## Nachsorge
 Nach komplikationslosem Verlauf und unauffälligem CCT Entlassung in die ambulante Weiterbetreuung. Aufklärung über Warnsymptome (Verschlechterung des AZ, Erbrechen, Bewusstseinseintrübung, fokal-neurologische Ausfälle) mit der Maßgabe, bei Auftreten umgehend die NFA aufzusuchen. Sportkarenz für mindestens 1 Woche. Bei mit Hautkleber versorgten Wunden löst sich dieser nach ca. 3 Tagen von selbst ab; die Wunde soll nicht gerieben und bis zur Abheilung sauber und trocken gehalten werden, bei Infektzeichen erfolgt eine antibiotische Behandlung durch den Hausarzt.
 - Bei fehlender CCT-Indikation Überwachung zu Hause auf Zeichen einer Gehirnerschütterung (Fieber, Erbrechen, audiovisuelle Überempfindlichkeit) für 24 Stunden
 - Bei Pflegeheimbewohnern erfolgt die Überwachung und Wundkontrolle im Pflegeheim bzw. durch den weiterbetreuenden Hausarzt, Angehörige sind in die Warnsymptom-Aufklärung einzubeziehen
+- Nach Nahtversorgung einer Kopfplatzwunde Fadenzug ab dem 10. Tag, Wundkontrolle beim weiterbetreuenden Hausarzt; bei fortbestehender Antikoagulation bzw. Thrombozytenaggregationshemmung ist auf eine verzögerte Blutstillung und Hämatombildung zu achten

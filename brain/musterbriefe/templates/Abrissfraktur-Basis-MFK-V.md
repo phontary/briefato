@@ -32,6 +32,7 @@ Röntgen des betroffenen Fußes in 2 Ebenen: Nachweis einer Abrissfraktur an der
 - Bei Dislokation oder Pseudarthrosenbildung operative Versorgung (Schraubenosteosynthese)
 
 - Bei knöcherner Heilung ohne Dislokation Übergang auf Unterschenkelschiene (Aluschiene) für 2 Wochen und Vollbelastung möglich
+- Bei initialer Versorgung mit Vacoped für 2 Wochen: Wiedervorstellung bei persistierenden Beschwerden zur erweiterten Diagnostik (CT)
 
 ## Diagnosen
 Abrissfraktur der Basis des Os metatarsale V

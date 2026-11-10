@@ -14,8 +14,10 @@ Wunddesinfektion und steriler Verband (Pflasterverband). Ambulante Schmerztherap
 - Wunddesinfektion mit PVP-Jod; bei stark verschmutzten Wundrändern oder unruhigem Kind ggf. nur steriler Strip/Pflasterverband statt Wundverschluss (Hautkleber/Steri-Strips)
 - Bei Schulterschmerzen Gilchrist-Bandage bzw. Gilchristschiene für 2 Wochen
 - Bei ausgeprägten Schmerzen Analgesie i.v. (z. B. Piritramid)
+- Bei multiplen Abschürfungen und Wunden im Gesichtsbereich nach Sturz mit Brillenbruch werden alle Wunden nach Desinfektion mit Lomatüll und Pflaster verbunden, die weitere Wundversorgung erfolgt regelmäßig durch den Hausarzt
 
 ## Nachsorge
 Körperliche Schonung, Kühlung und Hochlagerung bei Bedarf. Wiedervorstellung bei Komplikationen (Wundinfekt, Zunahme der Beschwerden, bei begleitendem SHT: Commotio-Zeichen wie Fieber, Erbrechen, visuelle Überempfindlichkeit, Epistaxis). Ausreichende Flüssigkeitszufuhr.
 - Bei persistierenden Beschwerden Wiedervorstellung in der chirurgischen Sprechstunde, ggf. MRT zur weiteren Abklärung
+- Nach ambulanter Versorgung von Abschürfungen im Gesicht werden die Wunden bis zur Abheilung sauber und trocken gehalten, die regelmäßige Wundversorgung erfolgt durch den Hausarzt, bei Komplikationen ist die jederzeitige Wiedervorstellung in der NFA möglich
 - Bei begleitender knöcherner Verletzung (z. B. nicht dislozierte Endgliedfraktur der Großzehe) Ruhigstellung mit Unterschenkel-L-Gipsschiene für 2 Wochen und Fadenzug ab dem 10. Tag durch den Hausarzt

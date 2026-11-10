@@ -11,7 +11,7 @@ timestamp: 2026-07-01T09:36:01Z
 ## Klinik
 - Müdigkeit, Leistungsminderung, Pruritus, Übelkeit
 - Erhöhte Infektanfälligkeit
-- Verminderte oder fehlende Urinausscheidung (Anurie/Oligurie)
+- Verminderte oder fehlende Urinausscheidung (Anurie/Oligurie), bei langjähriger Dialysepflicht mit Schrumpfnieren dauerhaft ohne Restharn
 - Elektrolytentgleisungen (Hyperkaliämie, Hyperphosphatämie)
 - Renale Anämie (Epo-Mangel)
 - Häufig assoziiert mit art. Hypertonie und DM

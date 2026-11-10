@@ -25,6 +25,7 @@ timestamp: 2026-09-14T00:00:00Z
 ## Therapie
 - Nachblutung: Verbandkontrollen, Kühlung, engmaschige ärztliche Kontrolle; bei persistierender Blutung bzw. Hämatombildung operative Revision mit Blutstillung, ggf. Redon-Drainage
 - Shuntthrombose/Shuntverschluss: operative Shuntthrombektomie mit Revision bzw. Neuanlage des Shunts; bei unzureichender Shuntfunktion Weiterführung der Dialyse über einen Vorhofkatheter
+- Frustraner Thrombektomieversuch: Resektion der bisherigen Shuntanastomose und Übernähung der Shuntvene, dann Neuanlage eines geraden AV-Prothesenshunts (Straight-Graft, z. B. 6-mm-PTFE-Prothese) zwischen A. brachialis und V. axillaris über einen subkutanen Tunnel; Kontrolle der Anastomosen und der Shuntdurchgängigkeit, ggf. intraoperative Shuntangiographie; je eine Redon-Drainage pro Zugangswunde
 - Postoperative Shuntkontrolle (Strömungsgeräusch, Durchgängigkeit)
 - Hochlagerung und Kühlung des Arms bei Schwellung
 - Hämodialyse an den Dialysetagen fortführen (postoperativ nach Rücksprache mit Nephrologie/Dialysezentrum)

@@ -11,6 +11,8 @@ directory by hand: edit the source archive (or the brain update process) and re-
 - licence review (structure may be used, prose must be paraphrased before paying customers):
   Biliaere_Pankreatitis.md, Coxarthrose_Exsikkose_Sturz.md, Pangastritis.md, Proktitis.md
 - missing in source: none
+- in the source but not yet packaged (manifest gap — a product decision, not drift):
+  Aktivierte_Gonarthrose.md, Akute_Pyelonephritis.md, Analfissur.md, Bypassverschluss_Revision.md, Distorsion_Ellenbogen.md, Geriatrische_Komplexbehandlung_AZ_Verschlechterung.md, Haematochezie_Abklaerung.md, Harnblasenkonkrement.md, ISG_Blockade_ISG_Syndrom.md, Ovarialzyste_Unterbauchschmerz.md, Patellaluxation.md, Peritonealkarzinose.md, Phalanxfraktur_Finger.md, Tendinitis_calcarea_Schulter.md, Ulcus_cruris_infiziert.md, Unterbauchschmerzen_in_der_Schwangerschaft.md, Weber_A_Fraktur.md
 
 Integrity: every file's sha256 is recorded in `packaged.json`; `tools/pack-brain.py --check`
 regenerates merged files and verifies the packaged copy against source + merge map.

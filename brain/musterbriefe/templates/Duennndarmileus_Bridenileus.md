@@ -16,10 +16,12 @@ timestamp: 2026-07-01T09:36:23Z
 - Neurologisch o.B.
 - Z.n. CHE und Appendektomie (anamnestisch relevant für DD Bridenileus)
 - Darmgeräusche teils metallisch klingend
+- Bei inkarzerierter Hernie (Leisten- oder Schenkelhernie) ist die Hernie selbst die Ursache der Einklemmung, nicht eine Bride. Klinisch imponieren unklare Bauchschmerzen mit einmaligem galligem Erbrechen, der Stuhlgang ist zuletzt am Vortag erfolgt, der Lokalbefund in der Leiste kann diskret sein
 
 ## Bildgebende Befunde
 - CT Abd./Becken p.v.: Tiefer Dünndarmileus mit Kalibersprung, DD Bridenileus. Keine freie Luft. Ggf. geringer Aszites. Nebenbefundlich Leber-/Nierenzysten, reizlose Sigmadivertikulose.
 - CT: konglomeratartig gelagerte, distendierte Darmschlingen, ggf. vergrößerte mesenteriale Lymphknoten
+- CT: dilatierte Dünndarmschlingen mit Transitionszone im Bereich der Femoralloge als Nachweis einer inkarzerierten Schenkelhernie
 - Rö. Abd. stehend n. Gastrolux: Spiegelbildungen, KM im Dünndarm, kein KM-Übertritt ins Kolon.
 - Rö. Abd. stehend Kontrolle: Keine wesentliche Befundbesserung, weiterhin Stopp im Dünndarmbereich.
 
@@ -35,6 +37,8 @@ timestamp: 2026-07-01T09:36:23Z
 9. Wundversorgung, Klammerentfernung, ZVK-Zug, Frühmobilisation
 10. E planen
 
+Bei Ileus durch inkarzerierte Hernie besteht die Therapie in der notfallmäßigen Hernienreparation, nicht in einer Laparotomie mit Bridenlösung. Postoperativ klärt eine CT Abd./Becken mit KM, ob ein Restileus, eine Rezidivhernie oder ein Abszess vorliegt.
+
 ## Pathologie
 - Dünndarmteilresektat mit inkompletter hämorrhagischer Infarzierung
 - Lokale fibrinös granulozytäre Peritonitis
@@ -49,3 +53,4 @@ timestamp: 2026-07-01T09:36:23Z
 - Leberzysten li. Leberlappen als Nebenbefund
 - Subileus ohne Briden-/Adhäsionsursache: bei Verschluss der V. lienalis mit narbigen Pankreasschwanzveränderungen zeigt die CT einzelne gering distendierte Dünndarmschlingen mit Spiegelbildungen ohne Kalibersprung, oft zusammen mit Arteriosklerose und Steatosis hepatis
 - Bei Subileus ist die Abgrenzung zur mesenterialen Ischämie entscheidend (Laktaterhöhung als Aufhänger): regelrechte Kontrastierung der A. mesenterica und fehlende Darmwandischämie schließen sie aus, eine Perforation wird über fehlende freie intraabdominelle Luft und Flüssigkeit ausgeschlossen
+- Nicht jeder mechanische Dünndarmileus ist ein Bridenileus: bei unklarer Symptomatik mit V.a. Cholezystitis die Leistenregion in der CT mitbeurteilen, da eine inkarzerierte Schenkelhernie klinisch führend sein kann

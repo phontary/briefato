@@ -19,6 +19,7 @@ Keine offene Hautverletzung, Prellung oder Hämatom. DS medial und/oder lateral 
 - Bei äußerlich unauffälligem Gelenk (keine Schwellung, kein Gelenkerguss, kein DS im Gelenk) kann ein isolierter Schmerz bei der Streckung ab etwa 15° der einzige wegweisende Befund einer Bandverletzung sein; Schubladentest und Prüfung der Aufklappbarkeit bleiben dabei häufig unauffällig
 - Ein ausgedehntes Hämatom lateral und präpatellar kann klinisch eine Patellafraktur vortäuschen; erst der radiologische Ausschluss frischer ossärer Läsionen führt zur Diagnose Kniedistorsion
 - Präpatellares Hämatom ohne Gelenkerguss möglich
+- Nach Sturz auf beide Knie mit präpatellarem Druckschmerz re. ohne Gelenkerguss, freier Beweglichkeit und negativem Schubladenphänomen kann das re. Seiten- bzw. Außenband etwas locker imponieren (Dehnung); bei persistierenden Beschwerden MRT zur Abklärung
 - Bei angelegter Binde sind Schubladentest und Prüfung der Aufklappbarkeit nicht sicher beurteilbar; die Bandbeurteilung erfolgt dann nach Abschwellung mittels MRT
 - Begleitender Druckschmerz über dem Malleolus medialis bei freier Beweglichkeit und stabilem Bandapparat des oberen Sprunggelenks möglich
 - Bei Blindheit Sturzursache und häusliche Sicherheit erfragen und Begleitung bzw. Hilfsmittel organisieren (erhöhtes Sturzrisiko)

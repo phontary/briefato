@@ -14,6 +14,7 @@ timestamp: 2026-07-01T09:36:23Z
 - pDMS intakt und seitengleich
 - Keine Frakturzeichen, keine Fehlstellung, keine Außenrotation oder Verkürzung
 - Bei Kontusion an Fingern/Daumen: lokaler Druckschmerz, keine Instabilität der Interphalangealgelenke, kein Anhalt für Sehnenverletzung
+- Bei Kontusion des DIP-Gelenks nach Einklemmung: Prellung mit Hämatom und starkem Druckschmerz über dem Endgelenk bei fehlender offener Hautverletzung, Bandapparat stabil, Faustschluss vollständig möglich, pDMS intakt
 - Bei Fingerkontusion mit Beteiligung des PIP-Gelenks: beginnende Schwellung und Hämatom, das Gelenk ist in allen Ebenen frei beweglich, die Beweglichkeit ist jedoch schmerzbedingt eingeschränkt, der Faustschluss nicht vollständig möglich, Handgelenk frei beweglich, pDMS intakt
 - Bei Distorsion des PIP-Gelenks nach Hyperextension oder Verdrehung im Ballsport: ausgeprägte Hämatomschwellung, umschriebener Druckschmerz über dem Gelenk, Faustschluss vollständig möglich, jedoch stark schmerzhaft, Handgelenk frei beweglich, kein Druckschmerz über dem Radiusköpfchen, pDMS intakt und seitengleich kräftig
 - Bei Kontusion der proximalen Phalanx des Zeigefingers nach Fahrradsturz beim Kind: ausgeprägte Schwellung ohne offene Hautverletzung, Beweglichkeit in allen Ebenen schmerzbedingt eingeschränkt, Faustschluss dennoch vollständig möglich, pDMS intakt und kräftig, radiologisch kein Hinweis auf frische Knochenverletzung oder Luxation
